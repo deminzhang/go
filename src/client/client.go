@@ -24,11 +24,9 @@ func main() {
 	fmt.Println(">>client start=========================")
 
 	//测试自连
-	// go Net.Connect("10.45.11.29:18091", func(ss *Net.Session) { //29旧版
-	// go Net.Connect("10.45.11.29:8088", func(ss *Net.Session) { //29新版
-	// go Net.Connect("10.5.30.213:18091", func(ss *Net.Session) { //?
-	// go Net.Connect("10.249.249.156:8088", func(ss *Net.Session) { //FX 10.249.249.156
-	go Net.Connect("localhost:8088", func(ss *Net.Session) { //10.249.249.169
+	go Net.Connect("localhost:8341", func(ss *Net.Session) {
+		ss.CallOut(Net.Ping, &protos.Ping{})
+		Net.Send(ss.Conn, 1, []byte("ClientPing"))
 		ss.CallOut(91, &protos.Login_C{
 			OpenId: proto.String("2017015025"),
 			// Uid:        proto.Int64(0),

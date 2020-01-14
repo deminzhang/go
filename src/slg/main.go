@@ -44,12 +44,7 @@ func main() {
 		//go Net.Connect("localhost:8341", func(conn net.Conn) {
 		go Net.Connect("localhost:8341", func(ss *Net.Session) {
 			ss.CallOut(Net.Ping, &protos.Ping{})
-			Net.Send(ss.Conn, 1, []byte("LoginPing"))
-			// ss.CallOut(91, &protos.Login_C{
-			// 	OpenId: proto.String("2017015939"),
-			// 	//Uid:    proto.Int64(0),
-			// })
-
+			Net.Send(ss.Conn, 1, []byte("SelfPing"))
 		}, func(ss *Net.Session) {
 			log.Println("onClose", ss)
 		})

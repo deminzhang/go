@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"protocol"
 	"slg/rpc"
-	"time"
 
-	"github.com/golang/protobuf/proto"
+	_ "github.com/golang/protobuf/proto"
 )
 
 func init() {
