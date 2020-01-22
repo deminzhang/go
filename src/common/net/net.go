@@ -121,6 +121,8 @@ func onListen(conn net.Conn) {
 		//CallIn(int32(pid), data)
 	}
 }
+
+//func Listen(addr string, onListen, onClose) {
 func Listen(addr string) {
 	ln, err := net.Listen("tcp", addr)
 	if err != nil {

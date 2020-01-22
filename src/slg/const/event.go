@@ -1,7 +1,12 @@
 package Const
 
+//事件
 const (
-	OnServerStart  = 1
-	OnUserRegister = 2
-	OnUserLogin    = 3
+	OnServerStart = iota
+	OnConfigLoaded
+	OnUserNew
+	OnUserLogin
+	OnUserOffline
+	OnUserGetData
+	OnUserLevelUp
 )

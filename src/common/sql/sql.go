@@ -32,11 +32,11 @@ var _dr, _src string
 var _db *sql.DB
 var _orm *xorm.Engine
 
-func Init() {
+func Init(driver, source string) *xorm.Engine {
 	//loadConf
 	//"postgres", "postgres://postgres:postgres@10.5.50.161/s999_slg?sslmode=disable"
 	// if runtime.GOOS == "windows" {
-	// 	Connect("mysql", "root:1614@tcp(localhost:3306)/s999_slg?charset=utf8")
+	Connect(driver, source)
 	// } else {
 	// 	Connect("mysql", "root:NoNeed4Pass32768@tcp(10.45.11.29:3306)/s999_slg?charset=utf8")
 	// }
@@ -48,6 +48,7 @@ func Init() {
 	// _orm.Delete(&Account{Id: 999})
 
 	//_orm.Where("")
+	return _orm
 }
 
 //连接/重连

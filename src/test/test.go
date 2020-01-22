@@ -3,6 +3,7 @@ package main
 import (
 	// "common/net"
 	// "common/sql"
+	"common/util"
 	"crypto/md5"
 	"fmt"
 	"log"
@@ -11,8 +12,6 @@ import (
 	"net/http"
 	"protocol"
 	"reflect"
-	_ "slg/rpc"
-	"slg/world"
 	"strconv"
 	"strings"
 	"time"
@@ -20,8 +19,19 @@ import (
 	_ "github.com/golang/protobuf/proto"
 )
 
+//配置
+type GameConf struct {
+	Listen string
+	DBHost string
+}
+
 func init() {
-	fmt.Println(">>test.test.init")
+	fmt.Println(">>test.main.init")
+}
+
+func main() {
+	Util.Info()
+	test()
 }
 
 func test() {
@@ -45,9 +55,11 @@ func test() {
 
 	rand.Seed(time.Now().UnixNano())
 	fmt.Println("RR", rand.Intn(10))
-	fmt.Println("XXXXX", strconv.Itoa(12334))
+	fmt.Println("XXXXX", strconv.Itoa(12334), 10&3)
 
 	fmt.Println("rand.Perm", rand.Perm(10))
+	fmt.Println("Util.Min", Util.Min(4, 3, 5, 6))
+	fmt.Println("Util.Min", Util.Min(3, 5, 6))
 
 	// data := Sql.Query2Map("select * from version;")
 	// fmt.Println(data, data[0], data[0]["ver"])
@@ -57,7 +69,7 @@ func test() {
 
 	//Sql.Exec("set @@auto_increment_offset=?;", 998)
 
-	fmt.Println(World.TILEX_NUM_X)
+	//fmt.Println(true?1:2)
 	// leastInterval([]byte("AAABBB"), 2)
 	aa := []byte{'a', 'b'}
 	bb := aa
@@ -72,6 +84,9 @@ func test() {
 	o = new(TestMgr)
 	o.onTest(123)
 
+	var conf GameConf
+	Util.ReadToml("test.toml", &conf)
+	fmt.Println("gameConfTest:", conf.Listen)
 }
 
 type IEvent interface {

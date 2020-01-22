@@ -12,8 +12,7 @@ import (
 )
 
 func init() {
-	now := time.Now()
-	rand.Seed(now.UnixNano())
+	rand.Seed(time.Now().UnixNano())
 
 	//rows, err := Sql.Query("select * from server_data where sid=?", 999)
 	//if not

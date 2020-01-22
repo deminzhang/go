@@ -8,7 +8,7 @@ import (
 )
 
 //unix时间ms级
-func MSec() int64 {
+func Millisecond() int64 {
 	return time.Now().UnixNano() / 1e6
 }
 
@@ -32,6 +32,7 @@ func Info() {
 	t := time.Now()
 	fmt.Println("", t)
 	fmt.Println(" unixtime =", t.Unix())
+	fmt.Println(" Millisecond =", Millisecond())
 	fmt.Println(" args =", os.Args)
 	wd, _ := os.Getwd()
 	fmt.Println(" pwd =", wd)

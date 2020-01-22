@@ -34,6 +34,11 @@ type Session struct {
 	SightR int
 }
 
+// type interface ISession{
+// 	CallOut(int32,Message)
+
+// }
+
 type SessionMap struct {
 	sync.RWMutex
 	list map[int64]*Session
