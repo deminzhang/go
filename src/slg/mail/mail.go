@@ -157,7 +157,7 @@ func SendSys(uid int64, cid int32, titles []string, contexts []string, item []*p
 
 //events
 func init() {
-	Event.Reg("OnUserNew", func(uid int64) {
+	Event.RegA("OnUserNew", func(uid int64) {
 		SendSys(uid, 0, []string{"第一封"}, []string{"测试邮件"},
 			[]*protos.IdNum{
 				&protos.IdNum{Cid: proto.Int32(1), Num: proto.Int64(1)},
@@ -165,7 +165,7 @@ func init() {
 			},
 			[]*protos.IdNum{&protos.IdNum{Cid: proto.Int32(1), Num: proto.Int64(1)}})
 	})
-	Event.Reg("OnUserInit", func(uid int64, updates *protos.Updates) {
+	Event.RegA("OnUserInit", func(uid int64, updates *protos.Updates) {
 		var all, unread int64
 		rows, err := Sql.Query("select count(*) as count from u_mail where uid=?", uid)
 		if err != nil {

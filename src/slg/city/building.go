@@ -47,13 +47,13 @@ func ReadBuilding(uid0 int64, sid int64) *protos.Building {
 //----------------------------------------------------------
 //event
 func init() {
-	Event.Reg("OnUserNew", func(uid int64) {
+	Event.RegA("OnUserNew", func(uid int64) {
 		//for cfg if init level>0
 		Sql.Query(`insert into u_building(sid,uid,tp,level,x,y,resTime,resOut,resVal)
 			values(null,?,?,?,?,?,?,?,?)`,
 			uid, 1, 1, 26, 26, 0, 0, 0)
 	})
-	Event.Reg("OnUserInit", func(uid int64, updates *protos.Updates) {
+	Event.RegA("OnUserInit", func(uid int64, updates *protos.Updates) {
 		rows, err := Sql.Query("select * from u_building where uid=?", uid)
 		if err != nil {
 			log.Println("OnUserInit error: ", err)

@@ -1,10 +1,8 @@
 package Item
 
 import (
-	"common/event"
 	"common/net"
 	"common/sql"
-	"log"
 	"protocol"
 	"slg/rpc"
 
@@ -86,31 +84,4 @@ func DelRess(uid int64, list []*protos.IdNum, src string) {
 	for _, it := range list {
 		DelRes(uid, it.GetCid(), it.GetNum(), src)
 	}
-}
-
-//event--------------------------------------
-func init() {
-	Event.Reg("OnUserNew", func(uid int64) {
-		for cid := 1; cid < 10; cid++ {
-			Sql.Query("replace into u_res(uid,cid,num) values(?,?,?)", uid, cid, 1)
-		}
-	})
-	Event.Reg("OnUserInit", func(uid int64, updates *protos.Updates) {
-		rows, err := Sql.Query("select cid,num from u_res where uid=?", uid)
-		if err != nil {
-			log.Println("Res.OnUserInit error: ", err)
-			return
-		}
-		items := []*protos.Res{}
-		for rows.Next() {
-			var cid int32
-			var num int64
-			rows.Scan(&cid, &num)
-			items = append(items, &protos.Res{
-				Cid: proto.Int32(cid),
-				Num: proto.Int64(num),
-			})
-		}
-		updates.Res = items
-	})
 }

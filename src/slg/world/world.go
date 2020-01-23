@@ -422,7 +422,7 @@ func init() {
 	BornAreaIdx = 8 //TODO读库
 	BornAreaNum = 0 //TODO读库
 
-	Event.Reg("OnUserNew", func(uid int64) {
+	Event.RegA("OnUserNew", func(uid int64) {
 		//分配城市坐标 第一次出城再分配更好
 		//City
 	NEXTAREA:
@@ -464,10 +464,10 @@ func init() {
 		BornAreaNum = 0
 		goto NEXTAREA
 	})
-	Event.Reg("OnUserInit", func(uid int64, updates *protos.Updates) {
+	Event.RegA("OnUserInit", func(uid int64, updates *protos.Updates) {
 
 	})
-	Event.Reg("OnDisconn", func(uid int64) {
+	Event.RegA("OnDisconn", func(uid int64) {
 		e := Eyes.Get(uid)
 		if e == nil {
 			return

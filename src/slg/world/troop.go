@@ -157,7 +157,7 @@ func getCrossSights(sx, sy, tx, ty int32) {
 //----------------------------------------------------------
 //event
 func init() {
-	Event.Reg("OnUserInit", func(uid int64, updates *protos.Updates) {
+	Event.RegA("OnUserInit", func(uid int64, updates *protos.Updates) {
 		//updates.Troop = myTroops
 	})
 

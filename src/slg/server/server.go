@@ -31,7 +31,7 @@ func GetDBname() string {
 //----------------------------------------------------------
 //event
 func init() {
-	Event.Reg("OnUserInit", func(uid int64, updates *protos.Updates) {
+	Event.RegA("OnUserInit", func(uid int64, updates *protos.Updates) {
 		now := (time.Now().UnixNano() / 1e6)
 		updates.Server = &protos.Server{
 			Time:    proto.Int64(now),

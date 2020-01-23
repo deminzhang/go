@@ -149,13 +149,13 @@ func DelWounded(uid int64, tp int32, lv int32, num int32) {
 //----------------------------------------------------------
 //event
 func init() {
-	Event.Reg("OnUserNew", func(uid int64) {
+	Event.RegA("OnUserNew", func(uid int64) {
 		Sql.Query(`insert into u_unit(uid,tp,lv,num) values(?,?,?,?)`,
 			uid, 1, 1, 100)
 		Sql.Query(`insert into u_wounded(uid,tp,lv,num) values(?,?,?,?)`,
 			uid, 1, 1, 10)
 	})
-	Event.Reg("OnUserInit", func(uid int64, updates *protos.Updates) {
+	Event.RegA("OnUserInit", func(uid int64, updates *protos.Updates) {
 		rows, err := Sql.Query("select * from u_unit where uid=?", uid)
 		if err != nil {
 			log.Println("City.OnUserInit error: ", err)
@@ -177,7 +177,7 @@ func init() {
 		}
 		updates.Unit = a
 	})
-	Event.Reg("OnUserInit", func(uid int64, updates *protos.Updates) {
+	Event.RegA("OnUserInit", func(uid int64, updates *protos.Updates) {
 		//伤兵
 		rows, err := Sql.Query("select * from u_wounded where uid=?", uid)
 		if err != nil {

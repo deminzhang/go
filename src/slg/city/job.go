@@ -87,7 +87,7 @@ func DelJob(sid int64) {
 //----------------------------------------------------------
 //event
 func init() {
-	Event.Reg("OnUserInit", func(uid int64, updates *protos.Updates) {
+	Event.RegA("OnUserInit", func(uid int64, updates *protos.Updates) {
 		rows, err := Sql.Query("select * from u_job where uid=?", uid)
 		if err != nil {
 			log.Println("Job.OnUserInit error: ", err)
