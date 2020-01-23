@@ -4,8 +4,9 @@ import (
 	"common/net"
 	"common/util"
 	"fmt"
-	"protocol"
+	"protos"
 	"runtime"
+	"slg/const"
 	"time"
 
 	"github.com/golang/protobuf/proto"
@@ -24,10 +25,10 @@ func main() {
 	fmt.Println(">>client start=========================")
 
 	//测试自连
-	go Net.Connect("localhost:8341", func(ss *Net.Session) {
+	go Net.Connect("localhost:8342", func(ss *Net.Session) {
 		ss.CallOut(Net.Ping, &protos.Ping{})
 		Net.Send(ss.Conn, 1, []byte("ClientPing"))
-		ss.CallOut(91, &protos.Login_C{
+		ss.CallOut(Const.Login_C, &protos.Login_C{
 			OpenId: proto.String("2017015025"),
 			// Uid:        proto.Int64(0),
 			// ServerName: proto.String("999"),

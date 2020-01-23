@@ -7,7 +7,7 @@ import (
 	"fmt"
 
 	// "math"
-	"protocol"
+	"protos"
 	"slg/rpc"
 	"sync"
 	"time"

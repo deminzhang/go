@@ -3,7 +3,7 @@ package Net
 import (
 	"fmt"
 	"log"
-	"protocol"
+	"protos"
 
 	"github.com/golang/protobuf/proto"
 )

@@ -1,7 +1,7 @@
 package Entity
 
 import (
-	"protocol"
+	"protos"
 
 	"github.com/golang/protobuf/proto"
 )

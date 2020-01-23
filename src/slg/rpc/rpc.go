@@ -4,7 +4,7 @@ package Rpc
 import (
 	"common/net"
 	"fmt"
-	"protocol"
+	"protos"
 )
 
 func init() {

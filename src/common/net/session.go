@@ -6,7 +6,7 @@ import (
 	"errors"
 	"log"
 	"net"
-	"protocol"
+	"protos"
 	"sync"
 
 	"github.com/golang/protobuf/proto"
@@ -101,6 +101,9 @@ func (ss *Session) CallIn(pid int32, data []byte) {
 	if rpc == nil {
 		log.Println(">>CallIn.Default", pid, uid)
 		rpc = rpcs[Response_S]
+		if rpc == nil {
+			log.Fatal(">>NoRegRpc", Response_S)
+		}
 	}
 	rpc(ss, pid, uid, data)
 }

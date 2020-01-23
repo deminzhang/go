@@ -3,7 +3,7 @@ package Event
 import (
 	"fmt"
 	"log"
-	"protocol"
+	"protos"
 	"reflect"
 
 	"github.com/golang/protobuf/proto"

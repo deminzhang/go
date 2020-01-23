@@ -4,7 +4,7 @@ import (
 	"common/net"
 	"common/sql"
 	"common/util"
-	"protocol"
+	"protos"
 	"slg/entity"
 	"slg/rpc"
 

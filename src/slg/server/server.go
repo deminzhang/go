@@ -6,7 +6,7 @@ import (
 
 	//"common/sql"
 	"common/event"
-	"protocol"
+	"protos"
 
 	"github.com/golang/protobuf/proto"
 )

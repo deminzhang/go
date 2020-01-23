@@ -7,7 +7,7 @@ import (
 	"common/util"
 	"fmt"
 	"log"
-	"protocol"
+	"protos"
 	"slg/const"
 	"slg/entity"
 

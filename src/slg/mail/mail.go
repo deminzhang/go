@@ -6,7 +6,7 @@ import (
 	"common/sql"
 	"common/util"
 	"log"
-	"protocol"
+	"protos"
 	"slg/item"
 	"slg/rpc"
 	"strings"

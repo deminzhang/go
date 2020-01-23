@@ -86,7 +86,7 @@ func onListen(conn net.Conn) {
 	defer func() {
 		fmt.Println("onNetClose:", conn.RemoteAddr(), conn.LocalAddr())
 		if session.Uid > 0 {
-			Event.Call("OnDisconn", session.Uid)
+			Event.CallA("OnDisconn", session.Uid)
 		}
 		_clientCount--
 		log.Println(">>clientCount=", _clientCount)

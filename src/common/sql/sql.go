@@ -13,60 +13,24 @@ import (
 
 	//第三方---------------------------
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/go-xorm/xorm"
 	_ "github.com/lib/pq"
 
 	"slg/server"
 )
 
 //
-type Account struct {
-	Id      int64
-	Name    string `xorm:"unique"`
-	Balance float64
-	Version int `xorm:"version"` // 乐观锁
-}
-
-//
-var _dr, _src string
+var _driver, _source string
 var _db *sql.DB
-var _orm *xorm.Engine
-
-func Init(driver, source string) *xorm.Engine {
-	//loadConf
-	//"postgres", "postgres://postgres:postgres@10.5.50.161/s999_slg?sslmode=disable"
-	// if runtime.GOOS == "windows" {
-	Connect(driver, source)
-	// } else {
-	// 	Connect("mysql", "root:NoNeed4Pass32768@tcp(10.45.11.29:3306)/s999_slg?charset=utf8")
-	// }
-	// UpdateDB()
-	//https://www.imooc.com/article/46419
-	// _orm.Sync2(new(Account))
-	// _orm.Insert(&Account{Name: "abc", Balance: 123})
-	// _orm.Insert(&Account{Name: "xxx"})
-	// _orm.Delete(&Account{Id: 999})
-
-	//_orm.Where("")
-	return _orm
-}
 
 //连接/重连
-func Connect(driver, source string) {
-	_dr, _src = driver, source
+func Connect(driver, source string) *sql.DB {
+	_driver, _source = driver, source
 	var err error
-	_orm, err = xorm.NewEngine(driver, source)
+	_db, err = sql.Open(driver, source)
 	if err != nil {
 		panic(err)
 	}
-	// _db, err = sql.Open(driver, source)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	_db = _orm.DB().DB
-}
-func ORM() *xorm.Engine {
-	return _orm
+	return _db
 }
 
 func GetSqlPath() string {
@@ -178,11 +142,6 @@ func UpdateDB() {
 		}
 	}
 	tx.Commit()
-}
-
-//TODO 清库重置
-func ClearDB() {
-	//_db.Query("DROP TABLE IF EXISTS `version`;")
 }
 
 func Begin() (*sql.Tx, error) {
