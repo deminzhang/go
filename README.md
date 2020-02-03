@@ -30,4 +30,4 @@ cd github.com/golang/protobuf/proto
 go build
 go install
 
-#ttt23
+#ttt23dev
