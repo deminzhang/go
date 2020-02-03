@@ -3,9 +3,9 @@ package User
 import (
 	"common/event"
 	"common/sql"
-	"protos"
 	"slg/const"
 	"slg/entity"
+	// "protos"
 )
 
 //event--------------------------------------
@@ -14,10 +14,10 @@ func init() {
 		x := Sql.ORM()
 		x.Sync2(new(Entity.User))
 	})
-	Event.Reg(Const.OnUserNew, func(uid int64) {
+	// Event.Reg(Const.OnUserNew, func(uid int64) {
 
-	})
-	Event.Reg(Const.OnUserGetData, func(uid int64, updates *protos.Updates) {
+	// })
+	// Event.Reg(Const.OnUserGetData, func(uid int64, updates *protos.Updates) {
 
-	})
+	// })
 }
