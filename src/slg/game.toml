@@ -1,6 +1,6 @@
 
 #主监听
-Listen = ":8342"
+Listen = ":8341"
 
 #DB数据库
 #DBType = "postgres"

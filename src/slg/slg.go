@@ -75,8 +75,7 @@ func main() {
 	//测试自连
 	//client, server := net.Pipe()
 	if runtime.GOOS == "windows" {
-		//go Net.Connect("localhost:8341", func(conn net.Conn) {
-		go Net.Connect("localhost:8342", func(ss *Net.Session) {
+		go Net.Connect("localhost:8341", func(ss *Net.Session) {
 			ss.CallOut(Net.Ping, &protos.Ping{})
 			Net.Send(ss.Conn, 1, []byte("SelfPing"))
 
