@@ -1,0 +1,5 @@
+#DBHost
+DBHost = "root:1614@tcp(localhost:3306)/s999_slg?charset=utf8"
+
+#主监听
+Listen = ":8341"
