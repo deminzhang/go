@@ -16,7 +16,7 @@ import (
 
 //rpc
 func init() {
-	Net.RegRPC(Const.Login_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.Login_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.Login_C{}
 		if ss.DecodeFail(data, &ps) {
 			return
@@ -72,7 +72,7 @@ func init() {
 		})
 	})
 
-	Net.RegRPC(Const.Rename_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.Rename_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.Rename_C{}
 		if ss.DecodeFail(data, &ps) {
 			return
@@ -85,7 +85,7 @@ func init() {
 		}
 		ss.Props().User = user
 	})
-	Net.RegRPC(Const.ReIcon_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.ReIcon_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.ReIcon_C{}
 		if ss.DecodeFail(data, &ps) {
 			return
@@ -99,7 +99,7 @@ func init() {
 		}
 		ss.Props().User = user
 	})
-	Net.RegRPC(Const.ReIconB_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.ReIconB_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.ReIconB_C{}
 		if ss.DecodeFail(data, &ps) {
 			return
@@ -112,7 +112,7 @@ func init() {
 		}
 		ss.Props().User = user
 	})
-	Net.RegRPC(Const.UserView_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.UserView_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.UserView_C{}
 		if ss.DecodeFail(data, &ps) {
 			return

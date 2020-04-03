@@ -54,7 +54,7 @@ func Read(uid0 int64, sid int64) *protos.Mail {
 			FromName: proto.String(string(fromName)),
 			Cid:      proto.Int32(cid),
 			Title:    proto.String(string(title)),
-			Context:  proto.String(string(context)),
+			Content:  proto.String(string(context)),
 			Time:     proto.Int64(time),
 			TimeOut:  proto.Int64(timeOut),
 			ReportId: proto.Int64(reportId),
@@ -98,7 +98,7 @@ func Reads(uid int64, from int64) []*protos.Mail {
 			FromName: proto.String(string(fromName)),
 			Cid:      proto.Int32(cid),
 			Title:    proto.String(string(title)),
-			Context:  proto.String(string(context)),
+			Content:  proto.String(string(context)),
 			Time:     proto.Int64(time),
 			TimeOut:  proto.Int64(timeOut),
 			ReportId: proto.Int64(reportId),
@@ -114,7 +114,7 @@ func Reads(uid int64, from int64) []*protos.Mail {
 }
 
 func SendSys(uid int64, cid int32, titles []string, contexts []string, item []*protos.IdNum, res []*protos.IdNum) {
-	now := Util.MSec()
+	now := Util.MilliSecond()
 	timeOut := now + 7*24*86400000
 	title := strings.Join(titles, ",")
 	context := strings.Join(contexts, ",")
@@ -136,7 +136,7 @@ func SendSys(uid int64, cid int32, titles []string, contexts []string, item []*p
 		FromName: proto.String(""),
 		Cid:      proto.Int32(cid),
 		Title:    proto.String(title),
-		Context:  proto.String(context),
+		Content:  proto.String(context),
 		Time:     proto.Int64(now),
 		TimeOut:  proto.Int64(timeOut),
 		ReportId: proto.Int64(0),
@@ -193,7 +193,7 @@ func init() {
 
 //RPC
 func init() {
-	Net.RegRPC(Rpc.MailGet_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.MailGet_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 
 		ps := protos.MailGet_C{}
 		err := proto.Unmarshal(data, &ps)
@@ -209,7 +209,7 @@ func init() {
 			Updates: updates,
 		})
 	})
-	Net.RegRPC(Rpc.MailDel_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.MailDel_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.MailDel_C{}
 		err := proto.Unmarshal(data, &ps)
 		if err != nil {
@@ -244,7 +244,7 @@ func init() {
 			Removes: removes,
 		})
 	})
-	Net.RegRPC(Rpc.MailRead_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.MailRead_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 
 		ps := protos.MailRead_C{}
 		err := proto.Unmarshal(data, &ps)
@@ -275,7 +275,7 @@ func init() {
 			Props: updates,
 		})
 	})
-	Net.RegRPC(Rpc.MailTake_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.MailTake_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 
 		ps := protos.MailTake_C{}
 		err := proto.Unmarshal(data, &ps)
@@ -308,7 +308,7 @@ func init() {
 			Props: updates,
 		})
 	})
-	Net.RegRPC(Rpc.MailFavor_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.MailFavor_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 
 		ps := protos.MailFavor_C{}
 		err := proto.Unmarshal(data, &ps)
@@ -332,7 +332,7 @@ func init() {
 			Props: updates,
 		})
 	})
-	Net.RegRPC(Rpc.ReadReport_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.ReadReport_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 
 		ps := protos.ReadReport_C{}
 		err := proto.Unmarshal(data, &ps)

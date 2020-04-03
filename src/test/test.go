@@ -10,12 +10,14 @@ import (
 	"math"
 	"math/rand"
 	"net/http"
+	"os"
 	"protos"
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/Luxurioust/excelize"
 	_ "github.com/golang/protobuf/proto"
 )
 
@@ -83,10 +85,67 @@ func test() {
 	var o IEvent
 	o = new(TestMgr)
 	o.onTest(123)
+	var o1 IEvent
+	o1 = new(TestMgr1)
+	o1.onTest(123)
 
 	var conf GameConf
 	Util.ReadToml("test.toml", &conf)
 	fmt.Println("gameConfTest:", conf.Listen)
+
+	xlsx, err := excelize.OpenFile("./test.xlsx")
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	// Get value from cell by given sheet index and axis.
+
+	for sheetIdx := 1; ; sheetIdx++ {
+		sheetName := xlsx.GetSheetName(sheetIdx)
+		if sheetName == "" {
+			break
+		}
+		fmt.Println(sheetName + ":")
+		rows, _ := xlsx.GetRows(sheetName)
+		colNum := 65535
+		endLine := false
+		for line, row := range rows {
+			for col, cell := range row {
+				if colNum < col {
+					break
+				}
+				if col == 1 {
+					if cell == "" || cell == "///END" {
+						endLine = true
+						break
+					}
+				}
+				if line == 0 { //desc
+					if cell == "" || cell == "///END" {
+						if colNum > col-1 {
+							colNum = col - 1
+							break
+						}
+					} else {
+						fmt.Print(cell, col, "\t")
+					}
+				} else if line == 2 { //key
+					fmt.Print(cell, "\t")
+				} else if line == 3 { //type
+					fmt.Print(cell, "\t")
+				} else if line == 4 { //cs
+					fmt.Print(cell, "\t")
+				} else {
+					fmt.Print(cell, "\t")
+				}
+			}
+			if endLine {
+				break
+			}
+			fmt.Println()
+		}
+		fmt.Print(colNum, len(rows), "\n")
+	}
 }
 
 type IEvent interface {
@@ -97,5 +156,13 @@ type TestMgr struct {
 }
 
 func (test TestMgr) onTest(t int32) {
+	fmt.Println("TestMgr.onTest", test.abc, t)
+}
+
+type TestMgr1 struct {
+	abc int32
+}
+
+func (test TestMgr1) onTest(t int32) {
 	fmt.Println("TestMgr.onTest", test.abc, t)
 }

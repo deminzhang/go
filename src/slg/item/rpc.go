@@ -12,7 +12,7 @@ import (
 //RPC
 func init() {
 
-	Net.RegRPC(Const.ItemUse_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.ItemUse_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		log.Println(">>>ItemUse_C", data)
 
 		ps := protos.ItemUse_C{}
@@ -27,7 +27,7 @@ func init() {
 		Use(uid, ps.GetCid(), int64(ps.GetNum()))
 
 	})
-	Net.RegRPC(Const.ItemDel_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.ItemDel_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		log.Println(">>>ItemUse_C", data)
 
 		ps := protos.ItemDel_C{}

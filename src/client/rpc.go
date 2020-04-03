@@ -10,22 +10,21 @@ import (
 )
 
 func init() {
-
-	Net.RegRPC(Const.Response_S, func(ss *Net.Session, pid int32, uid int64, data []byte) {
+	Net.RegRPC(Const.Response_S, func(ss Net.Session, pid int32, uid int64, data []byte) {
 		ps := protos.Response_S{}
 		if ss.DecodeFail(data, &ps) {
 			return
 		}
 		fmt.Println(">>>Response_S", ps.GetProtoId(), pid, uid, ps)
 	})
-	Net.RegRPC(Const.Error_S, func(ss *Net.Session, pid int32, uid int64, data []byte) {
+	Net.RegRPC(Const.Error_S, func(ss Net.Session, pid int32, uid int64, data []byte) {
 		ps := protos.Error_S{}
 		if ss.DecodeFail(data, &ps) {
 			return
 		}
 		fmt.Println("<<<Error_S", ps.GetProtoId(), ps.GetCode(), ps.GetMsg())
 	})
-	Net.RegRPC(Const.Login_S, func(ss *Net.Session, pid int32, uid int64, data []byte) {
+	Net.RegRPC(Const.Login_S, func(ss Net.Session, pid int32, uid int64, data []byte) {
 		ps := protos.Login_S{}
 		if ss.DecodeFail(data, &ps) {
 			return

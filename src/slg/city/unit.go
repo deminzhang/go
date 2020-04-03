@@ -205,7 +205,7 @@ func init() {
 //-----------------------------------------
 //RPC
 func init() {
-	Net.RegRPC(Rpc.UnitTrain_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.UnitTrain_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.UnitTrain_C{}
 		if ss.DecodeFail(data, &ps) {
 			return
@@ -248,7 +248,7 @@ func init() {
 			Updates: updates,
 		})
 	})
-	Net.RegRPC(Rpc.UnitDisMiss_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.UnitDisMiss_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.UnitDisMiss_C{}
 		if ss.DecodeFail(data, &ps) {
 			return
@@ -257,7 +257,7 @@ func init() {
 		fmt.Println(">>>UnitDissMiss_C", tp, lv, num)
 		DelUnit(uid, tp, lv, num)
 	})
-	Net.RegRPC(Rpc.UnitUp_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.UnitUp_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.UnitUp_C{}
 		if ss.DecodeFail(data, &ps) {
 			return
@@ -301,7 +301,7 @@ func init() {
 			},
 		})
 	})
-	Net.RegRPC(Rpc.UnitHeal_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.UnitHeal_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.UnitHeal_C{}
 		if ss.DecodeFail(data, &ps) {
 			return

@@ -31,5 +31,7 @@ go get github.com/golang/protobuf/proto
 cd github.com/golang/protobuf/proto
 go build
 go install
+# excelize
+go get github.com/Luxurioust/excelize
 
 #ttest

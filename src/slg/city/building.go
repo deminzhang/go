@@ -82,7 +82,7 @@ func init() {
 //-----------------------------------------
 //RPC
 func init() {
-	Net.RegRPC(Rpc.Build_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.Build_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		fmt.Println(">>>Build_C", data)
 
 		ps := protos.Build_C{}
@@ -142,7 +142,7 @@ func init() {
 			Updates: updates,
 		})
 	})
-	Net.RegRPC(Rpc.BuildUp_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.BuildUp_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		fmt.Println(">>>BuildUp_C", data)
 
 		ps := protos.BuildUp_C{}
@@ -193,7 +193,7 @@ func init() {
 			Updates: updates,
 		})
 	})
-	Net.RegRPC(Rpc.BuildMove_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.BuildMove_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.BuildMove_C{}
 		err := proto.Unmarshal(data, &ps)
 		if err != nil {

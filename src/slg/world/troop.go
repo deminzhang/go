@@ -166,7 +166,7 @@ func init() {
 //RPC
 func init() {
 
-	Net.RegRPC(Rpc.March_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.March_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.March_C{}
 		if ss.DecodeFail(data, &ps) {
 			return

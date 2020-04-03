@@ -232,17 +232,75 @@ func (m *UserView_C) GetUid() int64 {
 	return 0
 }
 
+type SetMark_C struct {
+	ProtoId              *int32   `protobuf:"varint,1,opt,name=protoId,def=111" json:"protoId,omitempty"`
+	Cid                  *int32   `protobuf:"varint,2,opt,name=cid" json:"cid,omitempty"`
+	Val                  *int64   `protobuf:"varint,3,opt,name=val" json:"val,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SetMark_C) Reset()         { *m = SetMark_C{} }
+func (m *SetMark_C) String() string { return proto.CompactTextString(m) }
+func (*SetMark_C) ProtoMessage()    {}
+func (*SetMark_C) Descriptor() ([]byte, []int) {
+	return fileDescriptor_116e343673f7ffaf, []int{4}
+}
+
+func (m *SetMark_C) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SetMark_C.Unmarshal(m, b)
+}
+func (m *SetMark_C) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SetMark_C.Marshal(b, m, deterministic)
+}
+func (m *SetMark_C) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SetMark_C.Merge(m, src)
+}
+func (m *SetMark_C) XXX_Size() int {
+	return xxx_messageInfo_SetMark_C.Size(m)
+}
+func (m *SetMark_C) XXX_DiscardUnknown() {
+	xxx_messageInfo_SetMark_C.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SetMark_C proto.InternalMessageInfo
+
+const Default_SetMark_C_ProtoId int32 = 111
+
+func (m *SetMark_C) GetProtoId() int32 {
+	if m != nil && m.ProtoId != nil {
+		return *m.ProtoId
+	}
+	return Default_SetMark_C_ProtoId
+}
+
+func (m *SetMark_C) GetCid() int32 {
+	if m != nil && m.Cid != nil {
+		return *m.Cid
+	}
+	return 0
+}
+
+func (m *SetMark_C) GetVal() int64 {
+	if m != nil && m.Val != nil {
+		return *m.Val
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*Rename_C)(nil), "protos.Rename_C")
 	proto.RegisterType((*ReIcon_C)(nil), "protos.ReIcon_C")
 	proto.RegisterType((*ReIconB_C)(nil), "protos.ReIconB_C")
 	proto.RegisterType((*UserView_C)(nil), "protos.UserView_C")
+	proto.RegisterType((*SetMark_C)(nil), "protos.SetMark_C")
 }
 
 func init() { proto.RegisterFile("user.proto", fileDescriptor_116e343673f7ffaf) }
 
 var fileDescriptor_116e343673f7ffaf = []byte{
-	// 182 bytes of a gzipped FileDescriptorProto
+	// 211 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2a, 0x2d, 0x4e, 0x2d,
 	0xd2, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x03, 0x53, 0xc5, 0x52, 0x3c, 0xc9, 0xf9, 0xb9,
 	0xb9, 0xf9, 0x79, 0x10, 0x51, 0x25, 0x1f, 0x2e, 0x8e, 0xa0, 0xd4, 0xbc, 0xc4, 0xdc, 0xd4, 0x78,
@@ -253,6 +311,8 @@ var fileDescriptor_116e343673f7ffaf = []byte{
 	0x61, 0x9a, 0x29, 0x5c, 0x3d, 0xc8, 0x34, 0x56, 0x25, 0x03, 0x2e, 0x4e, 0x88, 0x7a, 0x27, 0x1c,
 	0x1a, 0xcc, 0x85, 0x78, 0xb9, 0x58, 0x41, 0x1a, 0x9c, 0x24, 0x58, 0xc0, 0x3a, 0xf4, 0xb9, 0xb8,
 	0x42, 0x8b, 0x53, 0x8b, 0xc2, 0x32, 0x53, 0xcb, 0x71, 0x68, 0xb1, 0x14, 0xe2, 0xe6, 0x62, 0x2e,
-	0xcd, 0x4c, 0x91, 0x60, 0x52, 0x60, 0xd4, 0x60, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff, 0xdb, 0xd1,
-	0x29, 0xe3, 0x03, 0x01, 0x00, 0x00,
+	0xcd, 0x4c, 0x91, 0x60, 0x52, 0x60, 0xd4, 0x60, 0x56, 0xb2, 0xe6, 0xe2, 0x0c, 0x4e, 0x2d, 0xf1,
+	0x4d, 0x2c, 0xca, 0xc6, 0xae, 0xde, 0xd0, 0x10, 0xa4, 0x3e, 0x19, 0xaa, 0x9e, 0x15, 0xc4, 0x29,
+	0x4b, 0xcc, 0x01, 0xfb, 0x8e, 0x19, 0x10, 0x00, 0x00, 0xff, 0xff, 0x69, 0xf4, 0x6b, 0xd4, 0x40,
+	0x01, 0x00, 0x00,
 }

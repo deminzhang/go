@@ -118,7 +118,7 @@ func init() {
 //-----------------------------------------
 //RPC
 func init() {
-	Net.RegRPC(Rpc.JobDone_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.JobDone_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.JobDone_C{}
 		if ss.DecodeFail(data, &ps) {
 			return
@@ -164,7 +164,7 @@ func init() {
 		})
 
 	})
-	Net.RegRPC(Rpc.JobCancel_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.JobCancel_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.JobCancel_C{}
 		if ss.DecodeFail(data, &ps) {
 			return
@@ -207,7 +207,7 @@ func init() {
 		//}
 
 	})
-	Net.RegRPC(Rpc.JobFast_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.JobFast_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.JobFast_C{}
 		if ss.DecodeFail(data, &ps) {
 			return

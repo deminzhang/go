@@ -295,10 +295,10 @@ func getSightByXY(x, y int32) *Sight {
 }
 
 //重置视区 TODO跨服
-func ResetSight(ss *Net.Session, server int32, x int32, y int32) []*protos.Tile {
-	uid := ss.Uid
-	oldRow := ss.SightR
-	oldCol := ss.SightC
+func ResetSight(ss Net.Session, server int32, x int32, y int32) []*protos.Tile {
+	uid := ss.GetUid()
+	oldRow := 0 //ss.SightR
+	oldCol := 0 //ss.SightC
 	newRow := int(math.Ceil(float64(y) / float64(SIGHT_WIDTH)))
 	newCol := int(math.Ceil(float64(x) / float64(SIGHT_WIDTH)))
 	//if serverOld TODO 判定是否本服
@@ -333,7 +333,7 @@ func ResetSight(ss *Net.Session, server int32, x int32, y int32) []*protos.Tile 
 			})
 		}
 	}
-	ss.SightR, ss.SightC = newRow, newCol
+	//ss.SightR, ss.SightC = newRow, newCol
 	return tiles
 }
 
@@ -483,7 +483,7 @@ func init() {
 //RPC
 func init() {
 
-	Net.RegRPC(Rpc.View_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.View_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.View_C{}
 		if ss.DecodeFail(data, &ps) {
 			return
@@ -501,7 +501,7 @@ func init() {
 		// })
 	})
 
-	Net.RegRPC(Rpc.CityMove_C, func(ss *Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Rpc.CityMove_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.CityMove_C{}
 		if ss.DecodeFail(data, &ps) {
 			return

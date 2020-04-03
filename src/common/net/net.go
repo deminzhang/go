@@ -82,11 +82,12 @@ func onListen(conn net.Conn) {
 	conn.SetDeadline(time.Now().Add(time.Second * 30)) //初次收不到包超时
 	_clientCount++
 	log.Println(">>clientCount=", _clientCount)
-	session := Session{Conn: conn}
+	var session Session
+	session = &SessionS{Conn: conn}
 	defer func() {
 		fmt.Println("onNetClose:", conn.RemoteAddr(), conn.LocalAddr())
-		if session.Uid > 0 {
-			Event.CallA("OnDisconn", session.Uid)
+		if session.GetUid() > 0 {
+			Event.CallA("OnDisconn", session.GetUid())
 		}
 		_clientCount--
 		log.Println(">>clientCount=", _clientCount)
@@ -141,12 +142,13 @@ func Listen(addr string) {
 }
 
 //Client.connect
-func onConnect(conn net.Conn, onConn func(*Session), onDisconn func(*Session)) {
+func onConnect(conn net.Conn, onConn func(Session), onDisconn func(Session)) {
 	fmt.Println("onConnect:", conn.RemoteAddr(), conn.LocalAddr())
-	session := Session{Conn: conn}
-	onConn(&session)
+	var session Session
+	session = &SessionC{Conn: conn}
+	onConn(session)
 	defer func() {
-		onDisconn(&session)
+		onDisconn(session)
 		fmt.Println("onDisconn:", conn.RemoteAddr(), conn.LocalAddr())
 		conn.Close()
 	}()
@@ -168,7 +170,7 @@ func onConnect(conn net.Conn, onConn func(*Session), onDisconn func(*Session)) {
 		session.CallIn(int32(pid), data)
 	}
 }
-func Connect(addr string, onConn func(*Session), onDisconn func(*Session)) net.Conn {
+func Connect(addr string, onConn func(Session), onDisconn func(Session)) net.Conn {
 	fmt.Println(">>Connecting:", addr)
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {

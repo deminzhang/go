@@ -16,22 +16,22 @@ const (
 )
 
 //TODO 多协程读写map需加锁 sync.Mutex or sync.RwMutex
-var rpcs = make(map[int32]func(*Session, int32, int64, []byte))
+var rpcs = make(map[int32]func(Session, int32, int64, []byte))
 var decoders = make(map[int32]interface{})
 
 func init() {
 	//go tickServer()
-	RegRPC(Ping, func(ss *Session, pid int32, uid int64, data []byte) {
+	RegRPC(Ping, func(ss Session, pid int32, uid int64, data []byte) {
 		fmt.Println("<<<Ping", data)
-		Send(ss.Conn, Pong, data)
+		ss.Send(Pong, data)
 	})
-	RegRPC(Pong, func(ss *Session, pid int32, uid int64, data []byte) {
+	RegRPC(Pong, func(ss Session, pid int32, uid int64, data []byte) {
 		fmt.Println(">>>Pong", data)
 	})
 
 }
 
-func RegRPC(pid int32, call func(*Session, int32, int64, []byte)) {
+func RegRPC(pid int32, call func(Session, int32, int64, []byte)) {
 	if rpcs[pid] != nil {
 		log.Fatalf("RegRPC duplicated %d", pid)
 	}
@@ -39,7 +39,7 @@ func RegRPC(pid int32, call func(*Session, int32, int64, []byte)) {
 	//decoders[pid]=?
 }
 
-func ConnByUid(uid int64) *Session {
+func ConnByUid(uid int64) Session {
 	ss := G_uid2session.Get(uid)
 	if ss == nil {
 		return nil
@@ -63,7 +63,7 @@ func CallUids(uids []int64, pid int32, msg proto.Message) {
 	for _, uid := range uids {
 		ss := G_uid2session.Get(uid)
 		if ss != nil {
-			Send(ss.Conn, pid, data)
+			ss.Send(pid, data)
 		}
 	}
 }
