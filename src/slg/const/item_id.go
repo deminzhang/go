@@ -1,5 +1,6 @@
-package Item
+package Const
 
+//常用道具ID
 const (
 	GOOD   = 1
 	SILVER = 2

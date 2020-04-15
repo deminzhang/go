@@ -10,7 +10,7 @@ import (
 type Item struct {
 	Sid  int64 `xorm:"pk autoincr"`
 	Uid  int64 `xorm:"index"`
-	Cid  int32
+	Cid  int32 `xorm:"unique"`
 	Num  int64
 	Time int64 `xorm:"updated"`
 }

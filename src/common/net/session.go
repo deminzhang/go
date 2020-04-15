@@ -1,7 +1,6 @@
 package Net
 
 import (
-	"log"
 	"protos"
 	"sync"
 
@@ -68,10 +67,10 @@ func init() {
 		G_uid2session.lists[i] = &SessionMap{list: make(map[int64]Session)}
 	}
 	//TEST
-	var c Session
+	// var c Session
 	//c = new(Session)
-	c = &SessionS{uid: 1234}
+	// c = &SessionS{uid: 1234}
 
-	log.Println("TEST ISession", c.GetUid())
+	// log.Println("TEST ISession", c.GetUid())
 
 }

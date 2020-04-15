@@ -1,4 +1,4 @@
-package User
+package World
 
 import (
 	"common/event"
@@ -12,13 +12,21 @@ import (
 //event--------------------------------------
 func init() {
 	Event.Reg(Const.OnInitDB, func() {
+		log.Println("World.OnInitDB")
 		x := Sql.ORM()
-		x.Sync2(new(Entity.User))
+		x.Sync2(new(Entity.Area))
+		x.Sync2(new(Entity.Tile))
+	})
+	Event.Reg(Const.OnLoadDB, func() {
+		log.Println("World.OnLoadDB")
+
 	})
 	Event.Reg(Const.OnUserNew, func(uid int64) {
-		log.Println("User.OnUserNew", uid)
+		log.Println("World.OnUserNew", uid)
+
 	})
 	Event.Reg(Const.OnUserGetData, func(uid int64, updates *protos.Updates) {
-		log.Println("User.OnUserGetData", uid)
+		log.Println("World.OnUserGetData", uid)
+
 	})
 }

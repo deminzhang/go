@@ -17,7 +17,8 @@ type User struct {
 	Level      int32 //`xorm:"index"`
 	CityX      int32 `xorm:"index(pos)"`
 	CityY      int32 `xorm:"index(pos)"`
-	LoginTime  int64
+	Create     int64 `xorm:"created"`
+	Login      int64 `xorm:"->"`
 	AllianceId int64
 	Version    int `xorm:"version"` //乐观锁
 }

@@ -42,15 +42,15 @@ func init() {
 		} else {
 			name := "user_" + passport
 			user = Entity.User{
-				Passport:  passport,
-				Name:      name,
-				Level:     1,
-				Version:   0,
-				LoginTime: now,
+				Passport: passport,
+				Name:     name,
+				Level:    1,
+				Version:  0,
+				Login:    now,
 			}
 			x.Insert(&user)
 			uid = user.Uid
-			fmt.Println("User.OnUserNew", uid)
+			log.Println("Event.OnUserNew", uid)
 
 			//==OnUserNew(uid)
 			Event.Call(Const.OnUserNew, uid)
@@ -59,10 +59,9 @@ func init() {
 		uid = user.Uid
 		//updateLoginTime
 
-		fmt.Println("User.OnUserLogin", uid)
+		log.Println("Event.OnUserLogin", uid)
 		Event.Call(Const.OnUserLogin, uid)
 
-		fmt.Println("User.OnUserGetData", uid)
 		updates := &protos.Updates{}
 		updates.User = user.ToProto()
 		Event.Call(Const.OnUserGetData, uid, updates)

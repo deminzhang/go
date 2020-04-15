@@ -1,15 +1,12 @@
 package World
 
 import (
-	"common/event"
 	"common/net"
 	"common/sql"
 	"fmt"
 	"math"
 	"math/rand"
 	"protos"
-	"slg/item"
-	"slg/rpc"
 	"sync"
 	"time"
 
@@ -325,10 +322,10 @@ func ResetSight(ss Net.Session, server int32, x int32, y int32) []*protos.Tile {
 					return
 				}
 				tiles = append(tiles, &protos.Tile{
-					X:   proto.Int32(int32(x)),
-					Y:   proto.Int32(int32(y)),
-					Tp:  proto.Int32(int32(tp)),
-					Val: proto.Int64(val),
+					X:  proto.Int32(int32(x)),
+					Y:  proto.Int32(int32(y)),
+					Tp: proto.Int32(int32(tp)),
+					// Tp2: proto.Int64(val),
 				})
 			})
 		}
@@ -385,10 +382,10 @@ func MoveCity(uid int64, x, y int32) {
 	//for new update tile
 	tiles := []*protos.Tile{}
 	tiles = append(tiles, &protos.Tile{
-		X:   proto.Int32(int32(x)),
-		Y:   proto.Int32(int32(y)),
-		Tp:  proto.Int32(int32(TILE_CITY)),
-		Val: proto.Int64(uid),
+		X:  proto.Int32(int32(x)),
+		Y:  proto.Int32(int32(y)),
+		Tp: proto.Int32(int32(TILE_CITY)),
+		// Val: proto.Int64(uid),
 	})
 	if news == olds {
 		news.CallRound(12, &protos.Response_S{ProtoId: proto.Int32(0),
@@ -413,120 +410,4 @@ func MoveCity(uid int64, x, y int32) {
 			},
 		})
 	}
-}
-
-//----------------------------------------------------------
-//event
-func init() {
-	var BornAreaIdx, BornAreaNum int
-	BornAreaIdx = 8 //TODO读库
-	BornAreaNum = 0 //TODO读库
-
-	Event.RegA("OnUserNew", func(uid int64) {
-		//分配城市坐标 第一次出城再分配更好
-		//City
-	NEXTAREA:
-		r := BornAreaIdx/AREA_ROWN + 1
-		c := BornAreaIdx % AREA_ROWN
-		if c == 0 {
-			r--
-			c = AREA_ROWN
-		}
-		a := Areas[r][c]
-
-		sx := (a.col-1)*AREA_WIDTH + 1
-		sy := (a.row-1)*AREA_WIDTH + 1
-		for y := sy; y < sy+AREA_WIDTH; y++ {
-			for x := sx; x < sx+AREA_WIDTH; x++ {
-				tile := Tiles[y][x]
-				block := false //TODO 阻挡
-				if tile.Tp == 0 && !block {
-					//if Tiles[y-1][x-1]
-					tile.Tp = TILE_CITY
-					tile.Val = uid
-					BornAreaNum++
-					if BornAreaNum >= 800 {
-						BornAreaIdx = 14 //next
-						BornAreaNum = 0
-					}
-					//saveBornAreaNum
-					//Sql.Exec("update server_data set bornArea=?, bornNum=? where sid=?", BornAreaIdx,  BornAreaNum,999)
-
-					Tiles[y][x] = tile
-					Sql.Exec("replace into w_tile(x,y,tp,val) values(?,?,?,?)", tile.X, tile.Y, tile.Tp, tile.Val)
-					Sql.Exec("update u_user set cityX=?, cityY=? where uid=?", tile.X, tile.Y, uid)
-					//OnNewCity
-					return
-				}
-			}
-		}
-		BornAreaIdx = 14 ////next
-		BornAreaNum = 0
-		goto NEXTAREA
-	})
-	Event.RegA("OnUserInit", func(uid int64, updates *protos.Updates) {
-
-	})
-	Event.RegA("OnDisconn", func(uid int64) {
-		e := Eyes.Get(uid)
-		if e == nil {
-			return
-		}
-		s := getSight(e.row, e.col)
-		s.delEyes(uid)
-		Eyes.Set(uid, nil)
-
-	})
-
-}
-
-//RPC
-func init() {
-
-	Net.RegRPC(Rpc.View_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
-		ps := protos.View_C{}
-		if ss.DecodeFail(data, &ps) {
-			return
-		}
-
-		fmt.Println("<<<View_C", ps.GetServer(), ps.GetX(), ps.GetY())
-
-		tiles := ResetSight(ss, ps.GetServer(), ps.GetX(), ps.GetY())
-		//删的前端自理
-		ss.Update().Tile = tiles
-		// ss.CallOut(protoId+1, &protos.Response_S{ProtoId: proto.Int32(protoId),
-		// 	Updates: &protos.Updates{
-		// 		Tile: tiles,
-		// 	},
-		// })
-	})
-
-	Net.RegRPC(Rpc.CityMove_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
-		ps := protos.CityMove_C{}
-		if ss.DecodeFail(data, &ps) {
-			return
-		}
-		fmt.Println("<<<CityMove_C", ps.GetServer(), ps.GetX(), ps.GetY())
-		x, y := ps.GetX(), ps.GetY()
-		//TODO Item.CheckCost
-		if !CheckCityLand(x, y) {
-			ss.PError(protoId, 2, "CityMove_C.noMoveCity")
-			return
-		}
-		Item.Del(uid, 2, 1, "CityMove")
-		MoveCity(uid, x, y)
-
-		Sql.Exec("update u_user set cityX=?,cityY=? where uid=?", x, y, uid)
-		uu := &protos.User{
-			Uid:   proto.Int64(uid),
-			CityX: proto.Int32(x),
-			CityY: proto.Int32(y),
-		}
-		updates := &protos.Updates{}
-		updates.User = uu
-		ss.CallOut(protoId+1, &protos.Response_S{ProtoId: proto.Int32(protoId),
-			Props: updates,
-		})
-	})
-
 }

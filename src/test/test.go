@@ -105,6 +105,9 @@ func test() {
 		if sheetName == "" {
 			break
 		}
+		if sheetName[0:1] != "#" {
+			continue
+		}
 		fmt.Println(sheetName + ":")
 		rows, _ := xlsx.GetRows(sheetName)
 		colNum := 65535
@@ -146,6 +149,7 @@ func test() {
 		}
 		fmt.Print(colNum, len(rows), "\n")
 	}
+
 }
 
 type IEvent interface {

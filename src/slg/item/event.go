@@ -3,6 +3,7 @@ package Item
 import (
 	"common/event"
 	"common/sql"
+	"log"
 	"protos"
 	"slg/const"
 	"slg/entity"
@@ -10,12 +11,15 @@ import (
 
 //event--------------------------------------
 func init() {
-	Event.Reg(Const.OnDBConnect, func() {
+	Event.Reg(Const.OnInitDB, func() {
+		log.Println("Item.OnInitDB")
 		x := Sql.ORM()
 		x.Sync2(new(Entity.Item))
 		x.Sync2(new(Entity.Res))
 	})
+
 	Event.Reg(Const.OnUserNew, func(uid int64) {
+		log.Println("Item.OnUserNew", uid)
 		var cid int32
 		for cid = 1; cid < 10; cid++ {
 			Sql.ORM().Insert(&Entity.Res{Uid: uid, Cid: cid, Num: 1})
@@ -23,6 +27,7 @@ func init() {
 
 	})
 	Event.Reg(Const.OnUserGetData, func(uid int64, updates *protos.Updates) {
+		log.Println("Item.OnUserGetData", uid)
 		x := Sql.ORM()
 
 		items := make([]Entity.Item, 0)

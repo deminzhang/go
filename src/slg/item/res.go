@@ -9,26 +9,6 @@ import (
 	"github.com/golang/protobuf/proto"
 )
 
-const (
-	RES_FOOD  = 1  //粮食
-	RES_WOOD  = 2  //木头
-	RES_IRON  = 3  //铁
-	RES_GOLD  = 4  //金子
-	RES_VIP   = 5  //vip点
-	RES_EXP   = 6  //领主经验
-	RES_7     = 7  //体力
-	RES_GCOIN = 8  //联盟货币
-	RES_9     = 9  //竞技场荣誉值
-	RES_GEMB  = 10 //赠送砖石
-	RES_GEM   = 11 //充值钻石
-	RES_GEMS  = 12 //通用钻石
-
-)
-
-func init() {
-
-}
-
 //TODO 优化
 func resUp(uid int64, cid int32, newn int64) {
 	a := []*protos.Res{&protos.Res{

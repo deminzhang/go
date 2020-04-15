@@ -18,7 +18,7 @@ import (
 	// _ "slg/rpc"
 	// _ "slg/server"
 	_ "slg/user"
-	// _ "slg/world"
+	_ "slg/world"
 
 	"github.com/BurntSushi/toml"
 	"github.com/golang/protobuf/proto"
@@ -57,8 +57,9 @@ func main() {
 	} else {
 		Sql.ORMConnect(conf.DBType, conf.DBHost)
 	}
-	log.Println("Eevet.OnDBConnect")
-	Event.Call(Const.OnDBConnect)
+	log.Println("Eevet.OnInitDB")
+	Event.Call(Const.OnInitDB)
+	Event.Call(Const.OnLoadDB)
 
 	//服务器数据
 	//Server.Init()
@@ -80,7 +81,7 @@ func main() {
 			ss.Send(1, []byte("SelfPing"))
 
 			ss.CallOut(Const.Login_C, &protos.Login_C{
-				OpenId: proto.String("20170159998"),
+				OpenId: proto.String("20170159996"),
 				//Uid:    proto.Int64(0),
 			})
 		}, func(ss Net.Session) {
@@ -89,6 +90,6 @@ func main() {
 	}
 	//心跳监控
 	for {
-		time.Sleep(time.Second * 1)
+		time.Sleep(time.Second)
 	}
 }
