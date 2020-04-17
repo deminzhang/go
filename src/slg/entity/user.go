@@ -17,15 +17,10 @@ type User struct {
 	Level      int32 //`xorm:"index"`
 	CityX      int32 `xorm:"index(pos)"`
 	CityY      int32 `xorm:"index(pos)"`
-	Create     int64 `xorm:"created"`
-	Login      int64 `xorm:"->"`
+	CreateTime int64 `xorm:"created"`
+	LoginTime  int64 `xorm:"->"`
 	AllianceId int64
 	Version    int `xorm:"version"` //乐观锁
-}
-
-//返回主键
-func (this *User) GetPK() int64 {
-	return this.Uid
 }
 
 //转proto对象

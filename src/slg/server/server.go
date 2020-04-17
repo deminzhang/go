@@ -1,14 +1,15 @@
 package Server
 
 import (
-	"math/rand"
-	"time"
-
-	//"common/sql"
 	"common/event"
+	"math/rand"
 	"protos"
+	"slg/const"
 
-	"github.com/golang/protobuf/proto"
+	// "slg/entity"
+	"log"
+	"time"
+	// "github.com/golang/protobuf/proto"
 )
 
 func init() {
@@ -25,19 +26,19 @@ func GetServerId() int {
 }
 
 func GetDBname() string {
-	return "s999_slg"
+	return "slg999"
 }
 
 //----------------------------------------------------------
 //event
 func init() {
-	Event.RegA("OnUserInit", func(uid int64, updates *protos.Updates) {
-		now := (time.Now().UnixNano() / 1e6)
-		updates.Server = &protos.Server{
-			Time:    proto.Int64(now),
-			Appid:   proto.Int32(2148),
-			Region:  proto.Int32(2148999),
-			ChatUrl: proto.String("localhost"),
-		}
+
+	Event.Reg(Const.OnInitDB, func() {
+		// x := Sql.ORM()
+		// x.Sync2(new(Entity.ServerInfo))
+	})
+	Event.Reg(Const.OnUserGetData, func(uid int64, updates *protos.Updates) {
+		log.Println("ServerInfo.OnUserGetData", uid)
+
 	})
 }

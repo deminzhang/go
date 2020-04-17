@@ -1,14 +1,10 @@
-package World
+package Troop
 
 import (
-	"common/event"
-	"common/net"
 	"common/sql"
-	"fmt"
 
 	// "math"
 	"protos"
-	"slg/rpc"
 	"sync"
 	"time"
 )
@@ -89,35 +85,35 @@ func onTickTroops() {
 }
 
 func TroopMarch(uid, sid, tuid int64, tp, tx, ty int32) {
-	ret := Sql.Query2Map1("select cityX,cityY from u_user where uid=?;", uid)
-	sx := int32(ret["cityX"].(int64))
-	sy := int32(ret["cityY"].(int64))
-	tile := Tiles[sy][sx]
-	switch tp {
-	case TROOP_RES:
-		if tile.Tp < 1 || tile.Tp > 4 {
-			return
-		}
+	// ret := Sql.Query2Map1("select cityX,cityY from u_user where uid=?;", uid)
+	// sx := int32(ret["cityX"].(int64))
+	// sy := int32(ret["cityY"].(int64))
+	// tile := Tiles[sy][sx]
+	// switch tp {
+	// case TROOP_RES:
+	// 	if tile.Tp < 1 || tile.Tp > 4 {
+	// 		return
+	// 	}
 
-	case TROOP_SCOUT:
+	// case TROOP_SCOUT:
 
-	case TROOP_BACK: //只能对非联攻非返程的外出部队
-		if sid == 0 {
-			return
-		}
+	// case TROOP_BACK: //只能对非联攻非返程的外出部队
+	// 	if sid == 0 {
+	// 		return
+	// 	}
 
-	case TROOP_STATION:
+	// case TROOP_STATION:
 
-	case TROOP_MASS:
+	// case TROOP_MASS:
 
-	case TROOP_PVE:
+	// case TROOP_PVE:
 
-	case TROOP_PVP:
-	case TROOP_PPVE:
-	case TROOP_PPVP:
-	case TROOP_DEF:
-	default:
-	}
+	// case TROOP_PVP:
+	// case TROOP_PPVE:
+	// case TROOP_PPVP:
+	// case TROOP_DEF:
+	// default:
+	// }
 	// dis := int64(math.Sqrt(math.Pow(float64(sx)-float64(tx), 2) + math.Pow(float64(sy)-float64(ty), 2)))
 
 	// now := (time.Now().UnixNano() / 1e6)
@@ -146,35 +142,10 @@ func getCrossSights(sx, sy, tx, ty int32) {
 	}
 	//t := []*Sight{}
 
-	for r := sy / SIGHT_WIDTH; r <= ty/SIGHT_WIDTH; r++ {
+	// for r := sy / SIGHT_WIDTH; r <= ty/SIGHT_WIDTH; r++ {
 
-		for c := sx / SIGHT_WIDTH; c <= tx/SIGHT_WIDTH; c++ {
+	// 	for c := sx / SIGHT_WIDTH; c <= tx/SIGHT_WIDTH; c++ {
 
-		}
-	}
-}
-
-//----------------------------------------------------------
-//event
-func init() {
-	Event.RegA("OnUserInit", func(uid int64, updates *protos.Updates) {
-		//updates.Troop = myTroops
-	})
-
-}
-
-//RPC
-func init() {
-
-	Net.RegRPC(Rpc.March_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
-		ps := protos.March_C{}
-		if ss.DecodeFail(data, &ps) {
-			return
-		}
-		fmt.Println("<<<March_C", ps.GetTp(), ps.GetX(), ps.GetY())
-
-		//TroopMarch(uid, ps.GetSid(), 0, 1, ps.GetX(), ps.GetY())
-
-	})
-
+	// 	}
+	// }
 }

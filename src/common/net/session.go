@@ -17,7 +17,7 @@ type Session interface {
 	Send(int32, []byte)
 	CallOut(int32, proto.Message)
 	CallIn(int32, []byte)
-	PError(int32, int32, string)
+	PostError(int32, int32, string)
 	Error(error) bool
 	Assert(bool, error) bool
 

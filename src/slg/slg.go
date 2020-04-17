@@ -12,12 +12,17 @@ import (
 	"common/util"
 
 	"slg/const"
-	// _ "slg/city"
-	_ "slg/item"
-	// _ "slg/mail"
-	// _ "slg/rpc"
-	// _ "slg/server"
 	_ "slg/user"
+
+	_ "slg/building"
+	_ "slg/item"
+	_ "slg/job"
+	_ "slg/mail"
+	_ "slg/server"
+	_ "slg/ticker"
+	_ "slg/unit"
+
+	_ "slg/troop"
 	_ "slg/world"
 
 	"github.com/BurntSushi/toml"
@@ -30,6 +35,7 @@ type GameConf struct {
 	DBType    string
 	DBHost    string
 	DBHostDev string
+	ServerID  int64
 }
 
 func init() {
@@ -46,10 +52,11 @@ func main() {
 	}
 	log.Println("conf:", conf)
 
-	//载入策划配置
+	//载入数值配置
 	//Cfg.Load("./")
-	log.Println("Eevet.OnLoadConfig")
+	log.Println("Event.OnLoadConfig...")
 	Event.Call(Const.OnLoadConfig)
+	Event.Call(Const.OnCheckConfig)
 
 	//数据库初始化与更新
 	if runtime.GOOS == "windows" {
@@ -57,7 +64,7 @@ func main() {
 	} else {
 		Sql.ORMConnect(conf.DBType, conf.DBHost)
 	}
-	log.Println("Eevet.OnInitDB")
+	log.Println("Event.OnInitDB...")
 	Event.Call(Const.OnInitDB)
 	Event.Call(Const.OnLoadDB)
 
@@ -65,9 +72,9 @@ func main() {
 	//Server.Init()
 
 	//载入时间管理
-	//Ticker.Init()
+	// Ticker.Init()
 
-	log.Println("Eevet.OnServerStart")
+	log.Println("Event.OnServerStart...")
 	Event.Call(Const.OnServerStart)
 
 	//开启网络监听
@@ -81,7 +88,7 @@ func main() {
 			ss.Send(1, []byte("SelfPing"))
 
 			ss.CallOut(Const.Login_C, &protos.Login_C{
-				OpenId: proto.String("20170159996"),
+				OpenId: proto.String("2017015999622"),
 				//Uid:    proto.Int64(0),
 			})
 		}, func(ss Net.Session) {

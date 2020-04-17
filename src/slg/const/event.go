@@ -4,10 +4,14 @@ package Const
 const (
 	OnTest = iota //空置
 
-	OnLoadConfig  //配置加载完成 可重组关联项/预处理权重计算项
-	OnInitDB      //DB已连接 可初始化/增量更新数据
+	OnLoadConfig  //配置加载 可重组关联项/预处理权重计算项
+	OnCheckConfig //配置检查
+	OnInitDB      //DB已连接 可初始化/增量更新数据结构
 	OnLoadDB      //从DB读取相关数据到缓存
 	OnServerStart //服务器已经开启
+
+	OnSecond //服务器计时
+	OnMinute //服务器计时
 
 	OnUserNew     //角色创建初始化
 	OnUserLogin   //角色登陆 可处理离线结算 新功能数据初始化 异常数据修复

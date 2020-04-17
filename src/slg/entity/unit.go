@@ -13,11 +13,6 @@ type Unit struct {
 	Num int32
 }
 
-//返回主键
-func (this *Unit) GetPK() (int64, int32) {
-	return this.Uid, this.Cid
-}
-
 //转proto对象
 func (this *Unit) ToProto() *protos.Unit {
 	return &protos.Unit{

@@ -39,18 +39,20 @@ func init() {
 		has, _ := x.Where("Passport = ?", passport).Get(&user)
 		if has {
 			ss.SetUid(user.Uid)
+			user.LoginTime = now
+			x.Update(&user)
 		} else {
 			name := "user_" + passport
 			user = Entity.User{
-				Passport: passport,
-				Name:     name,
-				Level:    1,
-				Version:  0,
-				Login:    now,
+				Passport:  passport,
+				Name:      name,
+				Level:     1,
+				Version:   0,
+				LoginTime: now,
 			}
 			x.Insert(&user)
 			uid = user.Uid
-			log.Println("Event.OnUserNew", uid)
+			log.Println("Event.OnUserNew..", uid)
 
 			//==OnUserNew(uid)
 			Event.Call(Const.OnUserNew, uid)
@@ -59,7 +61,7 @@ func init() {
 		uid = user.Uid
 		//updateLoginTime
 
-		log.Println("Event.OnUserLogin", uid)
+		log.Println("Event.OnUserLogin..", uid)
 		Event.Call(Const.OnUserLogin, uid)
 
 		updates := &protos.Updates{}
@@ -77,12 +79,14 @@ func init() {
 			return
 		}
 		fmt.Println("<<<Rename", data, ps.GetName())
-		Sql.Exec("update u_user set name=? where uid=?", ps.GetName(), uid)
-		user := &protos.User{
-			Uid:  proto.Int64(uid),
-			Name: ps.Name,
+		x := Sql.ORM()
+		var user Entity.User
+		has, _ := x.Where("Uid = ?", uid).Get(&user)
+		if has {
+			user.Name = ps.GetName()
+			x.Update(&user)
+			user.AppendTo(ss.Update())
 		}
-		ss.Props().User = user
 	})
 	Net.RegRPC(Const.ReIcon_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.ReIcon_C{}
@@ -90,13 +94,14 @@ func init() {
 			return
 		}
 		fmt.Println("<<<ReIcon", data, ps.GetIcon())
-
-		Sql.Exec("update u_user set icon=? where uid=?", ps.GetIcon(), uid)
-		user := &protos.User{
-			Uid:  proto.Int64(uid),
-			Icon: ps.Icon,
+		x := Sql.ORM()
+		var user Entity.User
+		has, _ := x.Where("Uid = ?", uid).Get(&user)
+		if has {
+			user.Head = ps.GetIcon()
+			x.Update(&user)
+			user.AppendTo(ss.Update())
 		}
-		ss.Props().User = user
 	})
 	Net.RegRPC(Const.ReIconB_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.ReIconB_C{}
@@ -104,47 +109,26 @@ func init() {
 			return
 		}
 		fmt.Println("<<<ReIconB_C", data, ps.GetIconB())
-		Sql.Exec("update u_user set iconB=? where uid=?", ps.GetIconB(), uid)
-		user := &protos.User{
-			Uid:   proto.Int64(uid),
-			IconB: ps.IconB,
+		x := Sql.ORM()
+		var user Entity.User
+		has, _ := x.Where("Uid = ?", uid).Get(&user)
+		if has {
+			user.HeadB = ps.GetIconB()
+			x.Update(&user)
+			user.AppendTo(ss.Update())
 		}
-		ss.Props().User = user
 	})
 	Net.RegRPC(Const.UserView_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.UserView_C{}
 		if ss.DecodeFail(data, &ps) {
 			return
 		}
-		a := []*protos.User{}
-
-		rows, err := Sql.Query("select uid, name, gender, icon, iconB, level, cityX, cityY from u_user where uid=?", ps.GetUid())
-		if err != nil {
-			log.Println("Sql error: ", err)
-			return
+		x := Sql.ORM()
+		var user Entity.User
+		has, _ := x.Where("Uid = ?", uid).Get(&user)
+		if has {
+			user.AppendTo(ss.Update())
 		}
-		for rows.Next() {
-			var uid int64
-			var name []byte
-			var gender, icon, iconB, level, cityX, cityY int32
-			err = rows.Scan(&uid, &name, &gender, &icon, &iconB, &level, &cityX, &cityY)
-			if err != nil {
-				log.Println("Sql error: ", err)
-				return
-			}
-			user := &protos.User{
-				Uid:    proto.Int64(uid),
-				Name:   proto.String(string(name)),
-				Gender: proto.Int32(gender),
-				Icon:   proto.Int32(icon),
-				IconB:  proto.Int32(iconB),
-				Level:  proto.Int32(level),
-				CityX:  proto.Int32(cityX),
-				CityY:  proto.Int32(cityY),
-			}
-			a = append(a, user)
-		}
-		ss.Update().Other = a
 	})
 
 }

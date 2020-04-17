@@ -8,15 +8,9 @@ import (
 
 //资源计数
 type Res struct {
-	Uid     int64 `xorm:"pk"`
-	Cid     int32 `xorm:"pk"`
-	Num     int64
-	Version int32 `xorm:"version"`
-}
-
-//返回主键
-func (this *Res) GetPK() (int64, int32) {
-	return this.Uid, this.Cid
+	Uid int64 `xorm:"pk"`
+	Cid int32 `xorm:"pk"`
+	Num int64
 }
 
 //转proto对象

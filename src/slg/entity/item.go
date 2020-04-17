@@ -15,11 +15,6 @@ type Item struct {
 	Time int64 `xorm:"updated"`
 }
 
-//返回主键
-func (this *Item) GetPK() int64 {
-	return this.Sid
-}
-
 //转proto对象
 func (this *Item) ToProto() *protos.Item {
 	return &protos.Item{

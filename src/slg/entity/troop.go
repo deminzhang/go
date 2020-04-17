@@ -1,22 +1,28 @@
 package Entity
 
-//地板格
+import (
+	"protos"
+
+	"github.com/golang/protobuf/proto"
+)
+
+//部队
 type Troop struct {
 	Sid    int64 `xorm:"pk autoincr"`
 	Uid    int64 `xorm:"index"`
 	Create int64 `xorm:"created"`
-	tp     int32 //行动类型
-	stat   int32 //行动状态
+	Tp     int32 //行动类型
+	Stat   int32 //行动状态
 
-	sx int32 //起始坐标x,y
-	sy int32
-	tx int32 //目标坐标x,y
-	ty int32
+	Sx int32 //起始坐标x,y
+	Sy int32
+	Tx int32 //目标坐标x,y
+	Ty int32
 
-	st int64 //起始时间加速会校正保持行程比 已走路程/全程==(now-st)/(et-st)
-	et int64 //预计到达时间
+	St int64 //起始时间加速会校正保持行程比 已走路程/全程==(now-st)/(et-st)
+	Et int64 //预计到达时间
 
-	lsid int64 `xorm:"FlagShip"` //集结领队sid
+	Lsid int64 `xorm:"index(FlagShip)"` //集结领队sid
 	// ttp  int32 //目标类型
 	// tval int64 //目标值
 	// sumTime int64  //初始总时间,前端用于显示总进度
@@ -30,7 +36,44 @@ type Troop struct {
 
 }
 
-//返回主键
-func (this *Troop) GetPK() int64 {
-	return this.Sid
+//转proto对象
+func (this *Troop) ToProto() *protos.Troop {
+	return &protos.Troop{
+		Sid:  proto.Int64(this.Sid),
+		Uid:  proto.Int64(this.Uid),
+		Tp:   proto.Int32(this.Tp),
+		Stat: proto.Int32(this.Stat),
+		Sx:   proto.Int32(this.Sx),
+		Sy:   proto.Int32(this.Sy),
+		Tx:   proto.Int32(this.Tx),
+		Ty:   proto.Int32(this.Ty),
+		St:   proto.Int64(this.St),
+		Et:   proto.Int64(this.Et),
+		Lsid: proto.Int64(this.Lsid),
+	}
+}
+
+//转proto前端主键对象
+func (this *Troop) ToProtoPK() *protos.TroopPK {
+	return &protos.TroopPK{
+		Sid: proto.Int64(this.Sid),
+	}
+}
+
+//加到更新
+func (this *Troop) AppendTo(updates *protos.Updates) {
+	list := updates.Troop
+	if list == nil {
+		list = []*protos.Troop{}
+	}
+	updates.Troop = append(list, this.ToProto())
+}
+
+//加到删除
+func (this *Troop) AppendToPK(removes *protos.Removes) {
+	list := removes.Troop
+	if list == nil {
+		list = []*protos.TroopPK{}
+	}
+	removes.Troop = append(list, this.ToProtoPK())
 }
