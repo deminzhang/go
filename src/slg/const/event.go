@@ -12,6 +12,7 @@ const (
 
 	OnSecond //服务器计时
 	OnMinute //服务器计时
+	OnNewDay //服务器跨天
 
 	OnUserNew     //角色创建初始化
 	OnUserLogin   //角色登陆 可处理离线结算 新功能数据初始化 异常数据修复

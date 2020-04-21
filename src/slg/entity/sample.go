@@ -1,5 +1,9 @@
 package Entity
 
+import (
+	"protos"
+)
+
 //https://www.kancloud.cn/kancloud/xorm-manual-zh-cn/56004
 
 //单主键实例
@@ -24,6 +28,9 @@ type _SampleB struct {
 	Y int32 `xorm:"pk"` //实例复合主键2
 }
 
-type Entity interface {
-	ToProto()
+type IEntity interface {
+	ToProto() IEntity
+	ToProtoPK() IEntity
+	AppendTo(updates *protos.Updates)
+	AppendToPK(removes *protos.Removes)
 }

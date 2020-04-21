@@ -9,7 +9,7 @@ import (
 
 //
 type event struct {
-	when []interface{} //条件TODO
+	when []interface{} //条件 按参数顺序,nil为无条件
 	call interface{}   //回调
 }
 
@@ -45,7 +45,7 @@ func init() {
 
 var newWhen []interface{}
 
-//TODO 响应条件设置
+//响应条件设置 仅对下一个Reg有效
 func When(cond ...interface{}) {
 	// fmt.Println("_EventTest")
 	newWhen = cond
@@ -86,11 +86,14 @@ func Call(id int, a ...interface{}) {
 			return
 		}
 		in := make([]reflect.Value, len(a))
-		for k, v := range a {
-			in[k] = reflect.ValueOf(v)
-			//checkWhen
-			if k < len(e.when) && e.when[k] != nil {
-				if e.when[k] != v {
+		if e.when == nil {
+			for k, v := range a {
+				in[k] = reflect.ValueOf(v)
+			}
+		} else {
+			for k, v := range a {
+				in[k] = reflect.ValueOf(v)
+				if k < len(e.when) && e.when[k] != nil && e.when[k] != v {
 					return
 				}
 			}
@@ -109,11 +112,14 @@ func GoCall(id int, a ...interface{}) {
 			return
 		}
 		in := make([]reflect.Value, len(a))
-		for k, v := range a {
-			in[k] = reflect.ValueOf(v)
-			//checkWhen
-			if k < len(e.when) && e.when[k] != nil {
-				if e.when[k] != v {
+		if e.when == nil {
+			for k, v := range a {
+				in[k] = reflect.ValueOf(v)
+			}
+		} else {
+			for k, v := range a {
+				in[k] = reflect.ValueOf(v)
+				if k < len(e.when) && e.when[k] != nil && e.when[k] != v {
 					return
 				}
 			}

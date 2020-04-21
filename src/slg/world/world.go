@@ -7,26 +7,11 @@ import (
 	"slg/entity"
 )
 
-const (
-	MAIN_WORLD  = 0    //主世界ID
-	WORLD_WIDTH = 1200 //世界宽
-	//区域用于分区刷怪/建号
-	AREA_ROWCOL   = 8                         //区域行列数
-	AREA_NUM      = AREA_ROWCOL * AREA_ROWCOL //区域数
-	AREA_WIDTH    = WORLD_WIDTH / AREA_ROWCOL //区域宽
-	AREA_TILE_NUM = AREA_WIDTH * AREA_WIDTH   //区域格数
-	//用于视野同步
-	SIGHT_WIDTH  = 10                        //视块宽
-	SIGHT_ROWCOL = WORLD_WIDTH / SIGHT_WIDTH //视野行列数
-)
-
 var Areas [AREA_ROWCOL][AREA_ROWCOL]*Entity.Area
 var Tiles [WORLD_WIDTH][WORLD_WIDTH]*Entity.Tile
 var Sights [SIGHT_ROWCOL][SIGHT_ROWCOL]*Entity.Sight
 
 var ttt = make(chan func(), 512)
-
-var areaLoadCh = make(chan int, AREA_NUM)
 
 func initWorld() {
 	for y, line := range Tiles {
@@ -49,17 +34,24 @@ func initWorld() {
 	for _, o := range list {
 		Areas[o.Row][o.Col] = &o
 	}
+	var areaLoadOk = make(chan int, AREA_NUM)
 	for r := 0; r < AREA_ROWCOL; r++ {
 		for c := 0; c < AREA_ROWCOL; c++ {
 			if Areas[r][c] == nil {
-				go initArea(r, c)
+				go func(r, c int) {
+					initArea(r, c)
+					areaLoadOk <- 1
+				}(r, c)
 			} else {
-				go loadArea(r, c)
+				go func(r, c int) {
+					loadArea(r, c)
+					areaLoadOk <- 1
+				}(r, c)
 			}
 		}
 	}
 	for i := 1; i <= AREA_NUM; i++ {
-		<-areaLoadCh
+		<-areaLoadOk
 	}
 }
 
@@ -73,7 +65,7 @@ func initArea(r, c int) {
 		Col: int32(c),
 	}
 	list := getEmptyTiles(r, c)
-	num := 10
+	num := 10 //
 	for i := 1; i < num; i++ {
 		tail := len(list) - i //1
 		idx := rand.Intn(tail)
@@ -97,8 +89,8 @@ func initArea(r, c int) {
 	}
 	x.Insert(a)
 	Areas[r][c] = &a
-	areaLoadCh <- 1
 }
+
 func loadArea(r, c int) {
 	log.Println("World.loadArea", r, c)
 	areaId := int32(r*AREA_ROWCOL + c)
@@ -111,7 +103,6 @@ func loadArea(r, c int) {
 	for _, o := range list {
 		Tiles[o.Y][o.X] = &o
 	}
-	areaLoadCh <- 1
 }
 
 func getEmptyTiles(r, c int) []*Entity.Tile {

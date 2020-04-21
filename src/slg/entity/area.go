@@ -6,5 +6,5 @@ type Area struct {
 	Col    int32   `xorm:"index(pos)"`
 	Row    int32   `xorm:"index(pos)"`
 	Inited bool    `xorm:"-"`
-	Tiles  []*Tile `xorm:"-"`
+	Tiles  []*Tile `xorm:"-"` //包含格子
 }

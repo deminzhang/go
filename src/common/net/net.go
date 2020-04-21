@@ -2,7 +2,7 @@ package Net
 
 import (
 	"bytes"
-	"common/event"
+	// "common/event"
 	"encoding/binary"
 	"fmt"
 	"log"
@@ -87,7 +87,7 @@ func onListen(conn net.Conn) {
 	defer func() {
 		fmt.Println("onNetClose:", conn.RemoteAddr(), conn.LocalAddr())
 		if session.GetUid() > 0 {
-			Event.CallA("OnDisconn", session.GetUid())
+			// Event.CallA("OnDisconn", session.GetUid())
 		}
 		_clientCount--
 		log.Println(">>clientCount=", _clientCount)

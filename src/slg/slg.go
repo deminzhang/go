@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"math/rand"
 	"protos"
 	"runtime"
 	"time"
@@ -12,17 +13,18 @@ import (
 	"common/util"
 
 	"slg/const"
+
+	"slg/config"
+	"slg/server"
 	_ "slg/user"
 
 	_ "slg/building"
 	_ "slg/item"
 	_ "slg/job"
 	_ "slg/mail"
-	_ "slg/server"
 	_ "slg/ticker"
-	_ "slg/unit"
-
 	_ "slg/troop"
+	_ "slg/unit"
 	_ "slg/world"
 
 	"github.com/BurntSushi/toml"
@@ -35,10 +37,11 @@ type GameConf struct {
 	DBType    string
 	DBHost    string
 	DBHostDev string
-	ServerID  int64
+	ServerID  int
 }
 
 func init() {
+	rand.Seed(time.Now().UnixNano())
 	Util.Info()
 }
 
@@ -53,7 +56,7 @@ func main() {
 	log.Println("conf:", conf)
 
 	//载入数值配置
-	//Cfg.Load("./")
+	Config.Load("./")
 	log.Println("Event.OnLoadConfig...")
 	Event.Call(Const.OnLoadConfig)
 	Event.Call(Const.OnCheckConfig)
@@ -69,7 +72,7 @@ func main() {
 	Event.Call(Const.OnLoadDB)
 
 	//服务器数据
-	//Server.Init()
+	Server.Init(conf.ServerID)
 
 	//载入时间管理
 	// Ticker.Init()
@@ -83,6 +86,21 @@ func main() {
 	//测试自连
 	//client, server := net.Pipe()
 	if runtime.GOOS == "windows" {
+		Net.RegRPC(Const.Response_S, func(ss Net.Session, pid int32, uid int64, data []byte) {
+			ps := protos.Response_S{}
+			if ss.DecodeFail(data, &ps) {
+				return
+			}
+			log.Println(">>>Response_S", ps)
+		})
+		Net.RegRPC(Const.Error_S, func(ss Net.Session, protoId int32, uid int64, data []byte) {
+			ps := protos.Error_S{}
+			if ss.DecodeFail(data, &ps) {
+				return
+			}
+			log.Println("<<<Error_S", protoId, ps.GetCode(), ps.GetMsg())
+		})
+
 		go Net.Connect("localhost:8341", func(ss Net.Session) {
 			ss.CallOut(Net.Ping, &protos.Ping{})
 			ss.Send(1, []byte("SelfPing"))

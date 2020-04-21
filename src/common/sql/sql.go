@@ -14,8 +14,6 @@ import (
 	//第三方---------------------------
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
-
-	"slg/server"
 )
 
 //
@@ -39,9 +37,7 @@ func GetSqlPath() string {
 }
 
 //TODO 初始化及增量更新
-func UpdateDB() {
-	serverId := Server.GetServerId()
-	dbname := Server.GetDBname()
+func UpdateDB(serverId int64, dbname string) {
 	sqlPath := GetSqlPath()
 
 	Exec("set @@global.auto_increment_increment=1000;")
