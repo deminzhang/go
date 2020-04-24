@@ -19,7 +19,11 @@ func init() {
 	})
 	Event.Reg(Const.OnLoadDB, func() {
 		log.Println("World.OnLoadDB")
-		initWorld()
+		initWorld(0)
+	})
+	Event.Reg(Const.OnServerStart, func() {
+		log.Println("World.OnServerStart:startWorldTick")
+		go worldTick()
 	})
 	Event.Reg(Const.OnUserNew, func(uid int64) {
 		log.Println("World.OnUserNew", uid)

@@ -25,7 +25,7 @@ func main() {
 	fmt.Println(">>client start=========================")
 
 	//测试自连
-	go Net.Connect("localhost:8342", func(ss Net.Session) {
+	go Net.Connect("tcp", "localhost:8341", func(ss Net.Session) {
 		ss.CallOut(Net.Ping, &protos.Ping{})
 		ss.Send(Net.Ping, []byte("ClientPing"))
 		ss.CallOut(Const.Login_C, &protos.Login_C{

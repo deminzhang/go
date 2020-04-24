@@ -81,7 +81,7 @@ func main() {
 	Event.Call(Const.OnServerStart)
 
 	//开启网络监听
-	go Net.Listen(conf.Listen)
+	go Net.Listen("tcp", conf.Listen)
 
 	//测试自连
 	//client, server := net.Pipe()
@@ -101,7 +101,7 @@ func main() {
 			log.Println("<<<Error_S", protoId, ps.GetCode(), ps.GetMsg())
 		})
 
-		go Net.Connect("localhost:8341", func(ss Net.Session) {
+		go Net.Connect("tcp", "localhost:8341", func(ss Net.Session) {
 			ss.CallOut(Net.Ping, &protos.Ping{})
 			ss.Send(1, []byte("SelfPing"))
 

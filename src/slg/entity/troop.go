@@ -2,17 +2,19 @@ package Entity
 
 import (
 	"protos"
+	"sync"
 
 	"github.com/golang/protobuf/proto"
 )
 
 //部队
 type Troop struct {
-	Sid    int64 `xorm:"pk autoincr"`
-	Uid    int64 `xorm:"index"`
-	Create int64 `xorm:"created"`
-	Tp     int32 //行动类型
-	Stat   int32 //行动状态
+	sync.RWMutex `xorm:"-"`
+	Sid          int64 `xorm:"pk autoincr"`
+	Uid          int64 `xorm:"index"`
+	Create       int64 `xorm:"created"`
+	Tp           int32 //行动类型
+	Stat         int32 //行动状态
 
 	Sx int32 //起始坐标x,y
 	Sy int32

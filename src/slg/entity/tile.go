@@ -2,22 +2,24 @@ package Entity
 
 import (
 	"protos"
+	"sync"
 
 	"github.com/golang/protobuf/proto"
 )
 
 //地板格
 type Tile struct {
-	X        int32   `xorm:"pk"`
-	Y        int32   `xorm:"pk"`
-	Area     int32   `xorm:"index(area)"` //所属区域
-	Tp       int32   `xorm:"index(type)"` //类型
-	Tp2      int32   `xorm:"index(type)"` //子类
-	Level    int32   `xorm:"index(type)"` //级别
-	Uid      int64   `xorm:"index(uid)"`  //所属玩家
-	Alliance int64   `xorm:"index(aid)"`  //所属联盟
-	Troops   []int64 //停留部队
-	Version  int32   `xorm:"version"` //乐观锁
+	sync.RWMutex `xorm:"-"`
+	X            int32   `xorm:"pk"`
+	Y            int32   `xorm:"pk"`
+	Area         int32   `xorm:"index(area)"` //所属区域
+	Tp           int32   `xorm:"index(type)"` //类型
+	Tp2          int32   `xorm:"index(type)"` //子类
+	Level        int32   `xorm:"index(type)"` //级别
+	Uid          int64   `xorm:"index(uid)"`  //所属玩家
+	Alliance     int64   `xorm:"index(aid)"`  //所属联盟
+	Troops       []int64 //停留部队
+	Version      int32   `xorm:"version"` //乐观锁
 }
 
 //转proto对象

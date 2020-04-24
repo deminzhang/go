@@ -124,8 +124,8 @@ func onListen(conn net.Conn) {
 }
 
 //func Listen(addr string, onListen, onClose) {
-func Listen(addr string) {
-	ln, err := net.Listen("tcp", addr)
+func Listen(network, addr string) {
+	ln, err := net.Listen(network, addr)
 	if err != nil {
 		fmt.Print("Listen.err", err)
 		return
@@ -170,9 +170,9 @@ func onConnect(conn net.Conn, onConn func(Session), onDisconn func(Session)) {
 		session.CallIn(int32(pid), data)
 	}
 }
-func Connect(addr string, onConn func(Session), onDisconn func(Session)) net.Conn {
+func Connect(network, addr string, onConn func(Session), onDisconn func(Session)) net.Conn {
 	fmt.Println(">>Connecting:", addr)
-	conn, err := net.Dial("tcp", addr)
+	conn, err := net.Dial(network, addr)
 	if err != nil {
 		panic(err)
 		return nil
