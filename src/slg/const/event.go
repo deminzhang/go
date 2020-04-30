@@ -10,6 +10,7 @@ const (
 	OnLoadDB      //从DB读取相关数据到缓存
 	OnServerStart //服务器已经开启
 
+	OnTick   //服务器计时
 	OnSecond //服务器计时
 	OnMinute //服务器计时
 	OnNewDay //服务器跨天
@@ -19,4 +20,7 @@ const (
 	OnUserOffline //角色离线 可处理离线结算 社交关系通知 私有缓存释放
 	OnUserGetData //角色收集数据 给前端或跨服集
 	OnUserLevelUp //角色升级 更新任务/解锁/成就
+
+	OnJobDone       //工作结束 工作队列验收
+	OnTroopStatDone //部队状态结束 检查交战 结算等
 )

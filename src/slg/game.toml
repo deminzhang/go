@@ -3,12 +3,11 @@
 Listen = ":8341"
 
 #DB数据库
-#DBType = "postgres"
-#DBHost = "postgres://postgres:postgres@10.5.50.161/s999_slg?sslmode=disable"
-DBType = "mysql"
-#生产环境
-DBHost = "root:1614@tcp(localhost:3306)/slg999?charset=utf8"
-#本地开发
-DBHostDev = "root:1614@tcp(localhost:3306)/slg999?charset=utf8"
+DBType = "postgres"
+DBHost = "postgres://postgres:1614@localhost/slg999?sslmode=disable"
+DBHostDev = "postgres://postgres:1614@localhost/slg999?sslmode=disable"
+#DBType = "mysql"
+#DBHost = "root:1614@tcp(localhost:3306)/slg999?charset=utf8"
+#DBHostDev = "root:1614@tcp(localhost:3306)/slg999?charset=utf8"
 
 ServerID = 999

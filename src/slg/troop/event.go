@@ -23,7 +23,7 @@ func init() {
 
 		x := Sql.ORM()
 		list := make([]Entity.Troop, 0)
-		err := x.Where("Uid = ?", uid).Find(&list)
+		err := x.Where("uid = ?", uid).Find(&list)
 		if err != nil {
 			log.Println(err)
 		}
@@ -33,16 +33,27 @@ func init() {
 
 	})
 
-	Event.Reg(Const.OnSecond, func(mills int64) {
-		// log.Println("Troop.OnSecond")
+	// Event.Reg(Const.OnSecond, func(mills int64) {
+	Event.Reg(Const.OnTick, func(mills int64) {
+		// log.Println("Troop.OnTick")
 		x := Sql.ORM()
 		list := make([]Entity.Troop, 0)
-		err := x.Where("Et < ?", mills).Asc("Et").Limit(100).Find(&list)
+		err := x.Where("et < ?", mills).Asc("et").Limit(100).Find(&list)
 		if err != nil {
 			log.Println(err)
 		}
 		for _, o := range list {
-			log.Println(o)
+			Event.Call(Const.OnTroopStatDone, o.Tp, &o)
 		}
 	})
+	Event.Reg(Const.OnTroopStatDone, func(tp int32, t *Entity.Troop) {
+		log.Println("OnTroopStatDone", t)
+		switch t.Tp {
+		default:
+			break
+		}
+		x := Sql.ORM()
+		x.Delete(t)
+	})
+
 }

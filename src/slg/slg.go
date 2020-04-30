@@ -91,7 +91,8 @@ func main() {
 			if ss.DecodeFail(data, &ps) {
 				return
 			}
-			log.Println(">>>Response_S", ps)
+			log.Printf("recv<<Response_S srcPid=%d msg=\n", ps.GetProtoId())
+			log.Println(ps, ps.GetUpdates())
 		})
 		Net.RegRPC(Const.Error_S, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 			ps := protos.Error_S{}
@@ -100,13 +101,29 @@ func main() {
 			}
 			log.Println("<<<Error_S", protoId, ps.GetCode(), ps.GetMsg())
 		})
+		Net.RegRPC(Const.Login_S, func(ss Net.Session, pid int32, uid int64, data []byte) {
+			ps := protos.Login_S{}
+			if ss.DecodeFail(data, &ps) {
+				return
+			}
+			log.Println("recv>>Login_S:\n", Const.Login_S, len(data), ps)
+			ss.CallOut(Const.GetRoleInfo_C, &protos.GetRoleInfo_C{})
+		})
+		Net.RegRPC(Const.GetRoleInfo_S, func(ss Net.Session, pid int32, uid int64, data []byte) {
+			log.Println("recv>>GetRoleInfo_S\n", Const.GetRoleInfo_S, len(data))
+			ss.CallOut(Const.View_C, &protos.View_C{
+				X: proto.Int32(1),
+				Y: proto.Int32(1),
+			})
+
+		})
 
 		go Net.Connect("tcp", "localhost:8341", func(ss Net.Session) {
 			ss.CallOut(Net.Ping, &protos.Ping{})
 			ss.Send(1, []byte("SelfPing"))
 
 			ss.CallOut(Const.Login_C, &protos.Login_C{
-				OpenId: proto.String("2017015999622"),
+				OpenId: proto.String("20170159qww3222326"),
 				//Uid:    proto.Int64(0),
 			})
 		}, func(ss Net.Session) {

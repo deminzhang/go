@@ -10,6 +10,7 @@ import (
 	"protos"
 	"slg/const"
 	"slg/entity"
+	"slg/world"
 
 	"github.com/golang/protobuf/proto"
 )
@@ -49,8 +50,23 @@ func init() {
 				Level:     1,
 				Version:   0,
 				LoginTime: now,
+				CityX:     -1,
+				CityY:     -1,
 			}
+			t := World.GetEmptyTile(0, 0, 0)
+			if t == nil {
+				log.Println("Login.landFail")
+				return
+			}
+			t.Lock()
+			user.CityX = t.X
+			user.CityY = t.Y
 			x.Insert(&user)
+			t.Tp = 3
+			t.Level = 1
+			t.Uid = user.Uid
+			x.Insert(t)
+			t.Unlock()
 			uid = user.Uid
 			log.Println("Event.OnUserNew..", uid)
 
@@ -73,6 +89,18 @@ func init() {
 		})
 	})
 
+	Net.RegRPC(Const.GetRoleInfo_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
+		ps := protos.GetRoleInfo_C{}
+		if ss.DecodeFail(data, &ps) {
+			return
+		}
+		fmt.Println("<<<GetRoleInfo_C")
+		updates := ss.Update()
+		Event.Call(Const.OnUserGetData, uid, updates)
+		ss.CallOut(Const.GetRoleInfo_S, &protos.GetRoleInfo_S{
+			Uid: proto.Int64(uid),
+		})
+	})
 	Net.RegRPC(Const.Rename_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
 		ps := protos.Rename_C{}
 		if ss.DecodeFail(data, &ps) {

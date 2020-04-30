@@ -19,30 +19,6 @@ var events = make(map[int][]event)
 //事件参数类型 以首次注册时为准
 var types = make(map[int]reflect.Type)
 
-func init() {
-	//Test测试示例
-	fmt.Println(">>event0.sample")
-	//定义
-	_EventTest := -1
-	_EventTest2 := -2
-	//单响应
-	Reg(_EventTest, func() {
-		fmt.Println("_EventTest")
-	})
-	Call(_EventTest)
-
-	//多响应
-	Reg(_EventTest2, func(s string, i int) {
-		fmt.Println(s, i)
-	})
-	When(nil, 100)
-	Reg(_EventTest2, func(s string, i int) {
-		fmt.Println(s, i+1)
-	})
-	Call(_EventTest2, "_EventTest2A", 100)
-	Call(_EventTest2, "_EventTest2B", 200)
-}
-
 var newWhen []interface{}
 
 //响应条件设置 仅对下一个Reg有效
@@ -57,7 +33,7 @@ func Reg(id int, foo interface{}) {
 	t := reflect.TypeOf(foo)
 	s := fmt.Sprintf("%s", t)
 	if len(s) < 5 || s[:5] != "func(" {
-		log.Fatalf("Event.Reg %s #2 must be a func*, got %s", id, s)
+		log.Fatalf("Event.Reg %d #2 must be a func*, got %s", id, s)
 	}
 	if t0 == nil {
 		types[id] = t

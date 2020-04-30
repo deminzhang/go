@@ -23,7 +23,7 @@ func init() {
 
 		x := Sql.ORM()
 		list := make([]Entity.Job, 0)
-		err := x.Where("Uid = ?", uid).Find(&list)
+		err := x.Where("uid = ?", uid).Find(&list)
 		if err != nil {
 			log.Println(err)
 		}
@@ -32,15 +32,17 @@ func init() {
 		}
 	})
 
-	Event.Reg(Const.OnSecond, func(mills int64) {
-		// log.Println("Job.OnSecond")
+	// Event.Reg(Const.OnSecond, func(mills int64) {
+	Event.Reg(Const.OnTick, func(mills int64) {
+		// log.Println("Job.OnTick")
 		x := Sql.ORM()
 		list := make([]Entity.Job, 0)
-		err := x.Where("Et < ?", mills).Asc("Et").Limit(100).Find(&list)
+		err := x.Where("et < ?", mills).Asc("et").Limit(100).Find(&list)
 		if err != nil {
 			log.Println(err)
 		}
 		for _, o := range list {
+			Event.Call(Const.OnJobDone, o.Tp, &o)
 			fn := _jobDoneCallBack[o.Tp]
 			if fn != nil {
 				fn(&o)
@@ -48,5 +50,14 @@ func init() {
 				// log.Println("unknown job type :", o.Tp)
 			}
 		}
+	})
+	Event.Reg(Const.OnJobDone, func(tp int32, t *Entity.Job) {
+		log.Println("OnJobDone", t)
+		switch t {
+		default:
+			break
+		}
+		x := Sql.ORM()
+		x.Delete(t)
 	})
 }
