@@ -8,7 +8,6 @@ import (
 
 func TestEvent(t *testing.T) {
 	ExampleEvent()
-	// ExampleEventRPC()
 }
 
 func ExampleEvent() {
@@ -34,19 +33,3 @@ func ExampleEvent() {
 	Event.Call(_EventTest2, "_EventTest2A", 100)
 	Event.Call(_EventTest2, "_EventTest2B", 200)
 }
-
-// func ExampleEventRPC() {
-// 	//Test测试示例
-// 	fmt.Println(">>eventRPC.sample")
-
-// 	RegRPC(101, protos.Login_C{}, func(protoID uint16, data []byte, ps protos.Login_C) {
-// 		//fmt.Println("RPCEventTest", pid, ps.GetUid())
-// 		proto.Unmarshal(data, &ps)
-// 		fmt.Println("RPCEventTest", protoID, ps.GetUid())
-// 	})
-
-// 	data, _ := proto.Marshal(&protos.Login_C{OpenId: proto.String("test123"), Uid: proto.Int64(123)})
-// 	data2, _ := proto.Marshal(&protos.Login_C{OpenId: proto.String("test123"), Uid: proto.Int64(456)})
-// 	CallRPC(101, data)
-// 	CallRPC(101, data2)
-// }

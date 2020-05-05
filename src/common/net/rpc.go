@@ -3,6 +3,7 @@ package Net
 import (
 	"fmt"
 	"log"
+	"net"
 	"protos"
 
 	"github.com/golang/protobuf/proto"
@@ -16,43 +17,47 @@ const (
 )
 
 //TODO 多协程读写map需加锁 sync.Mutex or sync.RwMutex
-var rpcs = make(map[int32]func(Session, int32, int64, []byte))
-var decoders = make(map[int32]interface{})
+var rpcs = make(map[int32]func(Session, int32, []byte, int64))
+var decoders = make(map[int]interface{})
 
 func init() {
-	//go tickServer()
-	RegRPC(Ping, func(ss Session, pid int32, uid int64, data []byte) {
+	RegRPC(Ping, func(ss Session, pid int32, data []byte, uid int64) {
 		fmt.Println("<<<Ping", data)
 		ss.Send(Pong, data)
 	})
-	RegRPC(Pong, func(ss Session, pid int32, uid int64, data []byte) {
+	RegRPC(Pong, func(ss Session, pid int32, data []byte, uid int64) {
 		fmt.Println(">>>Pong", data)
 	})
-
 }
 
-func RegRPC(pid int32, call func(Session, int32, int64, []byte)) {
+func RegRPC(pid int32, call func(Session, int32, []byte, int64)) {
 	if rpcs[pid] != nil {
 		log.Fatalf("RegRPC duplicated %d", pid)
 	}
 	rpcs[pid] = call
-	//decoders[pid]=?
 }
 
-func ConnByUid(uid int64) Session {
-	ss := G_uid2session.Get(uid)
-	if ss == nil {
-		return nil
+func CallIn(conn *Conn, protoID int, data []byte) {
+	if conn.Session != nil {
+		conn.Session.CallIn(int32(protoID), data)
+	} else {
 	}
-	return ss
 }
 
-func CallUid(uid int64, pid int32, msg proto.Message) {
+func CallOut(conn net.Conn, protoID int, msg proto.Message) {
+	data, err := proto.Marshal(msg)
+	if err != nil {
+		log.Fatal("marshaling error: ", err)
+	}
+	Send(conn, int32(protoID), data)
+}
+
+func CallUid(uid int64, protoID int32, msg proto.Message) {
 	ss := G_uid2session.Get(uid)
 	if ss == nil {
 		return
 	}
-	ss.CallOut(pid, msg)
+	ss.CallOut(protoID, msg)
 }
 
 func CallUids(uids []int64, pid int32, msg proto.Message) {
@@ -68,7 +73,7 @@ func CallUids(uids []int64, pid int32, msg proto.Message) {
 	}
 }
 
-func CallUidError(uid int64, pid int32, code int32, msg string) {
+func CallError(uid int64, pid int32, code int32, msg string) {
 	ss := G_uid2session.Get(uid)
 	if ss == nil {
 		return

@@ -62,6 +62,8 @@ func test() {
 	fmt.Println("rand.Perm", rand.Perm(10))
 	fmt.Println("Util.Min", Util.Min(4, 3, 5, 6))
 	fmt.Println("Util.Min", Util.Min(3, 5, 6))
+	fmt.Println("Util.UnixNano", time.Now().UnixNano()/1e6)
+	fmt.Println("Util.Unix", time.Now().Unix())
 
 	// data := Sql.Query2Map("select * from version;")
 	// fmt.Println(data, data[0], data[0]["ver"])

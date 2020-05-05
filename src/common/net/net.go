@@ -14,17 +14,14 @@ const (
 	BUF_MAX_LEN = 1024 * 8 //TODO 最大包长 转到配置文件
 )
 
+type Conn struct {
+	net.Conn
+	Session Session
+}
+
 //TODO 多协程读写map需加锁 sync.Mutex or sync.RwMutex
 //客户连接
 var _clientCount = 0
-
-//对外连接
-//var G_servers = make(map[net.Conn]bool) //需锁
-
-func init() {
-	//TODO 读配置文件
-	//go tickServer()
-}
 
 func Send(conn net.Conn, pid int32, data []byte) {
 	var head = make([]byte, 4)
@@ -49,18 +46,7 @@ func Send(conn net.Conn, pid int32, data []byte) {
 	conn.Write(data)
 }
 
-func tickServer() {
-	//Test测试
-	//fmt.Println(">>ticking")
-	for {
-		time.Sleep(time.Second * 10)
-		//for conn := range G_clients {
-		//	Send(conn, 0, []byte("hi,client"))
-		//}
-	}
-}
-
-func readLen(conn net.Conn, lenth int) ([]byte, error) {
+func ReadLen(conn net.Conn, lenth int) ([]byte, error) {
 	if lenth == 0 {
 		return nil, nil
 	}
@@ -76,25 +62,26 @@ func readLen(conn net.Conn, lenth int) ([]byte, error) {
 	return data, nil
 }
 
-//Server.listen
-func onListen(conn net.Conn) {
+//Server------------------------------------------------------------------------
+func onAccept(conn net.Conn, onListen func(*Conn), onData func(*Conn, int, []byte), onClose func(*Conn)) {
 	fmt.Println("onListen:", conn.RemoteAddr(), conn.LocalAddr())
 	conn.SetDeadline(time.Now().Add(time.Second * 30)) //初次收不到包超时
+
+	connEx := &Conn{
+		Conn: conn,
+	}
+	onListen(connEx)
 	_clientCount++
 	log.Println(">>clientCount=", _clientCount)
-	var session Session
-	session = &SessionS{Conn: conn}
 	defer func() {
 		fmt.Println("onNetClose:", conn.RemoteAddr(), conn.LocalAddr())
-		if session.GetUid() > 0 {
-			// Event.CallA("OnDisconn", session.GetUid())
-		}
 		_clientCount--
 		log.Println(">>clientCount=", _clientCount)
+		onClose(connEx)
 		conn.Close()
 	}()
 	for {
-		head, err := readLen(conn, 4)
+		head, err := ReadLen(conn, 4)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -112,48 +99,52 @@ func onListen(conn net.Conn) {
 		//fmt.Printf("<<recvX(%x:%x)\n", pid, plen)
 
 		conn.SetDeadline(time.Now().Add(time.Second * 10)) //收到包头后超时
-		data, err := readLen(conn, int(plen))
+		data, err := ReadLen(conn, int(plen))
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 		conn.SetDeadline(time.Now().Add(time.Minute * 10)) //以后的包超时
-		session.CallIn(int32(pid), data)
-		//CallIn(int32(pid), data)
+		onData(connEx, int(pid), data)
 	}
 }
 
 //func Listen(addr string, onListen, onClose) {
-func Listen(network, addr string) {
-	ln, err := net.Listen(network, addr)
+func Listen(addr string, onListen func(*Conn), onData func(*Conn, int, []byte), onClose func(*Conn)) net.Listener {
+	ln, err := net.Listen("tcp", addr)
 	if err != nil {
 		fmt.Print("Listen.err", err)
-		return
+		return nil
 	}
 	fmt.Println(">>listening:", ln.Addr())
-	for {
-		conn, err := ln.Accept()
-		if err != nil {
-			fmt.Print(err)
-			continue
+	go func() {
+		for {
+			conn, err := ln.Accept()
+			if err != nil {
+				fmt.Print(err)
+				continue
+			}
+			go onAccept(conn, onListen, onData, onClose)
 		}
-		go onListen(conn)
-	}
+	}()
+	return ln
 }
 
-//Client.connect
-func onConnect(conn net.Conn, onConn func(Session), onDisconn func(Session)) {
+//Client------------------------------------------------------------------------
+func onConnect(conn net.Conn, onConn func(*Conn), onData func(*Conn, int, []byte), onDisconn func(*Conn)) {
 	fmt.Println("onConnect:", conn.RemoteAddr(), conn.LocalAddr())
-	var session Session
-	session = &SessionC{Conn: conn}
-	onConn(session)
+
+	connEx := &Conn{
+		Conn: conn,
+	}
+	onConn(connEx)
 	defer func() {
-		onDisconn(session)
+		onDisconn(connEx)
 		fmt.Println("onDisconn:", conn.RemoteAddr(), conn.LocalAddr())
 		conn.Close()
 	}()
 	for {
-		head, err := readLen(conn, 4)
+		head, err := ReadLen(conn, 4)
 		if err != nil {
 			fmt.Println(err)
 			return
@@ -162,21 +153,21 @@ func onConnect(conn net.Conn, onConn func(Session), onDisconn func(Session)) {
 		pid, plen := headInt>>16, headInt<<16>>16
 		//fmt.Printf(">>recv(%d:%d)\n", pid, plen)
 		//fmt.Printf(">>recvX(%x:%x)\n", pid, plen)
-		data, err := readLen(conn, int(plen))
+		data, err := ReadLen(conn, int(plen))
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
-		session.CallIn(int32(pid), data)
+		onData(connEx, int(pid), data)
 	}
 }
-func Connect(network, addr string, onConn func(Session), onDisconn func(Session)) net.Conn {
+func Connect(addr string, onConn func(*Conn), onData func(*Conn, int, []byte), onDisconn func(*Conn)) net.Conn {
 	fmt.Println(">>Connecting:", addr)
-	conn, err := net.Dial(network, addr)
+	conn, err := net.Dial("tcp", addr)
 	if err != nil {
 		panic(err)
 		return nil
 	}
-	go onConnect(conn, onConn, onDisconn)
+	go onConnect(conn, onConn, onData, onDisconn)
 	return conn
 }

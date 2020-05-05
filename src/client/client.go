@@ -25,16 +25,19 @@ func main() {
 	fmt.Println(">>client start=========================")
 
 	//测试自连
-	go Net.Connect("tcp", "localhost:8341", func(ss Net.Session) {
-		ss.CallOut(Net.Ping, &protos.Ping{})
-		ss.Send(Net.Ping, []byte("ClientPing"))
-		ss.CallOut(Const.Login_C, &protos.Login_C{
+	go Net.Connect("localhost:8341", func(conn *Net.Conn) {
+		conn.Session = &Net.SessionC{Conn: conn.Conn}
+		Net.Send(conn, Net.Ping, []byte("ClientPing"))
+
+		Net.CallOut(conn, Const.Login_C, &protos.Login_C{
 			OpenId: proto.String("2017015025"),
 			// Uid:        proto.Int64(0),
 			// ServerName: proto.String("999"),
 		})
 
-	}, func(ss Net.Session) {
+	}, func(conn *Net.Conn, pid int, data []byte) {
+		Net.CallIn(conn, pid, data)
+	}, func(conn *Net.Conn) {
 		panic("exit")
 	})
 

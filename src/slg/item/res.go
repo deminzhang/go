@@ -44,7 +44,7 @@ func DelRes(uid int64, cid int32, num int64, src string) {
 	}
 	affected, _, _ := Sql.Exec("update u_res set num=num-? where uid=? and cid=? and num>=?;", num, uid, cid, num)
 	if affected == 0 {
-		Net.CallUidError(uid, 0, 1, "lessRes")
+		Net.CallError(uid, 0, 1, "lessRes")
 		return
 	}
 	ret := Sql.Query2Map1("select num from u_res where uid=? and cid=?;", uid, cid)

@@ -15,8 +15,7 @@ import (
 
 //RPC
 func init() {
-	Net.RegRPC(Const.MailGet_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
-
+	Net.RegRPC(Const.MailGet_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
 		ps := protos.MailGet_C{}
 		err := proto.Unmarshal(data, &ps)
 		if err != nil {
@@ -24,14 +23,20 @@ func init() {
 			ss.Close()
 			return
 		}
-		from := ps.GetFrom()
+		fromSid := ps.GetFrom()
 		updates := &protos.Updates{}
-		updates.Mail = Reads(uid, from)
-		ss.CallOut(protoId+1, &protos.Response_S{ProtoId: proto.Int32(protoId),
+		mails := ReadFrom(uid, fromSid)
+		for _, o := range mails {
+			o.AppendTo(updates)
+		}
+		ss.CallOut(pid+1, &protos.Response_S{ProtoId: proto.Int32(pid),
 			Updates: updates,
 		})
 	})
-	Net.RegRPC(Const.MailDel_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
+	{
+		return
+	}
+	Net.RegRPC(Const.MailDel_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
 		ps := protos.MailDel_C{}
 		err := proto.Unmarshal(data, &ps)
 		if err != nil {
@@ -57,16 +62,15 @@ func init() {
 			}
 		}
 		if len(ms) == 0 {
-			ss.PostError(protoId, 1, "noMailDel")
 			return
 		}
 		removes := &protos.Removes{}
 		removes.Mail = ms
-		ss.CallOut(protoId+1, &protos.Response_S{ProtoId: proto.Int32(protoId),
+		ss.CallOut(pid+1, &protos.Response_S{ProtoId: proto.Int32(pid),
 			Removes: removes,
 		})
 	})
-	Net.RegRPC(Const.MailRead_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.MailRead_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
 
 		ps := protos.MailRead_C{}
 		err := proto.Unmarshal(data, &ps)
@@ -93,11 +97,11 @@ func init() {
 		}
 		updates := &protos.Updates{}
 		updates.Mail = a
-		ss.CallOut(protoId+1, &protos.Response_S{ProtoId: proto.Int32(protoId),
+		ss.CallOut(pid+1, &protos.Response_S{ProtoId: proto.Int32(pid),
 			Props: updates,
 		})
 	})
-	Net.RegRPC(Const.MailTake_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.MailTake_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
 
 		ps := protos.MailTake_C{}
 		err := proto.Unmarshal(data, &ps)
@@ -126,11 +130,11 @@ func init() {
 		}
 		updates := &protos.Updates{}
 		updates.Mail = a
-		ss.CallOut(protoId+1, &protos.Response_S{ProtoId: proto.Int32(protoId),
+		ss.CallOut(pid+1, &protos.Response_S{ProtoId: proto.Int32(pid),
 			Props: updates,
 		})
 	})
-	Net.RegRPC(Const.MailFavor_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.MailFavor_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
 
 		ps := protos.MailFavor_C{}
 		err := proto.Unmarshal(data, &ps)
@@ -150,11 +154,11 @@ func init() {
 		}
 		updates := &protos.Updates{}
 		updates.Mail = []*protos.Mail{m}
-		ss.CallOut(protoId+1, &protos.Response_S{ProtoId: proto.Int32(protoId),
+		ss.CallOut(pid+1, &protos.Response_S{ProtoId: proto.Int32(pid),
 			Props: updates,
 		})
 	})
-	Net.RegRPC(Const.ReadReport_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.ReadReport_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
 
 		ps := protos.ReadReport_C{}
 		err := proto.Unmarshal(data, &ps)

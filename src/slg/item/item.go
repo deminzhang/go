@@ -50,7 +50,7 @@ func Del(uid int64, cid int32, num int64, src string) {
 		item.Num -= num
 		Sql.ORM().Update(item)
 	} else {
-		Net.CallUidError(uid, 0, 1, "lessItem")
+		Net.CallError(uid, 0, 1, "lessItem")
 		return
 	}
 	itemUp(uid, &item)

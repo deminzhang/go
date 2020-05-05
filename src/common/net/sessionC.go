@@ -1,11 +1,8 @@
 package Net
 
 import (
-	"database/sql"
-	"errors"
 	"log"
 	"net"
-	"protos"
 
 	"github.com/golang/protobuf/proto"
 )
@@ -18,6 +15,7 @@ type SessionC struct {
 	protoId int32 //protoId
 	errCode int32 //
 	err     error //
+	kvmap   map[string]int
 }
 
 //外调
@@ -45,10 +43,6 @@ func (ss *SessionC) CallIn(pid int32, data []byte) {
 	//fmt.Println(">>Session.CallIn", pid, data)
 	ss.protoId = pid
 	uid := ss.GetUid()
-	if uid == 0 && pid%2 == 1 && pid > 101 { //未登陆 服务端 业务协议
-		ss.PostError(pid, 1, "needLogin")
-		return
-	}
 	defer ss.afterCall()
 	rpc := rpcs[pid]
 	if rpc == nil {
@@ -60,29 +54,7 @@ func (ss *SessionC) CallIn(pid int32, data []byte) {
 	}
 	var sss Session
 	sss = ss
-	rpc(sss, pid, uid, data)
-}
-
-//外发错误
-func (ss *SessionC) PostError(pid int32, code int32, msg string) {
-	ss.errCode = code
-	ss.err = errors.New(msg)
-	ss.afterCall()
-}
-
-//非事务操作
-func (ss *SessionC) Query(str string, args ...interface{}) (*sql.Rows, error) {
-	return nil, nil
-}
-
-//非事务操作
-func (ss *SessionC) Exec(str string, args ...interface{}) (int64, int64, error) {
-	return 0, 0, nil
-}
-
-//事务(禁混非事务操作)
-func (ss *SessionC) GetTx() *sql.Tx {
-	return nil
+	rpc(sss, pid, data, uid)
 }
 
 //在线设置
@@ -104,13 +76,6 @@ func (ss *SessionC) GetProtoId() int32 {
 
 func (ss *SessionC) onError() {
 	log.Println(ss.err)
-	if ss.errCode != 0 {
-		ss.CallOut(Error_S, &protos.Error_S{
-			ProtoId: proto.Int32(ss.GetProtoId()),
-			Code:    proto.Int32(ss.errCode),
-			Msg:     proto.String(ss.err.Error()),
-		})
-	}
 }
 
 func (ss *SessionC) commit() {
@@ -126,12 +91,12 @@ func (ss *SessionC) afterCall() {
 //错误自动断开
 func (ss *SessionC) Error(err error) bool {
 	if err == nil {
-		return false
+		return true
 	}
 	ss.err = err
 	ss.onError()
 	ss.Close()
-	return true
+	return false
 }
 
 //错误自动断开
@@ -142,24 +107,16 @@ func (ss *SessionC) Assert(b bool, err error) bool {
 	return b
 }
 
-//全量更新
-func (ss *SessionC) Update() *protos.Updates {
-	return nil
+//自定义数值
+func (ss *SessionC) Get(key string) int {
+	return ss.kvmap[key]
 }
-
-//删除
-func (ss *SessionC) Remove() *protos.Removes {
-	return nil
-
-}
-
-//增量更新
-func (ss *SessionC) Props() *protos.Updates {
-	return nil
+func (ss *SessionC) Set(key string, val int) {
+	ss.kvmap[key] = val
 }
 
 //解码错误自动断开
-func (ss *SessionC) DecodeFail(buf []byte, pb proto.Message) bool {
+func (ss *SessionC) Decode(buf []byte, pb proto.Message) bool {
 	err := proto.Unmarshal(buf, pb)
 	return ss.Error(err)
 }

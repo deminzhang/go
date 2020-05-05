@@ -26,8 +26,7 @@ type SessionS struct {
 	removes *protos.Removes
 	props   *protos.Updates
 	//logic
-	// SightC int
-	// SightR int
+	kvmap map[string]int
 }
 
 //外调
@@ -47,7 +46,7 @@ func (ss *SessionS) CallOut(pid int32, msg proto.Message) {
 	if err != nil {
 		log.Fatal("marshaling error: ", err)
 	}
-	Send(conn, int32(pid), data)
+	Send(conn, pid, data)
 }
 
 //内调
@@ -56,7 +55,7 @@ func (ss *SessionS) CallIn(pid int32, data []byte) {
 	ss.protoId = pid
 	uid := ss.GetUid()
 	if uid == 0 && pid%2 == 1 && pid > 101 { //未登陆 服务端 业务协议
-		ss.PostError(pid, 1, "needLogin")
+		ss.SendError(pid, 1, "needLogin")
 		return
 	}
 	defer ss.afterCall()
@@ -70,11 +69,11 @@ func (ss *SessionS) CallIn(pid int32, data []byte) {
 	}
 	var sss Session
 	sss = ss
-	rpc(sss, pid, uid, data)
+	rpc(sss, pid, data, uid)
 }
 
 //外发错误
-func (ss *SessionS) PostError(pid int32, code int32, msg string) {
+func (ss *SessionS) SendError(pid int32, code int32, msg string) {
 	ss.errCode = code
 	ss.err = errors.New(msg)
 	ss.afterCall()
@@ -175,12 +174,12 @@ func (ss *SessionS) afterCall() {
 //错误自动断开
 func (ss *SessionS) Error(err error) bool {
 	if err == nil {
-		return false
+		return true
 	}
 	ss.err = err
 	ss.onError()
 	ss.Close()
-	return true
+	return false
 }
 
 //错误自动断开
@@ -192,7 +191,7 @@ func (ss *SessionS) Assert(b bool, err error) bool {
 }
 
 //全量更新
-func (ss *SessionS) Update() *protos.Updates {
+func (ss *SessionS) ProtoUpdate() *protos.Updates {
 	if ss.updates == nil {
 		ss.updates = &protos.Updates{}
 	}
@@ -200,7 +199,7 @@ func (ss *SessionS) Update() *protos.Updates {
 }
 
 //删除
-func (ss *SessionS) Remove() *protos.Removes {
+func (ss *SessionS) ProtoRemove() *protos.Removes {
 	if ss.removes == nil {
 		ss.removes = &protos.Removes{}
 	}
@@ -209,15 +208,23 @@ func (ss *SessionS) Remove() *protos.Removes {
 }
 
 //增量更新
-func (ss *SessionS) Props() *protos.Updates {
+func (ss *SessionS) ProtoProps() *protos.Updates {
 	if ss.props == nil {
 		ss.props = &protos.Updates{}
 	}
 	return ss.props
 }
 
+//自定义数值
+func (ss *SessionS) Get(key string) int {
+	return ss.kvmap[key]
+}
+func (ss *SessionS) Set(key string, val int) {
+	ss.kvmap[key] = val
+}
+
 //解码错误自动断开
-func (ss *SessionS) DecodeFail(buf []byte, pb proto.Message) bool {
+func (ss *SessionS) Decode(buf []byte, pb proto.Message) bool {
 	err := proto.Unmarshal(buf, pb)
 	return ss.Error(err)
 }

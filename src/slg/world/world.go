@@ -56,10 +56,12 @@ func getAreaEmptyTiles(world *World, row, col int) []*Entity.Tile {
 	return list
 }
 
-func getSightTiles(world *World, row, col int) []*Entity.Tile {
+func getSightTiles(world *World, row, col int, list []*Entity.Tile) []*Entity.Tile {
 	sy := row * SIGHT_WIDTH
 	sx := col * SIGHT_WIDTH
-	list := make([]*Entity.Tile, 0)
+	if list == nil {
+		list = make([]*Entity.Tile, 0)
+	}
 	for y := sy; y < sy+SIGHT_WIDTH; y++ {
 		for x := sx; x < sx+SIGHT_WIDTH; x++ {
 			t := world.tiles[y][x]
@@ -68,7 +70,7 @@ func getSightTiles(world *World, row, col int) []*Entity.Tile {
 			}
 		}
 	}
-	log.Println(row, col, len(list))
+	// log.Println("XX", row, col, len(list))
 	return list
 }
 
@@ -89,7 +91,7 @@ func initArea(world *World, r, c int) {
 		sel := list[idx]
 		list[idx] = list[tail]
 		sel.Area = areaId
-		sel.Tp = 1
+		sel.Tp = 1 //Mine
 		sel.Level = int32(rand.Intn(10)) + 1
 		x.Insert(sel)
 		list = list[:tail]
@@ -100,7 +102,7 @@ func initArea(world *World, r, c int) {
 		sel := list[idx]
 		list[idx] = list[tail]
 		sel.Area = areaId
-		sel.Tp = 2
+		sel.Tp = 2 //Monster
 		sel.Level = int32(rand.Intn(10)) + 1
 		x.Insert(sel)
 	}
@@ -180,15 +182,27 @@ func initWorld(worldId int) {
 	AllWorlds[worldId] = w
 }
 
-func moveEyes(worldId int, uid int64, x, y int32) []*Entity.Tile {
+func moveEyes(worldId int, uid int64, x, y int32, sr, sc int) []*Entity.Tile {
 	// w := AllWorlds[worldId]
 	// r := int(math.Floor(float64(y) / float64(SIGHT_WIDTH)))
 	// c := int(math.Floor(float64(x) / float64(SIGHT_WIDTH)))
 	r := int(y / SIGHT_WIDTH)
 	c := int(x / SIGHT_WIDTH)
 	w := AllWorlds[0]
-	tiles := getSightTiles(w, r, c)
-	return tiles
+	list := make([]*Entity.Tile, 0)
+	for rr := r - 1; rr < r+2; rr++ {
+		if rr < 0 || rr > SIGHT_ROWCOL {
+			continue
+		}
+		for cc := c - 1; cc < c+2; cc++ {
+			if cc < 0 || cc > SIGHT_ROWCOL {
+				continue
+			}
+			list = getSightTiles(w, rr, cc, list)
+		}
+	}
+	log.Println("moveEyes", r, c, len(list))
+	return list
 }
 
 func GetEmptyTile(worldId, r, c int) *Entity.Tile {

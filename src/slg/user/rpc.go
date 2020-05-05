@@ -15,11 +15,11 @@ import (
 	"github.com/golang/protobuf/proto"
 )
 
-//rpc
+//Net版RPC
 func init() {
-	Net.RegRPC(Const.Login_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.Login_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
 		ps := protos.Login_C{}
-		if ss.DecodeFail(data, &ps) {
+		if !ss.Decode(data, &ps) {
 			return
 		}
 		fmt.Println("<<<Login", data, ps.GetOpenId(), ps.GetUid())
@@ -80,30 +80,24 @@ func init() {
 		log.Println("Event.OnUserLogin..", uid)
 		Event.Call(Const.OnUserLogin, uid)
 
-		updates := &protos.Updates{}
-		updates.User = user.ToProto()
-		Event.Call(Const.OnUserGetData, uid, updates)
-
-		ss.CallOut(protoId+1, &protos.Response_S{ProtoId: proto.Int32(protoId),
-			Updates: updates,
-		})
+		ss.CallOut(Const.Login_S, &protos.Login_S{})
 	})
 
-	Net.RegRPC(Const.GetRoleInfo_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.GetRoleInfo_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
 		ps := protos.GetRoleInfo_C{}
-		if ss.DecodeFail(data, &ps) {
+		if !ss.Decode(data, &ps) {
 			return
 		}
 		fmt.Println("<<<GetRoleInfo_C")
-		updates := ss.Update()
+		updates := ss.(*Net.SessionS).ProtoUpdate()
 		Event.Call(Const.OnUserGetData, uid, updates)
 		ss.CallOut(Const.GetRoleInfo_S, &protos.GetRoleInfo_S{
 			Uid: proto.Int64(uid),
 		})
 	})
-	Net.RegRPC(Const.Rename_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.Rename_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
 		ps := protos.Rename_C{}
-		if ss.DecodeFail(data, &ps) {
+		if !ss.Decode(data, &ps) {
 			return
 		}
 		fmt.Println("<<<Rename", data, ps.GetName())
@@ -113,12 +107,12 @@ func init() {
 		if has {
 			user.Name = ps.GetName()
 			x.Update(&user)
-			user.AppendTo(ss.Update())
+			user.AppendTo(ss.(*Net.SessionS).ProtoUpdate())
 		}
 	})
-	Net.RegRPC(Const.ReIcon_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.ReIcon_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
 		ps := protos.ReIcon_C{}
-		if ss.DecodeFail(data, &ps) {
+		if !ss.Decode(data, &ps) {
 			return
 		}
 		fmt.Println("<<<ReIcon", data, ps.GetIcon())
@@ -128,12 +122,12 @@ func init() {
 		if has {
 			user.Head = ps.GetIcon()
 			x.Update(&user)
-			user.AppendTo(ss.Update())
+			user.AppendTo(ss.(*Net.SessionS).ProtoUpdate())
 		}
 	})
-	Net.RegRPC(Const.ReIconB_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.ReIconB_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
 		ps := protos.ReIconB_C{}
-		if ss.DecodeFail(data, &ps) {
+		if !ss.Decode(data, &ps) {
 			return
 		}
 		fmt.Println("<<<ReIconB_C", data, ps.GetIconB())
@@ -143,19 +137,19 @@ func init() {
 		if has {
 			user.HeadB = ps.GetIconB()
 			x.Update(&user)
-			user.AppendTo(ss.Update())
+			user.AppendTo(ss.(*Net.SessionS).ProtoUpdate())
 		}
 	})
-	Net.RegRPC(Const.UserView_C, func(ss Net.Session, protoId int32, uid int64, data []byte) {
+	Net.RegRPC(Const.UserView_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
 		ps := protos.UserView_C{}
-		if ss.DecodeFail(data, &ps) {
+		if !ss.Decode(data, &ps) {
 			return
 		}
 		x := Sql.ORM()
 		var user Entity.User
 		has, _ := x.Where("Uid = ?", uid).Get(&user)
 		if has {
-			user.AppendTo(ss.Update())
+			user.AppendTo(ss.(*Net.SessionS).ProtoUpdate())
 		}
 	})
 

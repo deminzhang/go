@@ -9,7 +9,7 @@ import (
 
 type ServerInfo struct {
 	Sid    int32 `xorm:"pk"`
-	Minute int64
+	Minute int64 //
 }
 
 //转proto对象

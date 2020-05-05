@@ -26,5 +26,5 @@ const (
 type World struct {
 	sync.RWMutex `xorm:"-"`
 	Sid          int
-	Inited       bool
+	Inited       bool `xorm:"-"`
 }
