@@ -151,6 +151,12 @@ func test() {
 		}
 		fmt.Print(colNum, len(rows), "\n")
 	}
+	f := func(a int, b ...int64) {
+		log.Println(a, len(b))
+	}
+	f(1)
+	f(1, 2)
+	f(1, 2, 3)
 
 }
 

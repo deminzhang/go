@@ -11,7 +11,7 @@ import (
 
 //rpc
 func init() {
-	Net.RegRPC(Const.March_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
+	Net.RegRpcC(Const.March_C, func(ss *Net.Conn, pid int, data []byte, uid int64) {
 		ps := protos.March_C{}
 		if !ss.Decode(data, &ps) {
 			return

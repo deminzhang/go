@@ -17,11 +17,15 @@ import (
 
 //Net版RPC
 func init() {
-	Net.RegRPC(Const.Login_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
+	Net.RegRpcC(Const.Login_C, func(ss *Net.Conn, pid int, data []byte, uid int64) {
+		// Net.RegRpcC(Const.Login_C, func(ss *Net.Conn, pid int, data []byte) {
 		ps := protos.Login_C{}
 		if !ss.Decode(data, &ps) {
 			return
 		}
+		// if err := Net.Decode(data, &ps); err != nil {
+		// 	return
+		// }
 		fmt.Println("<<<Login", data, ps.GetOpenId(), ps.GetUid())
 
 		//var rows sql.Rows
@@ -67,35 +71,35 @@ func init() {
 			t.Uid = user.Uid
 			x.Insert(t)
 			t.Unlock()
-			uid = user.Uid
-			log.Println("Event.OnUserNew..", uid)
+			log.Println("Event.OnUserNew..", user.Uid)
 
 			//==OnUserNew(uid)
-			Event.Call(Const.OnUserNew, uid)
+			Event.Call(Const.OnUserNew, user.Uid)
 
 		}
-		uid = user.Uid
-		//updateLoginTime
 
-		log.Println("Event.OnUserLogin..", uid)
-		Event.Call(Const.OnUserLogin, uid)
+		log.Println("Event.OnUserLogin..", user.Uid)
+		Event.Call(Const.OnUserLogin, user.Uid)
 
 		ss.CallOut(Const.Login_S, &protos.Login_S{})
 	})
 
-	Net.RegRPC(Const.GetRoleInfo_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
+	Net.RegRpcC(Const.GetRoleInfo_C, func(ss *Net.Conn, pid int, data []byte, uid int64) {
 		ps := protos.GetRoleInfo_C{}
 		if !ss.Decode(data, &ps) {
 			return
 		}
 		fmt.Println("<<<GetRoleInfo_C")
-		updates := ss.(*Net.SessionS).ProtoUpdate()
+		updates := &protos.Updates{}
 		Event.Call(Const.OnUserGetData, uid, updates)
+		ss.CallOut(Const.Response_S, &protos.Response_S{
+			Updates: updates,
+		})
 		ss.CallOut(Const.GetRoleInfo_S, &protos.GetRoleInfo_S{
 			Uid: proto.Int64(uid),
 		})
 	})
-	Net.RegRPC(Const.Rename_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
+	Net.RegRpcC(Const.Rename_C, func(ss *Net.Conn, pid int, data []byte, uid int64) {
 		ps := protos.Rename_C{}
 		if !ss.Decode(data, &ps) {
 			return
@@ -107,40 +111,14 @@ func init() {
 		if has {
 			user.Name = ps.GetName()
 			x.Update(&user)
-			user.AppendTo(ss.(*Net.SessionS).ProtoUpdate())
+			updates := &protos.Updates{}
+			user.AppendTo(updates)
+			ss.CallOut(Const.Response_S, &protos.Response_S{
+				Updates: updates,
+			})
 		}
 	})
-	Net.RegRPC(Const.ReIcon_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
-		ps := protos.ReIcon_C{}
-		if !ss.Decode(data, &ps) {
-			return
-		}
-		fmt.Println("<<<ReIcon", data, ps.GetIcon())
-		x := Sql.ORM()
-		var user Entity.User
-		has, _ := x.Where("Uid = ?", uid).Get(&user)
-		if has {
-			user.Head = ps.GetIcon()
-			x.Update(&user)
-			user.AppendTo(ss.(*Net.SessionS).ProtoUpdate())
-		}
-	})
-	Net.RegRPC(Const.ReIconB_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
-		ps := protos.ReIconB_C{}
-		if !ss.Decode(data, &ps) {
-			return
-		}
-		fmt.Println("<<<ReIconB_C", data, ps.GetIconB())
-		x := Sql.ORM()
-		var user Entity.User
-		has, _ := x.Where("Uid = ?", uid).Get(&user)
-		if has {
-			user.HeadB = ps.GetIconB()
-			x.Update(&user)
-			user.AppendTo(ss.(*Net.SessionS).ProtoUpdate())
-		}
-	})
-	Net.RegRPC(Const.UserView_C, func(ss Net.Session, pid int32, data []byte, uid int64) {
+	Net.RegRpcC(Const.UserView_C, func(ss *Net.Conn, pid int, data []byte, uid int64) {
 		ps := protos.UserView_C{}
 		if !ss.Decode(data, &ps) {
 			return
@@ -149,7 +127,11 @@ func init() {
 		var user Entity.User
 		has, _ := x.Where("Uid = ?", uid).Get(&user)
 		if has {
-			user.AppendTo(ss.(*Net.SessionS).ProtoUpdate())
+			updates := &protos.Updates{}
+			user.AppendTo(updates)
+			ss.CallOut(Const.Response_S, &protos.Response_S{
+				Updates: updates,
+			})
 		}
 	})
 
