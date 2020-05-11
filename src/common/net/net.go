@@ -71,19 +71,19 @@ func (conn *Conn) ReadLen(lenth int, timeOut time.Duration) ([]byte, error) {
 	}
 	return data, nil
 }
-
 func (conn *Conn) Send(pid int, data []byte) {
-	var head = make([]byte, 4)
-	var plen = int32(len(data))
+	head := make([]byte, 4)
+	plen := int32(4 + len(data))
 
-	binary.BigEndian.PutUint32(head, uint32(int32(pid)<<16+plen))
-	//fmt.Printf(">>send(%d:%d)\n", pid, plen)
-
+	binary.BigEndian.PutUint32(head, uint32(plen))
 	conn.Write(head)
 	if plen == 0 {
 		return
 	}
+	binary.BigEndian.PutUint32(head, uint32(pid)<<16)
+	conn.Write(head)
 	//大包分包
+	plen -= 4
 	for plen > BUF_MAX_LEN {
 		conn.Write(data[:BUF_MAX_LEN])
 		data = data[BUF_MAX_LEN:]
@@ -199,16 +199,19 @@ func onAccept(conn net.Conn, onListen func(*Conn), onData func(*Conn, int, []byt
 		}
 		//onHead(conn,head)
 		headInt := binary.BigEndian.Uint32(head)
-		pid, plen := headInt>>16, headInt<<16>>16
+		// pid, plen := headInt>>16, headInt<<16>>16
 
 		timeOut = time.Second * 10 //包体超时 小
-		body, err := connEx.ReadLen(int(plen), timeOut)
+		body, err := connEx.ReadLen(int(headInt), timeOut)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 		//onBody(conn,body)
-		onData(connEx, int(pid), body)
+		pidb := body[:2]
+		pid := int(binary.BigEndian.Uint16(pidb))
+		fmt.Printf(">>S:recvLen/Pid(%d/%d)\n", int(headInt), pid)
+		onData(connEx, pid, body[4:])
 		timeOut = time.Minute * 10 //非首次包头超时 大
 	}
 }
@@ -252,16 +255,17 @@ func onConnect(conn *Conn, onConn func(*Conn), onData func(*Conn, int, []byte), 
 		}
 		//onHead(conn,head)
 		headInt := binary.BigEndian.Uint32(head)
-		pid, plen := headInt>>16, headInt<<16>>16
-		//fmt.Printf(">>recv(%d:%d)\n", pid, plen)
-		//fmt.Printf(">>recvX(%x:%x)\n", pid, plen)
-		body, err := conn.ReadLen(int(plen), time.Second*10)
+		// fmt.Printf(">>recvLen(%d)\n", headInt)
+		body, err := conn.ReadLen(int(headInt), time.Second*10)
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 		//onHead(conn,body)
-		onData(conn, int(pid), body)
+		pidb := body[:2]
+		pid := int(binary.BigEndian.Uint16(pidb))
+		fmt.Printf(">>C:recvLen/Pid(%d/%d)\n", int(headInt), pid)
+		onData(conn, pid, body[4:])
 	}
 }
 func Connect(addr string, onConn func(*Conn), onData func(*Conn, int, []byte), onDisconn func(*Conn)) *Conn {
