@@ -17,16 +17,15 @@ import (
 
 //Net版RPC
 func init() {
-	Net.RegRpcC(Const.Login_C, func(ss *Net.Conn, pid int, data []byte, uid int64) {
-		// Net.RegRpcC(Const.Login_C, func(ss *Net.Conn, pid int, data []byte) {
+	Net.RegRpc(Const.Login_C, func(c *Net.Conn, pid int, buf []byte, uid int64) {
 		ps := protos.Login_C{}
-		if !ss.Decode(data, &ps) {
+		if !c.Decode(buf, &ps) {
 			return
 		}
 		// if err := Net.Decode(data, &ps); err != nil {
 		// 	return
 		// }
-		fmt.Println("<<<Login", data, ps.GetOpenId(), ps.GetUid())
+		fmt.Println("<<<Login", buf, ps.GetOpenId(), ps.GetUid())
 
 		//var rows sql.Rows
 		if ps.GetUid() == 0 {
@@ -43,7 +42,7 @@ func init() {
 		var user Entity.User
 		has, _ := x.Where("Passport = ?", passport).Get(&user)
 		if has {
-			ss.SetUid(user.Uid)
+			c.SetUid(user.Uid)
 			user.LoginTime = now
 			x.Update(&user)
 		} else {
@@ -81,30 +80,30 @@ func init() {
 		log.Println("Event.OnUserLogin..", user.Uid)
 		Event.Call(Const.OnUserLogin, user.Uid)
 
-		ss.CallOut(Const.Login_S, &protos.Login_S{})
+		c.CallOut(Const.Login_S, &protos.Login_S{})
 	})
 
-	Net.RegRpcC(Const.GetRoleInfo_C, func(ss *Net.Conn, pid int, data []byte, uid int64) {
+	Net.RegRpc(Const.GetRoleInfo_C, func(c *Net.Conn, pid int, buf []byte, uid int64) {
 		ps := protos.GetRoleInfo_C{}
-		if !ss.Decode(data, &ps) {
+		if !c.Decode(buf, &ps) {
 			return
 		}
 		fmt.Println("<<<GetRoleInfo_C")
 		updates := &protos.Updates{}
 		Event.Call(Const.OnUserGetData, uid, updates)
-		ss.CallOut(Const.Response_S, &protos.Response_S{
+		c.CallOut(Const.Response_S, &protos.Response_S{
 			Updates: updates,
 		})
-		ss.CallOut(Const.GetRoleInfo_S, &protos.GetRoleInfo_S{
+		c.CallOut(Const.GetRoleInfo_S, &protos.GetRoleInfo_S{
 			Uid: proto.Int64(uid),
 		})
 	})
-	Net.RegRpcC(Const.Rename_C, func(ss *Net.Conn, pid int, data []byte, uid int64) {
+	Net.RegRpc(Const.Rename_C, func(c *Net.Conn, pid int, buf []byte, uid int64) {
 		ps := protos.Rename_C{}
-		if !ss.Decode(data, &ps) {
+		if !c.Decode(buf, &ps) {
 			return
 		}
-		fmt.Println("<<<Rename", data, ps.GetName())
+		fmt.Println("<<<Rename", buf, ps.GetName())
 		x := Sql.ORM()
 		var user Entity.User
 		has, _ := x.Where("Uid = ?", uid).Get(&user)
@@ -113,14 +112,14 @@ func init() {
 			x.Update(&user)
 			updates := &protos.Updates{}
 			user.AppendTo(updates)
-			ss.CallOut(Const.Response_S, &protos.Response_S{
+			c.CallOut(Const.Response_S, &protos.Response_S{
 				Updates: updates,
 			})
 		}
 	})
-	Net.RegRpcC(Const.UserView_C, func(ss *Net.Conn, pid int, data []byte, uid int64) {
+	Net.RegRpc(Const.UserView_C, func(c *Net.Conn, pid int, buf []byte, uid int64) {
 		ps := protos.UserView_C{}
-		if !ss.Decode(data, &ps) {
+		if !c.Decode(buf, &ps) {
 			return
 		}
 		x := Sql.ORM()
@@ -129,7 +128,7 @@ func init() {
 		if has {
 			updates := &protos.Updates{}
 			user.AppendTo(updates)
-			ss.CallOut(Const.Response_S, &protos.Response_S{
+			c.CallOut(Const.Response_S, &protos.Response_S{
 				Updates: updates,
 			})
 		}

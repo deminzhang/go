@@ -18,7 +18,7 @@ import (
 	"time"
 
 	"github.com/Luxurioust/excelize"
-	_ "github.com/golang/protobuf/proto"
+	"github.com/golang/protobuf/proto"
 )
 
 //配置
@@ -157,6 +157,51 @@ func test() {
 	f(1)
 	f(1, 2)
 	f(1, 2, 3)
+
+	/////////////////////////////
+	var rpcF = make(map[int]interface{})
+	var rpcD = make(map[int]proto.Message)
+	dd := protos.Item{}
+	rpcD[1] = &dd
+
+	ii := protos.Item{
+		Sid: proto.Int64(456),
+	}
+
+	buf, err := proto.Marshal(&ii)
+	if err != nil {
+		log.Fatal("Marshal error: ", err)
+	}
+
+	ff := func(pb *protos.Item) {
+		log.Println(pb.GetSid())
+	}
+	rpcF[1] = ff
+	fff := func(pb proto.Message) {
+		ps := pb.(*protos.Item)
+		log.Println(ps.GetSid())
+	}
+	ffff := func(pb interface{}) {
+		ps := pb.(*protos.Item)
+		log.Println(ps.GetSid())
+	}
+
+	ddd := dd //getdd()
+	if err = proto.Unmarshal(buf, &ddd); err != nil {
+		log.Fatal("Unmarshal error:", err)
+	}
+	// var dx interface{}
+	// dx = &ddd
+	// dt := reflect.ValueOf(dx).Elem().Type()
+	// ff(dx.(dt))
+	fff(&ddd)
+	ffff(&ddd)
+	log.Println(dd.GetSid())
+
+
+	func cc(pid int,buf []byte){
+		
+	}
 
 }
 

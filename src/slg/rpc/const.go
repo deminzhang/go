@@ -36,10 +36,10 @@ const (
 	MysticShopView_C  = 317 //神秘商店查看
 	MysticShopFlush_C = 319 //神秘商店刷新
 	//city
-	Build_C     = 401 //建筑初建
-	BuildUp_C   = 403 //建筑升级
-	BuildDel_C  = 405 //建筑拆除
-	BuildMove_C = 409 //建筑移动
+	Build_C      = 401 //建筑初建
+	BuildUp_C    = 403 //建筑升级
+	BuildDel_C   = 405 //建筑拆除
+	UnlockArea_C = 409 //建筑移动
 	//hero
 	HeroStepUp_C  = 421 //英雄升阶
 	HeroAddExp_C  = 423 //英雄加经验

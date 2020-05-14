@@ -14,43 +14,31 @@ const (
 	Error_S    = 14
 )
 
-var rpcC = make(map[int]func(*Conn, int, []byte, int64))
-
-// var Decode func(buf []byte, msg interface{}) error
-// var Encode func(msg interface{}) ([]byte, error)
+var rpcF = make(map[int]func(*Conn, int, []byte, int64))
+var rpcD = make(map[int]proto.Message)
 
 func init() {
-	// // base
-	// Decode = func(buf []byte, msg interface{}) error {
-	// 	panic("Net.Decoder Need Rewrite as func(buf []byte, msg interface{}) error")
-	// 	return nil
-	// }
-	// Encode = func(msg interface{}) ([]byte, error) {
-	// 	panic("Net.Encoder Need Rewrite as func(msg interface{}) ([]byte, error)")
-	// 	return nil, nil
-	// }
-	// //rewrite
-	// Encode = func(msg interface{}) ([]byte, error) {
-	// 	return proto.Marshal(msg.(proto.Message))
-	// }
-	// Decode = func(buf []byte, msg interface{}) error {
-	// 	return proto.Unmarshal(buf, msg.(proto.Message))
-	// }
-
-	RegRpcC(Ping, func(conn *Conn, pid int, data []byte, uid int64) {
+	RegRpc(Ping, func(conn *Conn, pid int, data []byte, uid int64) {
 		fmt.Println("<<<Ping", data)
-		conn.Send(Pong, data)
+		conn.SendRpc(Pong, data)
 	})
-	RegRpcC(Pong, func(conn *Conn, pid int, data []byte, uid int64) {
+	RegRpc(Pong, func(conn *Conn, pid int, data []byte, uid int64) {
 		fmt.Println(">>>Pong", data)
 	})
 }
 
-func RegRpcC(pid int, call func(*Conn, int, []byte, int64)) {
-	if rpcC[pid] != nil {
+func DefRpc(pid int, pb proto.Message) {
+	if rpcD[pid] != nil {
 		log.Fatalf("RegRpcC duplicated %d", pid)
 	}
-	rpcC[pid] = call
+	rpcD[pid] = pb
+}
+
+func RegRpc(pid int, call func(*Conn, int, []byte, int64)) {
+	if rpcF[pid] != nil {
+		log.Fatalf("RegRpcC duplicated %d", pid)
+	}
+	rpcF[pid] = call
 }
 
 func CallUid(uid int64, pid int, pb proto.Message) {

@@ -16,11 +16,11 @@ import (
 
 //RPC
 func init() {
-	Net.RegRpcC(Const.MailGet_C, func(ss *Net.Conn, pid int, data []byte, uid int64) {
+	Net.RegRpc(Const.MailGet_C, func(c *Net.Conn, pid int, buf []byte, uid int64) {
 		ps := protos.MailGet_C{}
-		if err := proto.Unmarshal(data, &ps); err != nil {
-			log.Println("Decode error: ", err, data)
-			ss.Close()
+		if err := proto.Unmarshal(buf, &ps); err != nil {
+			log.Println("Decode error: ", err, buf)
+			c.Close()
 			return
 		}
 		fromSid := ps.GetFrom()
@@ -29,18 +29,18 @@ func init() {
 		for _, o := range mails {
 			o.AppendTo(updates)
 		}
-		ss.CallOut(pid+1, &protos.Response_S{ProtoId: proto.Int32(int32(pid)),
+		c.CallOut(pid+1, &protos.Response_S{ProtoId: proto.Int32(int32(pid)),
 			Updates: updates,
 		})
 	})
 	{
 		return
 	}
-	Net.RegRpcC(Const.MailDel_C, func(ss *Net.Conn, pid int, data []byte, uid int64) {
+	Net.RegRpc(Const.MailDel_C, func(c *Net.Conn, pid int, buf []byte, uid int64) {
 		ps := protos.MailDel_C{}
-		if err := proto.Unmarshal(data, &ps); err != nil {
-			log.Println("Decode error: ", err, data)
-			ss.Close()
+		if err := proto.Unmarshal(buf, &ps); err != nil {
+			log.Println("Decode error: ", err, buf)
+			c.Close()
 			return
 		}
 		force := ps.GetForce()
@@ -65,24 +65,24 @@ func init() {
 		}
 		removes := &protos.Removes{}
 		removes.Mail = ms
-		ss.CallOut(pid+1, &protos.Response_S{ProtoId: proto.Int32(int32(pid)),
+		c.CallOut(pid+1, &protos.Response_S{ProtoId: proto.Int32(int32(pid)),
 			Removes: removes,
 		})
 	})
-	Net.RegRpcC(Const.MailRead_C, func(ss *Net.Conn, pid int, data []byte, uid int64) {
+	Net.RegRpc(Const.MailRead_C, func(c *Net.Conn, pid int, buf []byte, uid int64) {
 		ps := protos.MailRead_C{}
-		if err := proto.Unmarshal(data, &ps); err != nil {
-			log.Println("Decode error: ", err, data)
-			ss.Close()
+		if err := proto.Unmarshal(buf, &ps); err != nil {
+			log.Println("Decode error: ", err, buf)
+			c.Close()
 			return
 		}
 	})
-	Net.RegRpcC(Const.MailTake_C, func(ss *Net.Conn, pid int, data []byte, uid int64) {
+	Net.RegRpc(Const.MailTake_C, func(c *Net.Conn, pid int, buf []byte, uid int64) {
 
 		ps := protos.MailTake_C{}
-		if err := proto.Unmarshal(data, &ps); err != nil {
-			log.Println("Decode error: ", err, data)
-			ss.Close()
+		if err := proto.Unmarshal(buf, &ps); err != nil {
+			log.Println("Decode error: ", err, buf)
+			c.Close()
 			return
 		}
 	})

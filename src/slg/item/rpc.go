@@ -12,12 +12,12 @@ import (
 //RPC
 func init() {
 
-	Net.RegRpcC(Const.ItemUse_C, func(ss *Net.Conn, pid int, data []byte, uid int64) {
-		log.Println(">>>ItemUse_C", data)
+	Net.RegRpc(Const.ItemUse_C, func(c *Net.Conn, pid int, buf []byte, uid int64) {
+		log.Println(">>>ItemUse_C", buf)
 		ps := protos.ItemUse_C{}
-		if err := proto.Unmarshal(data, &ps); err != nil {
-			log.Println("Decode error: ", err, data)
-			ss.Close()
+		if err := proto.Unmarshal(buf, &ps); err != nil {
+			log.Println("Decode error: ", err, buf)
+			c.Close()
 			return
 		}
 		log.Println(">>>ItemUse_C", ps.GetCid(), ps.GetNum())
@@ -25,12 +25,12 @@ func init() {
 		Use(uid, ps.GetCid(), int64(ps.GetNum()))
 
 	})
-	Net.RegRpcC(Const.ItemDel_C, func(ss *Net.Conn, pid int, data []byte, uid int64) {
-		log.Println(">>>ItemUse_C", data)
+	Net.RegRpc(Const.ItemDel_C, func(c *Net.Conn, pid int, buf []byte, uid int64) {
+		log.Println(">>>ItemUse_C", buf)
 		ps := protos.ItemDel_C{}
-		if err := proto.Unmarshal(data, &ps); err != nil {
-			log.Println("Decode error: ", err, data)
-			ss.Close()
+		if err := proto.Unmarshal(buf, &ps); err != nil {
+			log.Println("Decode error: ", err, buf)
+			c.Close()
 			return
 		}
 		log.Println(">>>ItemUse_C", ps.GetCid(), ps.GetNum())

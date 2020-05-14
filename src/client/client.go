@@ -26,16 +26,16 @@ func main() {
 	fmt.Println(">>client start=========================")
 
 	//测试自连
-	SERVER := Net.Connect("localhost:8341", func(conn *Net.Conn) {
+	SERVER := Net.Connect("localhost:8341", func(c *Net.Conn) {
 		conn.CallOut(Const.Login_C, &protos.Login_C{
 			OpenId: proto.String("2017015025"),
 			// Uid:        proto.Int64(0),
 			// ServerName: proto.String("999"),
 		})
 
-	}, func(conn *Net.Conn, pid int, data []byte) {
+	}, func(c *Net.Conn, pid int, data []byte) {
 		conn.CallIn(pid, data)
-	}, func(conn *Net.Conn) {
+	}, func(c *Net.Conn) {
 		panic("exit")
 	})
 

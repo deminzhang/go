@@ -77,7 +77,7 @@ package Troop
 
 // 				TroopMgr.Set(sid, nil)
 // 			}
-// 			// 	ss.CallOut( 12, &protos.Response_S{ProtoId: proto.Int32(0),
+// 			// 	c.CallOut( 12, &protos.Response_S{ProtoId: proto.Int32(0),
 // 			// 		Updates: &protos.Updates{},
 // 			// 	})
 // 		}
