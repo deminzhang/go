@@ -4,19 +4,16 @@ import (
 	"common/net"
 	"common/sql"
 	"protos"
+	"slg/entity"
 	"slg/rpc"
 
 	"github.com/golang/protobuf/proto"
 )
 
 //TODO 优化
-func resUp(uid int64, cid int32, newn int64) {
-	a := []*protos.Res{&protos.Res{
-		Cid: proto.Int32(cid),
-		Num: proto.Int64(newn),
-	}}
+func resUp(uid int64, item *Entity.Res) {
 	updates := &protos.Updates{}
-	updates.Res = a
+	item.AppendTo(updates)
 	Net.CallUid(uid, Rpc.Response_S, &protos.Response_S{ProtoId: proto.Int32(0),
 		Updates: updates,
 	})
@@ -27,13 +24,16 @@ func AddRes(uid int64, cid int32, num int64, src string) {
 	if num <= 0 {
 		return
 	}
-	affected, _, _ := Sql.Exec("update u_res set num=num+? where uid=? and cid=?;", num, uid, cid)
-	if affected == 0 {
-		Sql.Exec("replace into u_res(uid,cid,num) values(?,?,num+?)", uid, cid, num)
+	var item Entity.Res
+	has, _ := Sql.ORM().Where("uid = ? and cid = ?", uid, cid).Get(&item)
+	if has {
+		item.Num += num
+		Sql.ORM().Update(item)
+	} else {
+		item = Entity.Res{Uid: uid, Cid: cid, Num: num}
+		Sql.ORM().Insert(item)
 	}
-	ret := Sql.Query2Map1("select num from u_res where uid=? and cid=?;", uid, cid)
-	newn := int64(ret["num"].(int64))
-	resUp(uid, cid, newn)
+	resUp(uid, &item)
 
 }
 
@@ -42,14 +42,16 @@ func DelRes(uid int64, cid int32, num int64, src string) {
 	if num <= 0 {
 		return
 	}
-	affected, _, _ := Sql.Exec("update u_res set num=num-? where uid=? and cid=? and num>=?;", num, uid, cid, num)
-	if affected == 0 {
-		Net.CallError(uid, 0, 1, "lessRes")
+	var item Entity.Res
+	has, _ := Sql.ORM().Where("uid = ? and cid = ?", uid, cid).Get(&item)
+	if has && item.Num >= num {
+		item.Num -= num
+		Sql.ORM().Update(item)
+	} else {
+		Net.CallError(uid, 0, 1, "lessItem")
 		return
 	}
-	ret := Sql.Query2Map1("select num from u_res where uid=? and cid=?;", uid, cid)
-	newn := int64(ret["num"].(int64))
-	resUp(uid, cid, newn)
+	resUp(uid, &item)
 }
 
 //混加

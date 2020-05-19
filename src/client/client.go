@@ -33,10 +33,19 @@ func main() {
 			// ServerName: proto.String("999"),
 		})
 
-	}, func(c *Net.Conn, pid int, data []byte) {
-		conn.CallIn(pid, data)
-	}, func(c *Net.Conn) {
-		panic("exit")
+		var onHead, onBody func(*Net.Conn, []byte)
+		onHead = func(c *Net.Conn, buf []byte) {
+			headInt := int(binary.BigEndian.Uint32(buf))
+			c.ReadLen(headInt, time.Second*10, onBody) //包体超时 小
+		}
+		onBody = func(c *Net.Conn, buf []byte) {
+			pid := int(binary.BigEndian.Uint16(buf[:2]))
+			c.CallIn(pid, buf[4:])
+			c.ReadLen(4, time.Minute*10, onHead)
+		}
+		c.ReadLen(4, time.Second*10, onHead)
+	},  func(c *Net.Conn,, err error) {
+		panic(err)
 	})
 
 	//signal

@@ -15,7 +15,8 @@ const (
 )
 
 var rpcF = make(map[int]func(*Conn, int, []byte, int64))
-var rpcD = make(map[int]proto.Message)
+
+// var rpcD = make(map[int]proto.Message)
 
 func init() {
 	RegRpc(Ping, func(conn *Conn, pid int, data []byte, uid int64) {
@@ -27,12 +28,12 @@ func init() {
 	})
 }
 
-func DefRpc(pid int, pb proto.Message) {
-	if rpcD[pid] != nil {
-		log.Fatalf("RegRpcC duplicated %d", pid)
-	}
-	rpcD[pid] = pb
-}
+// func DefRpc(pid int, pb proto.Message) {
+// 	if rpcD[pid] != nil {
+// 		log.Fatalf("RegRpcC duplicated %d", pid)
+// 	}
+// 	rpcD[pid] = pb
+// }
 
 func RegRpc(pid int, call func(*Conn, int, []byte, int64)) {
 	if rpcF[pid] != nil {

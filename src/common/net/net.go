@@ -1,8 +1,10 @@
 package Net
 
 import (
-	"bytes"
+	"strconv"
+	// "bytes"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"log"
 	"net"
@@ -18,8 +20,9 @@ const (
 
 type Conn struct {
 	net.Conn
-	uid  int64
-	Call func()
+	uid     int64
+	OnError func(*Conn, error)
+	err     error
 }
 
 func (conn *Conn) GetUid() int64 {
@@ -34,21 +37,26 @@ func (conn *Conn) SetUid(uid int64) {
 	conn.uid = uid
 
 }
-func (conn *Conn) ReadLen(lenth int, timeOut time.Duration) ([]byte, error) {
+func (conn *Conn) ReadLen(lenth int, timeOut time.Duration, onData func(*Conn, []byte)) {
 	conn.SetDeadline(time.Now().Add(timeOut))
 	if lenth == 0 {
-		return nil, nil
+		return
 	}
 	data := make([]byte, lenth)
 	l := 0 //长包等合并
-	for l < lenth {
+	for {
 		n, err := conn.Read(data[l:])
 		if err != nil {
-			return nil, err
+			conn.err = err
+			conn.Close()
+			return
 		}
 		l += n
+		if l >= lenth {
+			break
+		}
 	}
-	return data, nil
+	onData(conn, data)
 }
 func (conn *Conn) Send(data []byte) {
 	plen := len(data)
@@ -96,7 +104,9 @@ func (conn *Conn) CallIn(pid int, buf []byte) {
 		log.Println(">>CallIn.Default", pid)
 		rpc = rpcF[Response_S]
 		if rpc == nil {
-			log.Fatal(">>NoRegRpc", Response_S)
+			conn.err = errors.New("NoRegRpc pid:" + strconv.Itoa(Response_S))
+			conn.Close()
+			return
 		}
 	}
 	//begin
@@ -105,8 +115,14 @@ func (conn *Conn) CallIn(pid int, buf []byte) {
 }
 
 func (conn *Conn) CallOut(pid int, pb proto.Message) {
-	// buf, err := Encode(pb)
 	buf, err := proto.Marshal(pb)
+	if err != nil {
+		log.Fatal("Marshal error: ", err)
+	}
+	conn.SendRpc(pid, buf)
+}
+func (conn *Conn) Call(pid int, pb interface{}) {
+	buf, err := proto.Marshal(pb.(proto.Message))
 	if err != nil {
 		log.Fatal("Marshal error: ", err)
 	}
@@ -182,56 +198,18 @@ func SetUid(uid int64, conn *Conn) {
 
 //Server------------------------------------------------------------------------
 //客户连接
-var _connInCount = 0
 
-func onAccept(conn *Conn, onListen func(*Conn), onData func(*Conn, int, []byte), onClose func(*Conn)) {
+func onAccept(conn *Conn, onListen func(*Conn), onClose func(*Conn, error)) {
 	fmt.Println("onListen:", conn.RemoteAddr(), conn.LocalAddr())
-
 	defer func() {
 		fmt.Println("onClientClose:", conn.RemoteAddr(), conn.LocalAddr())
-		_connInCount--
-		log.Println(">>clientCount=", _connInCount)
-		onClose(conn)
+		onClose(conn, conn.err)
 		conn.Close()
 	}()
-	_connInCount++
-	log.Println(">>clientCount=", _connInCount)
 	onListen(conn)
-
-	timeOut := time.Second * 10 //首包头超时 小
-	for {
-		head, err := conn.ReadLen(4, timeOut)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		if bytes.Equal(head, []byte("POST")) {
-			fmt.Println("TODO http.POST")
-		}
-		if bytes.Equal(head, []byte("GET ")) {
-			fmt.Println("TODO http.GET ")
-		}
-		//onHead(conn,head)
-		headInt := binary.BigEndian.Uint32(head)
-		// pid, plen := headInt>>16, headInt<<16>>16
-
-		timeOut = time.Second * 10 //包体超时 小
-		body, err := conn.ReadLen(int(headInt), timeOut)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		//onBody(conn,body)
-		pidb := body[:2]
-		pid := int(binary.BigEndian.Uint16(pidb))
-		fmt.Printf(">>S:recvLen/Pid(%d/%d)\n", int(headInt), pid)
-		onData(conn, pid, body[4:])
-		timeOut = time.Minute * 10 //非首次包头超时 大
-	}
 }
 
-//func Listen(addr string, onListen, onClose) {
-func Listen(addr string, onListen func(*Conn), onData func(*Conn, int, []byte), onClose func(*Conn)) net.Listener {
+func Listen(addr string, onListen func(*Conn), onClose func(*Conn, error)) net.Listener {
 	ln, err := net.Listen("tcp", addr)
 	if err != nil {
 		fmt.Print("Listen.err", err)
@@ -243,48 +221,33 @@ func Listen(addr string, onListen func(*Conn), onData func(*Conn, int, []byte), 
 			conn, err := ln.Accept()
 			if err != nil {
 				fmt.Print(err)
-				continue
+				// continue
+				return
 			}
 			connEx := &Conn{
-				Conn: conn,
+				Conn:    conn,
+				OnError: onClose,
 			}
-			go onAccept(connEx, onListen, onData, onClose)
+			go onAccept(connEx, onListen, onClose)
 		}
 	}()
 	return ln
 }
+func ListenUnix() {
+
+}
 
 //Client------------------------------------------------------------------------
-func onConnect(conn *Conn, onConn func(*Conn), onData func(*Conn, int, []byte), onDisconn func(*Conn)) {
+func onConnect(conn *Conn, onConn func(*Conn), onDisconn func(*Conn, error)) {
 	fmt.Println("onConnect:", conn.RemoteAddr(), conn.LocalAddr())
-
-	onConn(conn)
 	defer func() {
-		onDisconn(conn)
+		onDisconn(conn, conn.err)
 		fmt.Println("onDisconn:", conn.RemoteAddr())
 		conn.Close()
 	}()
-	for {
-		head, err := conn.ReadLen(4, time.Second*30)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		//onHead(conn,head)
-		headInt := binary.BigEndian.Uint32(head)
-		body, err := conn.ReadLen(int(headInt), time.Second*10)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		//onHead(conn,body)
-		pidb := body[:2]
-		pid := int(binary.BigEndian.Uint16(pidb))
-		fmt.Printf(">>C:recvLen/Pid(%d/%d)\n", int(headInt), pid)
-		onData(conn, pid, body[4:])
-	}
+	onConn(conn)
 }
-func Connect(addr string, onConn func(*Conn), onData func(*Conn, int, []byte), onDisconn func(*Conn)) *Conn {
+func Connect(addr string, onConn func(*Conn), onDisconn func(*Conn, error)) *Conn {
 	fmt.Println(">>Connecting:", addr)
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
@@ -292,8 +255,9 @@ func Connect(addr string, onConn func(*Conn), onData func(*Conn, int, []byte), o
 		return nil
 	}
 	connEx := &Conn{
-		Conn: conn,
+		Conn:    conn,
+		OnError: onDisconn,
 	}
-	go onConnect(connEx, onConn, onData, onDisconn)
+	go onConnect(connEx, onConn, onDisconn)
 	return connEx
 }
