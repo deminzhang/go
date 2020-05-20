@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net"
 	// "common/net"
 	// "common/sql"
 	"common/util"
@@ -83,13 +84,6 @@ func test() {
 	ss := "dog cat cat dog"
 	sa := strings.Split(ss, " ")
 	fmt.Println(sa, len(make([]int, 5)))
-
-	var o IEvent
-	o = new(TestMgr)
-	o.onTest(123)
-	var o1 IEvent
-	o1 = new(TestMgr1)
-	o1.onTest(123)
 
 	var conf GameConf
 	Util.ReadToml("test.toml", &conf)
@@ -198,28 +192,36 @@ func test() {
 	ffff(&ddd)
 	log.Println(dd.GetSid())
 
+	事务()
 
-	func cc(pid int,buf []byte){
-		
+	addr := &net.UnixAddr{Name: "test1.sock", Net: "unix"}
+	os.Remove(addr.Name)
+	lis, err := net.ListenUnix("unix", addr)
+	if err != nil {
+		fmt.Println("ListenUnix", err)
+		return
+	}
+	http.HandleFunc("/", http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		w.WriteHeader(222) // 这里返回一个特殊的 code, 好做验证
+	}))
+	svr := &http.Server{Handler: http.DefaultServeMux}
+	err = svr.Serve(lis)
+	if err != nil {
+		fmt.Println("Serve err:", err)
 	}
 
 }
 
-type IEvent interface {
-	onTest(t int32)
-}
-type TestMgr struct {
-	abc int32
-}
-
-func (test TestMgr) onTest(t int32) {
-	fmt.Println("TestMgr.onTest", test.abc, t)
-}
-
-type TestMgr1 struct {
-	abc int32
-}
-
-func (test TestMgr1) onTest(t int32) {
-	fmt.Println("TestMgr.onTest", test.abc, t)
+func 事务() {
+	defer func() {
+		err := recover()
+		if err == nil {
+			//commit()
+		} else { //产生了panic异常
+			fmt.Println(err)
+			//rollback()
+		}
+	}()
+	//begin()
+	panic("xxx")
 }
