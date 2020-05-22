@@ -20,9 +20,11 @@ const (
 
 type Conn struct {
 	net.Conn
-	uid     int64
-	OnError func(*Conn, error)
-	err     error
+	uid int64
+	// OnError func(*Conn, error)
+	err error
+	//CallOut
+	//CallIn
 }
 
 func (conn *Conn) GetUid() int64 {
@@ -225,8 +227,8 @@ func Listen(addr string, onListen func(*Conn), onClose func(*Conn, error)) net.L
 				return
 			}
 			connEx := &Conn{
-				Conn:    conn,
-				OnError: onClose,
+				Conn: conn,
+				// OnError: onClose,
 			}
 			go onAccept(connEx, onListen, onClose)
 		}
@@ -255,8 +257,8 @@ func Connect(addr string, onConn func(*Conn), onDisconn func(*Conn, error)) *Con
 		return nil
 	}
 	connEx := &Conn{
-		Conn:    conn,
-		OnError: onDisconn,
+		Conn: conn,
+		// OnError: onDisconn,
 	}
 	go onConnect(connEx, onConn, onDisconn)
 	return connEx

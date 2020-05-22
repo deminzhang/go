@@ -76,6 +76,7 @@ const (
 	AllianceCreate_C        = 701 //创
 	AllianceApply_C         = 703 //申入
 	AllianceOut_C           = 705 //退
+	AllianceOut_S           = 706 //退
 	AllianceSelect_C        = 707 //搜索联盟
 	AllianceSelect_S        = 708 //
 	AllianceAutoApply_C     = 709 //一键加入

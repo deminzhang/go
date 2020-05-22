@@ -438,6 +438,243 @@ func (m *MysticShopFlush_C) GetProtoId() int32 {
 	return Default_MysticShopFlush_C_ProtoId
 }
 
+type ItemUse_S struct {
+	ProtoId              *int32   `protobuf:"varint,1,opt,name=protoId,def=302" json:"protoId,omitempty"`
+	Cid                  *int32   `protobuf:"varint,2,req,name=cid" json:"cid,omitempty"`
+	Num                  *int32   `protobuf:"varint,3,opt,name=num,def=1" json:"num,omitempty"`
+	Items                *IdNum   `protobuf:"bytes,4,opt,name=items" json:"items,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ItemUse_S) Reset()         { *m = ItemUse_S{} }
+func (m *ItemUse_S) String() string { return proto.CompactTextString(m) }
+func (*ItemUse_S) ProtoMessage()    {}
+func (*ItemUse_S) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6007f868cf6553df, []int{8}
+}
+
+func (m *ItemUse_S) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ItemUse_S.Unmarshal(m, b)
+}
+func (m *ItemUse_S) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ItemUse_S.Marshal(b, m, deterministic)
+}
+func (m *ItemUse_S) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ItemUse_S.Merge(m, src)
+}
+func (m *ItemUse_S) XXX_Size() int {
+	return xxx_messageInfo_ItemUse_S.Size(m)
+}
+func (m *ItemUse_S) XXX_DiscardUnknown() {
+	xxx_messageInfo_ItemUse_S.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ItemUse_S proto.InternalMessageInfo
+
+const Default_ItemUse_S_ProtoId int32 = 302
+const Default_ItemUse_S_Num int32 = 1
+
+func (m *ItemUse_S) GetProtoId() int32 {
+	if m != nil && m.ProtoId != nil {
+		return *m.ProtoId
+	}
+	return Default_ItemUse_S_ProtoId
+}
+
+func (m *ItemUse_S) GetCid() int32 {
+	if m != nil && m.Cid != nil {
+		return *m.Cid
+	}
+	return 0
+}
+
+func (m *ItemUse_S) GetNum() int32 {
+	if m != nil && m.Num != nil {
+		return *m.Num
+	}
+	return Default_ItemUse_S_Num
+}
+
+func (m *ItemUse_S) GetItems() *IdNum {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
+type ShopBuy_S struct {
+	ProtoId              *int32   `protobuf:"varint,1,opt,name=protoId,def=312" json:"protoId,omitempty"`
+	Cid                  *int32   `protobuf:"varint,2,req,name=cid" json:"cid,omitempty"`
+	Num                  *int32   `protobuf:"varint,3,req,name=num" json:"num,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ShopBuy_S) Reset()         { *m = ShopBuy_S{} }
+func (m *ShopBuy_S) String() string { return proto.CompactTextString(m) }
+func (*ShopBuy_S) ProtoMessage()    {}
+func (*ShopBuy_S) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6007f868cf6553df, []int{9}
+}
+
+func (m *ShopBuy_S) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ShopBuy_S.Unmarshal(m, b)
+}
+func (m *ShopBuy_S) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ShopBuy_S.Marshal(b, m, deterministic)
+}
+func (m *ShopBuy_S) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ShopBuy_S.Merge(m, src)
+}
+func (m *ShopBuy_S) XXX_Size() int {
+	return xxx_messageInfo_ShopBuy_S.Size(m)
+}
+func (m *ShopBuy_S) XXX_DiscardUnknown() {
+	xxx_messageInfo_ShopBuy_S.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ShopBuy_S proto.InternalMessageInfo
+
+const Default_ShopBuy_S_ProtoId int32 = 312
+
+func (m *ShopBuy_S) GetProtoId() int32 {
+	if m != nil && m.ProtoId != nil {
+		return *m.ProtoId
+	}
+	return Default_ShopBuy_S_ProtoId
+}
+
+func (m *ShopBuy_S) GetCid() int32 {
+	if m != nil && m.Cid != nil {
+		return *m.Cid
+	}
+	return 0
+}
+
+func (m *ShopBuy_S) GetNum() int32 {
+	if m != nil && m.Num != nil {
+		return *m.Num
+	}
+	return 0
+}
+
+type VipShopBuy_S struct {
+	ProtoId              *int32   `protobuf:"varint,1,opt,name=protoId,def=314" json:"protoId,omitempty"`
+	Cid                  *int32   `protobuf:"varint,2,req,name=cid" json:"cid,omitempty"`
+	Num                  *int32   `protobuf:"varint,3,req,name=num" json:"num,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *VipShopBuy_S) Reset()         { *m = VipShopBuy_S{} }
+func (m *VipShopBuy_S) String() string { return proto.CompactTextString(m) }
+func (*VipShopBuy_S) ProtoMessage()    {}
+func (*VipShopBuy_S) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6007f868cf6553df, []int{10}
+}
+
+func (m *VipShopBuy_S) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_VipShopBuy_S.Unmarshal(m, b)
+}
+func (m *VipShopBuy_S) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_VipShopBuy_S.Marshal(b, m, deterministic)
+}
+func (m *VipShopBuy_S) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VipShopBuy_S.Merge(m, src)
+}
+func (m *VipShopBuy_S) XXX_Size() int {
+	return xxx_messageInfo_VipShopBuy_S.Size(m)
+}
+func (m *VipShopBuy_S) XXX_DiscardUnknown() {
+	xxx_messageInfo_VipShopBuy_S.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VipShopBuy_S proto.InternalMessageInfo
+
+const Default_VipShopBuy_S_ProtoId int32 = 314
+
+func (m *VipShopBuy_S) GetProtoId() int32 {
+	if m != nil && m.ProtoId != nil {
+		return *m.ProtoId
+	}
+	return Default_VipShopBuy_S_ProtoId
+}
+
+func (m *VipShopBuy_S) GetCid() int32 {
+	if m != nil && m.Cid != nil {
+		return *m.Cid
+	}
+	return 0
+}
+
+func (m *VipShopBuy_S) GetNum() int32 {
+	if m != nil && m.Num != nil {
+		return *m.Num
+	}
+	return 0
+}
+
+type MysticShopBuy_S struct {
+	ProtoId              *int32   `protobuf:"varint,1,opt,name=protoId,def=316" json:"protoId,omitempty"`
+	Cid                  *int32   `protobuf:"varint,2,req,name=cid" json:"cid,omitempty"`
+	Num                  *int32   `protobuf:"varint,3,req,name=num" json:"num,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *MysticShopBuy_S) Reset()         { *m = MysticShopBuy_S{} }
+func (m *MysticShopBuy_S) String() string { return proto.CompactTextString(m) }
+func (*MysticShopBuy_S) ProtoMessage()    {}
+func (*MysticShopBuy_S) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6007f868cf6553df, []int{11}
+}
+
+func (m *MysticShopBuy_S) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_MysticShopBuy_S.Unmarshal(m, b)
+}
+func (m *MysticShopBuy_S) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_MysticShopBuy_S.Marshal(b, m, deterministic)
+}
+func (m *MysticShopBuy_S) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MysticShopBuy_S.Merge(m, src)
+}
+func (m *MysticShopBuy_S) XXX_Size() int {
+	return xxx_messageInfo_MysticShopBuy_S.Size(m)
+}
+func (m *MysticShopBuy_S) XXX_DiscardUnknown() {
+	xxx_messageInfo_MysticShopBuy_S.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_MysticShopBuy_S proto.InternalMessageInfo
+
+const Default_MysticShopBuy_S_ProtoId int32 = 316
+
+func (m *MysticShopBuy_S) GetProtoId() int32 {
+	if m != nil && m.ProtoId != nil {
+		return *m.ProtoId
+	}
+	return Default_MysticShopBuy_S_ProtoId
+}
+
+func (m *MysticShopBuy_S) GetCid() int32 {
+	if m != nil && m.Cid != nil {
+		return *m.Cid
+	}
+	return 0
+}
+
+func (m *MysticShopBuy_S) GetNum() int32 {
+	if m != nil && m.Num != nil {
+		return *m.Num
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*ItemUse_C)(nil), "protos.ItemUse_C")
 	proto.RegisterType((*ItemDel_C)(nil), "protos.ItemDel_C")
@@ -447,12 +684,16 @@ func init() {
 	proto.RegisterType((*MysticShopBuy_C)(nil), "protos.MysticShopBuy_C")
 	proto.RegisterType((*MysticShopView_C)(nil), "protos.MysticShopView_C")
 	proto.RegisterType((*MysticShopFlush_C)(nil), "protos.MysticShopFlush_C")
+	proto.RegisterType((*ItemUse_S)(nil), "protos.ItemUse_S")
+	proto.RegisterType((*ShopBuy_S)(nil), "protos.ShopBuy_S")
+	proto.RegisterType((*VipShopBuy_S)(nil), "protos.VipShopBuy_S")
+	proto.RegisterType((*MysticShopBuy_S)(nil), "protos.MysticShopBuy_S")
 }
 
 func init() { proto.RegisterFile("item.proto", fileDescriptor_6007f868cf6553df) }
 
 var fileDescriptor_6007f868cf6553df = []byte{
-	// 219 bytes of a gzipped FileDescriptorProto
+	// 283 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0xca, 0x2c, 0x49, 0xcd,
 	0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x03, 0x53, 0xc5, 0x52, 0x3c, 0xc9, 0xf9, 0xb9,
 	0xb9, 0xf9, 0x79, 0x10, 0x51, 0x25, 0x3b, 0x2e, 0x4e, 0xcf, 0x92, 0xd4, 0xdc, 0xd0, 0xe2, 0xd4,
@@ -465,6 +706,10 @@ var fileDescriptor_6007f868cf6553df = []byte{
 	0x2d, 0xe4, 0x86, 0x58, 0xc8, 0x02, 0xe2, 0x28, 0xd9, 0x71, 0xf1, 0x84, 0x65, 0x16, 0xe0, 0xd7,
 	0x6f, 0x8c, 0x47, 0xbf, 0x23, 0x17, 0xbf, 0x6f, 0x65, 0x71, 0x49, 0x66, 0x32, 0x7e, 0x23, 0x4c,
 	0xf1, 0x18, 0xa1, 0xc1, 0x25, 0x80, 0x30, 0x22, 0x2c, 0x33, 0xb5, 0x1c, 0x87, 0x19, 0xe6, 0x4a,
-	0x9a, 0x5c, 0x82, 0x08, 0x95, 0x6e, 0x39, 0xa5, 0xc5, 0x19, 0x38, 0x94, 0x5a, 0x02, 0x02, 0x00,
-	0x00, 0xff, 0xff, 0x7e, 0xd7, 0xbf, 0x4e, 0xe8, 0x01, 0x00, 0x00,
+	0x9a, 0x5c, 0x82, 0x08, 0x95, 0x6e, 0x39, 0xa5, 0xc5, 0x19, 0x38, 0x94, 0x5a, 0x2a, 0xc5, 0x20,
+	0x62, 0x31, 0x18, 0x6b, 0x20, 0x1a, 0xe1, 0x8d, 0x05, 0x21, 0x19, 0x2e, 0x56, 0x50, 0x4a, 0x29,
+	0x96, 0x60, 0x51, 0x60, 0xd4, 0xe0, 0x36, 0xe2, 0x85, 0x24, 0x8e, 0x62, 0x3d, 0xcf, 0x14, 0xbf,
+	0xd2, 0x5c, 0xe4, 0x20, 0xc7, 0x6a, 0xba, 0x21, 0x9a, 0xe9, 0xdc, 0x30, 0xd3, 0x31, 0x83, 0x1c,
+	0xbb, 0x7e, 0x13, 0x3c, 0xfa, 0x31, 0x82, 0x1c, 0xbb, 0x11, 0x66, 0xb8, 0x8d, 0x00, 0x04, 0x00,
+	0x00, 0xff, 0xff, 0xdb, 0xed, 0x05, 0x11, 0x06, 0x03, 0x00, 0x00,
 }
