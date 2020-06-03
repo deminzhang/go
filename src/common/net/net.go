@@ -41,8 +41,7 @@ func (conn *Conn) SetUid(uid int64) {
 
 }
 
-//blockRead
-func (conn *Conn) ReadLen(lenth int, timeOut time.Duration, onData func(*Conn, []byte)) {
+func (conn *Conn) Recv(lenth int, timeOut time.Duration, onData func(*Conn, []byte)) {
 	conn.SetDeadline(time.Now().Add(timeOut))
 	if lenth == 0 {
 		return
@@ -60,6 +59,52 @@ func (conn *Conn) ReadLen(lenth int, timeOut time.Duration, onData func(*Conn, [
 		}
 	}
 	onData(conn, data)
+}
+func (conn *Conn) ReadLen(lenth int, timeOut time.Duration) ([]byte, error) {
+	conn.SetDeadline(time.Now().Add(timeOut))
+	data := make([]byte, lenth)
+	if lenth == 0 {
+		return data, nil
+	}
+	for l := 0; ; {
+		n, err := conn.Read(data[l:])
+		if err != nil {
+			return nil, err
+		}
+		l += n
+		if l >= lenth {
+			break
+		}
+	}
+	return data, nil
+}
+func (conn *Conn) RecvData(headLen int, onBody func(*Conn, []byte),
+	firstHead time.Duration, headTimeOut time.Duration, bodyTimeOut time.Duration) {
+	timeOut := firstHead //首包头超时 小
+	for {
+		head, err := conn.ReadLen(headLen, timeOut)
+		if err != nil {
+			fmt.Println(err)
+			panic(err.Error())
+			return
+		}
+		// if bytes.Equal(head, []byte("POST")) {
+		// 	fmt.Println("TODO http.POST")
+		// }
+		// if bytes.Equal(head, []byte("GET ")) {
+		// 	fmt.Println("TODO http.GET ")
+		// }
+		//onHead(conn,head)
+		headInt := binary.BigEndian.Uint32(head)
+
+		body, err := conn.ReadLen(int(headInt), bodyTimeOut) //包体超时 小
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		onBody(conn, body)
+		timeOut = headTimeOut //非首次包头超时 大
+	}
 }
 func (conn *Conn) Send(data []byte) {
 	plen := len(data)
