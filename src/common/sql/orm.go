@@ -5,6 +5,9 @@ package Sql
 
 import (
 	"github.com/go-xorm/xorm"
+	// _ "github.com/go-sql-driver/mysql"
+	// _ "github.com/lib/pq"
+	// _ "github.com/mattn/go-sqlite3"
 )
 
 var _orm *xorm.Engine
@@ -21,6 +24,7 @@ func ORMConnect(driver, source string) *xorm.Engine {
 	if err != nil {
 		panic(err)
 	}
+	//_orm.ShowSQL(true) //则会在控制台打印出生成的SQL语句；
 	_db = _orm.DB().DB
 	//缓存
 	// cacher := xorm.NewLRUCacher(xorm.NewMemoryStore(), 1000)

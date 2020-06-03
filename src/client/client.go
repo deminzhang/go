@@ -44,7 +44,7 @@ func main() {
 			c.ReadLen(4, time.Minute*10, onHead)
 		}
 		c.ReadLen(4, time.Second*10, onHead)
-	},  func(c *Net.Conn,, err error) {
+	},  func(c *Net.Conn,, err string) {
 		panic(err)
 	})
 

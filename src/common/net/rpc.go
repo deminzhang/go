@@ -1,7 +1,7 @@
 package Net
 
 import (
-	"fmt"
+	//"fmt"
 	"log"
 
 	"github.com/golang/protobuf/proto"
@@ -19,12 +19,12 @@ var rpcF = make(map[int]func(*Conn, int, []byte, int64))
 // var rpcD = make(map[int]proto.Message)
 
 func init() {
-	RegRpc(Ping, func(conn *Conn, pid int, data []byte, uid int64) {
-		fmt.Println("<<<Ping", data)
-		conn.SendRpc(Pong, data)
+	RegRpc(Ping, func(c *Conn, pid int, data []byte, uid int64) {
+		//fmt.Println("<<<Ping", data)
+		c.SendRpc(Pong, data)
 	})
-	RegRpc(Pong, func(conn *Conn, pid int, data []byte, uid int64) {
-		fmt.Println(">>>Pong", data)
+	RegRpc(Pong, func(c *Conn, pid int, data []byte, uid int64) {
+		//fmt.Println(">>>Pong", data)
 	})
 }
 

@@ -6,6 +6,10 @@ import (
 	"log"
 	"reflect"
 	"testing"
+
+	"protos"
+
+	"github.com/golang/protobuf/proto"
 )
 
 func TestEvent(t *testing.T) {
@@ -62,6 +66,13 @@ func CallRPC(protoID int, data []byte) {
 		return
 	}
 	decoder := decoders[protoID]
+	// f0 := reflect.ValueOf(proto.Unmarshal)
+	// in0 := []reflect.Value{
+	// 	reflect.ValueOf(data),
+	// 	reflect.ValueOf(xx),
+	// }
+	// f0.Call(in0)
+
 	f := reflect.ValueOf(call)
 	// in := make([]reflect.Value, 3)
 	// in[0] = reflect.ValueOf(protoID)
@@ -69,12 +80,34 @@ func CallRPC(protoID int, data []byte) {
 	// in[2] = reflect.ValueOf(decoder)
 	in := []reflect.Value{
 		reflect.ValueOf(protoID),
-		reflect.ValueOf(data),
+		//reflect.ValueOf(data),
 		reflect.ValueOf(decoder),
 	}
+	f.Call(in)
 	f.Call(in)
 }
 
 func ExampleEventR() {
+	type RPC interface {
+		Reset()
+		String() string
+		ProtoMessage()
+	}
+	pb := &protos.Error_S{Code: proto.Int32(123)}
+	buf, err := proto.Marshal(pb)
+	if err != nil {
+		log.Fatal("Marshal error: ", err)
+	}
+	RegRPC(1, protos.Error_S{}, func(pid int, dec protos.Error_S) {
+		log.Println("CallRPC", pid, dec)
+		dec.Code = proto.Int32(1234)
+	})
 
+	// func() {
+	// 	if err := proto.Unmarshal(data, &xx); err != nil {
+	// 		log.Println("Unmarshal error:", err)
+	// 		return
+	// 	}
+	// }
+	CallRPC(1, buf)
 }

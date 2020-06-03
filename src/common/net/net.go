@@ -4,7 +4,7 @@ import (
 	"strconv"
 	// "bytes"
 	"encoding/binary"
-	"errors"
+	// "errors"
 	"fmt"
 	"log"
 	"net"
@@ -20,11 +20,12 @@ const (
 
 type Conn struct {
 	net.Conn
-	uid int64
+	uid       int64
+	err       error
+	DefaltRpc int
 	// OnError func(*Conn, error)
-	err error
-	//CallOut
-	//CallIn
+	// CallOut func(*Conn, proto.Message)
+	// CallIn  func(*Conn, []byte)
 }
 
 func (conn *Conn) GetUid() int64 {
@@ -39,18 +40,18 @@ func (conn *Conn) SetUid(uid int64) {
 	conn.uid = uid
 
 }
+
+//blockRead
 func (conn *Conn) ReadLen(lenth int, timeOut time.Duration, onData func(*Conn, []byte)) {
 	conn.SetDeadline(time.Now().Add(timeOut))
 	if lenth == 0 {
 		return
 	}
 	data := make([]byte, lenth)
-	l := 0 //长包等合并
-	for {
+	for l := 0; ; {
 		n, err := conn.Read(data[l:])
 		if err != nil {
-			conn.err = err
-			conn.Close()
+			panic(err.Error())
 			return
 		}
 		l += n
@@ -104,10 +105,11 @@ func (conn *Conn) CallIn(pid int, buf []byte) {
 	rpc := rpcF[pid]
 	if rpc == nil {
 		log.Println(">>CallIn.Default", pid)
-		rpc = rpcF[Response_S]
+		rpc = rpcF[conn.DefaltRpc]
 		if rpc == nil {
-			conn.err = errors.New("NoRegRpc pid:" + strconv.Itoa(Response_S))
-			conn.Close()
+			panic("NoRegRpc pid:" + strconv.Itoa(conn.DefaltRpc))
+			// conn.err = errors.New("NoRegRpc pid:" + strconv.Itoa(Response_S))
+			// conn.Close()
 			return
 		}
 	}
@@ -201,17 +203,21 @@ func SetUid(uid int64, conn *Conn) {
 //Server------------------------------------------------------------------------
 //客户连接
 
-func onAccept(conn *Conn, onListen func(*Conn), onClose func(*Conn, error)) {
+func onAccept(conn *Conn, onListen func(*Conn), onClose func(*Conn, string)) {
 	fmt.Println("onListen:", conn.RemoteAddr(), conn.LocalAddr())
 	defer func() {
-		fmt.Println("onClientClose:", conn.RemoteAddr(), conn.LocalAddr())
-		onClose(conn, conn.err)
+		err := recover()
+		if err != nil {
+			onClose(conn, err.(string))
+		} else {
+			onClose(conn, "?")
+		}
 		conn.Close()
 	}()
 	onListen(conn)
 }
 
-func Listen(addr string, onListen func(*Conn), onClose func(*Conn, error)) net.Listener {
+func Listen(addr string, onListen func(*Conn), onClose func(*Conn, string)) net.Listener {
 	ln, err := net.Listen("tcp", addr)
 	if err != nil {
 		fmt.Print("Listen.err", err)
@@ -224,6 +230,7 @@ func Listen(addr string, onListen func(*Conn), onClose func(*Conn, error)) net.L
 			if err != nil {
 				fmt.Print(err)
 				// continue
+				panic(err.Error())
 				return
 			}
 			connEx := &Conn{
@@ -240,16 +247,20 @@ func ListenUnix() {
 }
 
 //Client------------------------------------------------------------------------
-func onConnect(conn *Conn, onConn func(*Conn), onDisconn func(*Conn, error)) {
+func onConnect(conn *Conn, onConn func(*Conn), onDisconn func(*Conn, string)) {
 	fmt.Println("onConnect:", conn.RemoteAddr(), conn.LocalAddr())
 	defer func() {
-		onDisconn(conn, conn.err)
-		fmt.Println("onDisconn:", conn.RemoteAddr())
+		err := recover()
+		if err != nil {
+			onDisconn(conn, err.(string))
+		} else {
+			onDisconn(conn, "?")
+		}
 		conn.Close()
 	}()
 	onConn(conn)
 }
-func Connect(addr string, onConn func(*Conn), onDisconn func(*Conn, error)) *Conn {
+func Connect(addr string, onConn func(*Conn), onDisconn func(*Conn, string)) *Conn {
 	fmt.Println(">>Connecting:", addr)
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
@@ -259,6 +270,7 @@ func Connect(addr string, onConn func(*Conn), onDisconn func(*Conn, error)) *Con
 	connEx := &Conn{
 		Conn: conn,
 		// OnError: onDisconn,
+		// DefaltRpc: Response_S,
 	}
 	go onConnect(connEx, onConn, onDisconn)
 	return connEx

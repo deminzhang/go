@@ -47,18 +47,18 @@ func (this *User) ToProtoPK() *protos.UserPK {
 
 //加到更新
 func (this *User) AppendTo(updates *protos.Updates) {
-	list := updates.Other
+	list := updates.User
 	if list == nil {
 		list = []*protos.User{}
 	}
-	updates.Other = append(list, this.ToProto())
+	updates.User = append(list, this.ToProto())
 }
 
 //加到删除
 // func (this *User) AppendToPK(removes *protos.Removes) {
-// 	list := removes.Other
+// 	list := removes.User
 // 	if list == nil {
 // 		list = []*protos.UserPK{}
 // 	}
-// 	removes.Other = append(list, this.ToProtoPK())
+// 	removes.User = append(list, this.ToProtoPK())
 // }

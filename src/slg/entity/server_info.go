@@ -10,6 +10,9 @@ import (
 type ServerInfo struct {
 	Sid    int32 `xorm:"pk"`
 	Minute int64 //
+	// Time     int64 //对表时间现取
+	// VersionH int32 //大版本
+	// VersionL int32 //小版本
 }
 
 //转proto对象
@@ -18,9 +21,4 @@ func (this *ServerInfo) ToProto() *protos.Server {
 		Region: proto.Int32(this.Sid),
 		Time:   proto.Int64(Util.MilliSecond()),
 	}
-}
-
-//加到更新
-func (this *ServerInfo) AppendTo(updates *protos.Updates) {
-	updates.Server = this.ToProto()
 }
