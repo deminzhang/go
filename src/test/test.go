@@ -196,20 +196,82 @@ func test() {
 
 	addr := &net.UnixAddr{Name: "test1.sock", Net: "unix"}
 	os.Remove(addr.Name)
-	lis, err := net.ListenUnix("unix", addr)
-	if err != nil {
-		fmt.Println("ListenUnix", err)
-		return
-	}
-	http.HandleFunc("/", http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		w.WriteHeader(222) // 这里返回一个特殊的 code, 好做验证
-	}))
-	svr := &http.Server{Handler: http.DefaultServeMux}
-	err = svr.Serve(lis)
-	if err != nil {
-		fmt.Println("Serve err:", err)
-	}
+	// lis, err := net.ListenUnix("unix", addr)
+	// if err != nil {
+	// 	fmt.Println("ListenUnix", err)
+	// 	return
+	// }
+	// http.HandleFunc("/", http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+	// 	w.WriteHeader(222) // 这里返回一个特殊的 code, 好做验证
+	// }))
+	// svr := &http.Server{Handler: http.DefaultServeMux}
+	// err = svr.Serve(lis)
+	// if err != nil {
+	// 	fmt.Println("Serve err:", err)
+	// }
 
+	// ddd = DDDD{A: 1}
+	// fmt.Println("ddd :", ddd)
+
+	buf, err = proto.Marshal(&protos.Item{Sid: proto.Int64(256), Cid: proto.Int32(65535), Num: proto.Int64(8)})
+	log.Println(buf)
+	buf, err = proto.Marshal(&protos.Item{Sid: proto.Int64(2), Cid: proto.Int32(3)})
+	log.Println(buf)
+	m := make(map[int64]string)
+	m[3] = ""
+	m[6] = ""
+	buf, err = proto.Marshal(&protos.TestType{
+		// Fint32:       proto.Int32(130),
+		// Fint64:       proto.Int64(-8),
+		// Fuint32:      proto.Uint32(123),
+		// Fuint64:      proto.Uint64(123456),
+		// Fsint32:      proto.Int32(-123),
+		// Fsint64:      proto.Int64(-123),
+		// Ffixed32:     proto.Uint32(123),
+		// Ffixed64:     proto.Uint64(123),
+		// Fdouble:      proto.Float64(-123.123),
+		// Ffloat:       proto.Float32(123.123),
+		// Fbool:        proto.Bool(true),
+		// Fsfixed32:    proto.Int32(1234),
+		// Fsfixed64:    proto.Int64(1234),
+		Fmap: m,
+		// Fint32:       130,
+		// Fint64:       -8,
+		// Fuint32:      123,
+		// Fuint64:      123456,
+		// Fsint32:      -123,
+		// Fsint64:      -123,
+		// Ffixed32:     123,
+		// Ffixed64:     123,
+		// Fdouble:      -123.123,
+		// Ffloat:       123.123,
+		// Fbool:        true,
+		// Fsfixed32:    1234,
+		// Fsfixed64:    1234,
+		// Fstring:      "abcde",
+		// Fbytes:       []byte{'a', 'b', 'c'},
+		// Frepeatbool:  []bool{true, false, true},
+		// Frepeatbool2: []bool{true, false, true},
+		// Frepeatint: []int32{255, 65536},
+		// Frepeatint2:  []int32{255, 65536},
+		// Fstring2: []string{"abc", "abcd"},
+		// Fenum:        protos.TestEnum_SUNDAY,
+		// Fmessage: &protos.TestChild{
+		// 	Fsint64: 123,
+		// },
+		// Frepc: []*protos.TestChild{&protos.TestChild{
+		// 	Fsint64: 123,
+		// }, &protos.TestChild{
+		// 	Fsint64: 234,
+		// }},
+	})
+
+	log.Println("TestType:", buf)
+
+}
+
+type DDDD struct {
+	A int
 }
 
 func 事务() {

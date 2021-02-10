@@ -41,24 +41,24 @@ func (conn *Conn) SetUid(uid int64) {
 
 }
 
-func (conn *Conn) Recv(lenth int, timeOut time.Duration, onData func(*Conn, []byte)) {
+func (conn *Conn) Recv(lenth int, timeOut time.Duration) []byte {
 	conn.SetDeadline(time.Now().Add(timeOut))
 	if lenth == 0 {
-		return
+		return nil
 	}
 	data := make([]byte, lenth)
 	for l := 0; ; {
 		n, err := conn.Read(data[l:])
 		if err != nil {
 			panic(err.Error())
-			return
+			// return nil, err
 		}
 		l += n
 		if l >= lenth {
 			break
 		}
 	}
-	onData(conn, data)
+	return data
 }
 func (conn *Conn) ReadLen(lenth int, timeOut time.Duration) ([]byte, error) {
 	conn.SetDeadline(time.Now().Add(timeOut))
@@ -88,13 +88,6 @@ func (conn *Conn) RecvData(headLen int, onBody func(*Conn, []byte),
 			panic(err.Error())
 			return
 		}
-		// if bytes.Equal(head, []byte("POST")) {
-		// 	fmt.Println("TODO http.POST")
-		// }
-		// if bytes.Equal(head, []byte("GET ")) {
-		// 	fmt.Println("TODO http.GET ")
-		// }
-		//onHead(conn,head)
 		headInt := binary.BigEndian.Uint32(head)
 
 		body, err := conn.ReadLen(int(headInt), bodyTimeOut) //包体超时 小
@@ -297,7 +290,7 @@ func onConnect(conn *Conn, onConn func(*Conn), onDisconn func(*Conn, string)) {
 	defer func() {
 		err := recover()
 		if err != nil {
-			onDisconn(conn, err.(string))
+			onDisconn(conn, err.(error).Error())
 		} else {
 			onDisconn(conn, "?")
 		}
@@ -309,7 +302,8 @@ func Connect(addr string, onConn func(*Conn), onDisconn func(*Conn, string)) *Co
 	fmt.Println(">>Connecting:", addr)
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
-		panic(err)
+		// panic(err)
+		onDisconn(nil, err.Error())
 		return nil
 	}
 	connEx := &Conn{

@@ -12,4 +12,5 @@ type Area struct {
 	Row          int32   `xorm:"index(pos)"`
 	Inited       bool    `xorm:"-"`
 	Tiles        []*Tile `xorm:"-"` //包含格子
+	Version      int32   `xorm:"version"`
 }

@@ -16,8 +16,10 @@ const (
 	ReIcon_C   = 105 //改头像
 	ReIconB_C  = 107 //改头像框
 	UserView_C = 109 //查看角色
+	SetMark_C  = 111 //
 	//world
 	View_C           = 203 //换视野
+	View_S           = 204 //换视野
 	CityMove_C       = 207 //迁城
 	TileFind_C       = 209 //资源/怪点查找
 	March_C          = 211 //行军
@@ -67,6 +69,9 @@ const (
 	MailFavor_C  = 509 //邮件收藏
 	ReadReport_C = 511 //战报读取
 
+	VipBuyBox_C      = 551 //
+	VipGetDailyBox_C = 553 //
+
 	//task
 	UserTaskReward_C  = 601 //领取主线支线任务奖励
 	DailyTaskToDay_C  = 603 //获取今天每日任务
@@ -95,7 +100,13 @@ const (
 	AllianceRenotice_C      = 735 //联盟修改公告
 	AllianceWelfare_C       = 737 //联盟领取福利
 	AllianceShop_C          = 739 //联盟商店
+	AllianceShop_S          = 740 //联盟商店
 	AllianceShutUp_C        = 741 //联盟禁言
 	AllianceTechView_C      = 743 //联盟科技查看刷新
+	AllianceView_C          = 745 //联盟查看
 
+	RankGet_C = 801
+	RankGet_S = 802
+
+	ActivityThroneWar_C = 1003
 )

@@ -1,7 +1,7 @@
 #!/bin/sh
 
-export GOPATH=/data/app/slgdev/go
-export PATH=$PATH:/data/app/slgdev/go/bin
+# export GOPATH=/data/app/slgdev/go
+# export PATH=$PATH:/data/app/slgdev/go/bin
 
 cd protos
 protoc --version

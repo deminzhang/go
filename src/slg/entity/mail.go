@@ -21,7 +21,7 @@ type Mail struct {
 	Take     bool    //已取附件
 	Favor    bool    //收藏
 	Item     []int32 //附件道具id1,num1,id2,num,...
-	// Res
+
 }
 
 //转proto对象
