@@ -6,8 +6,6 @@ import (
 	"log"
 	"protos"
 	"slg/const"
-
-	"github.com/golang/protobuf/proto"
 )
 
 //RPC
@@ -27,8 +25,9 @@ func init() {
 		// for _, o := range list {
 		// 	o.AppendTo(updates)
 		// }
-		c.CallOut(pid+1, &protos.Response_S{ProtoId: proto.Int32(int32(pid)),
-			Props: updates,
+		c.CallOut(pid+1, &protos.Response_S{
+			ProtoId: int32(pid),
+			Props:   updates,
 		})
 	})
 

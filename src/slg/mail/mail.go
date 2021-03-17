@@ -10,8 +10,6 @@ import (
 	"slg/entity"
 	"slg/rpc"
 	"strings"
-
-	"github.com/golang/protobuf/proto"
 )
 
 const (
@@ -48,8 +46,7 @@ func ReadFrom(uid int64, from int64) []Entity.Mail {
 func SystemSend(uid int64, cid int32, titles []string, contexts []string, item []*protos.IdNum, res []*protos.IdNum) {
 	now := Util.MilliSecond()
 	// timeOut := now + 7*24*86400000
-	title := strings.Join(titles, ",")
-	context := strings.Join(contexts, ",")
+	params := strings.Join(titles, ",")
 
 	//TODO 用字串存库方便查库
 	// its := &protos.ItemArray{Item: item}
@@ -63,9 +60,8 @@ func SystemSend(uid int64, cid int32, titles []string, contexts []string, item [
 		FromUid:  0,
 		FromName: "",
 		Cid:      cid,
-		Title:    title,
-		Context:  context,
 		Time:     now,
+		Params:   params,
 		// TimeOut:  timeOut,
 		// ReportId: 0,
 		// IntelId:  0,
@@ -79,7 +75,8 @@ func SystemSend(uid int64, cid int32, titles []string, contexts []string, item [
 
 	updates := &protos.Updates{}
 	mail.AppendTo(updates)
-	Net.CallUid(uid, Rpc.Response_S, &protos.Response_S{ProtoId: proto.Int32(0),
+	Net.CallUid(uid, Rpc.Response_S, &protos.Response_S{
+		ProtoId: 0,
 		Updates: updates,
 	})
 }
@@ -93,9 +90,8 @@ func UserSend(uid int64, sender *Entity.User, title string, context string, item
 		FromUid:  sender.Uid,
 		FromName: sender.Name,
 		Cid:      0,
-		Title:    title,
-		Context:  context,
 		Time:     now,
+		Params:   title,
 		// TimeOut:  timeOut,
 		// ReportId: 0,
 		// IntelId:  0,
@@ -109,7 +105,8 @@ func UserSend(uid int64, sender *Entity.User, title string, context string, item
 
 	updates := &protos.Updates{}
 	mail.AppendTo(updates)
-	Net.CallUid(uid, Rpc.Response_S, &protos.Response_S{ProtoId: proto.Int32(0),
+	Net.CallUid(uid, Rpc.Response_S, &protos.Response_S{
+		ProtoId: 0,
 		Updates: updates,
 	})
 }

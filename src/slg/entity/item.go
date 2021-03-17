@@ -2,15 +2,13 @@ package Entity
 
 import (
 	"protos"
-
-	"github.com/golang/protobuf/proto"
 )
 
 //道具实例
 type Item struct {
 	Sid  int64 `xorm:"pk autoincr"`
 	Uid  int64 `xorm:"index"`
-	Cid  int32 `xorm:"unique"`
+	Cid  int32 `xorm:"index"`
 	Num  int64
 	Time int64 `xorm:"updated"`
 }
@@ -18,16 +16,16 @@ type Item struct {
 //转proto对象
 func (this *Item) ToProto() *protos.Item {
 	return &protos.Item{
-		Sid: proto.Int64(this.Sid),
-		Cid: proto.Int32(this.Cid),
-		Num: proto.Int64(this.Num),
+		Sid: this.Sid,
+		Cid: this.Cid,
+		Num: this.Num,
 	}
 }
 
 //转proto前端主键对象
 func (this *Item) ToProtoPK() *protos.ItemPK {
 	return &protos.ItemPK{
-		Sid: proto.Int64(this.Sid),
+		Sid: this.Sid,
 	}
 }
 

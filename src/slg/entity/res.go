@@ -2,8 +2,6 @@ package Entity
 
 import (
 	"protos"
-
-	"github.com/golang/protobuf/proto"
 )
 
 //资源计数
@@ -16,15 +14,15 @@ type Res struct {
 //转proto对象
 func (this *Res) ToProto() *protos.Res {
 	return &protos.Res{
-		Cid: proto.Int32(this.Cid),
-		Num: proto.Int64(this.Num),
+		Cid: this.Cid,
+		Num: this.Num,
 	}
 }
 
 //转proto前端主键对象
 func (this *Res) ToProtoPK() *protos.ResPK {
 	return &protos.ResPK{
-		Cid: proto.Int32(this.Cid),
+		Cid: this.Cid,
 	}
 }
 

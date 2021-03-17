@@ -2,8 +2,6 @@ package Entity
 
 import (
 	"protos"
-
-	"github.com/golang/protobuf/proto"
 )
 
 //角色数据
@@ -26,22 +24,22 @@ type User struct {
 //转proto对象
 func (this *User) ToProto() *protos.User {
 	return &protos.User{
-		Uid:        proto.Int64(this.Uid),
-		Name:       proto.String(this.Name),
-		Gender:     proto.Int32(this.Gender),
-		Icon:       proto.Int32(this.Head),
-		IconB:      proto.Int32(this.HeadB),
-		Level:      proto.Int32(this.Level),
-		CityX:      proto.Int32(this.CityX),
-		CityY:      proto.Int32(this.CityY),
-		AllianceId: proto.Int64(this.AllianceId),
+		Uid:        this.Uid,
+		Name:       this.Name,
+		Gender:     this.Gender,
+		Icon:       this.Head,
+		IconB:      this.HeadB,
+		Level:      this.Level,
+		CityX:      this.CityX,
+		CityY:      this.CityY,
+		AllianceId: this.AllianceId,
 	}
 }
 
 //转proto前端主键对象
 func (this *User) ToProtoPK() *protos.UserPK {
 	return &protos.UserPK{
-		Uid: proto.Int64(this.Uid),
+		Uid: this.Uid,
 	}
 }
 

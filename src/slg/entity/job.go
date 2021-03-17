@@ -2,8 +2,6 @@ package Entity
 
 import (
 	"protos"
-
-	"github.com/golang/protobuf/proto"
 )
 
 //工作队
@@ -12,8 +10,8 @@ type Job struct {
 	Uid        int64 `xorm:"index"`
 	Tp         int32
 	Create     int64 `xorm:"created"`
-	St     int64
-	Et     int64
+	St         int64
+	Et         int64
 	TotalTime  int64
 	BuildingId int64
 	TechId     int64
@@ -23,17 +21,17 @@ type Job struct {
 //转proto对象
 func (this *Job) ToProto() *protos.Job {
 	return &protos.Job{
-		Sid:    proto.Int64(this.Sid),
-		Tp:     proto.Int32(this.Tp),
-		StTime: proto.Int64(this.St),
-		EdTime: proto.Int64(this.Et),
+		Sid:    this.Sid,
+		Tp:     this.Tp,
+		StTime: this.St,
+		EdTime: this.Et,
 	}
 }
 
 //转proto前端主键对象
 func (this *Job) ToProtoPK() *protos.JobPK {
 	return &protos.JobPK{
-		Sid: proto.Int64(this.Sid),
+		Sid: this.Sid,
 	}
 }
 

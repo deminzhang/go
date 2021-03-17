@@ -1,0 +1,52 @@
+syntax="proto3";
+package protos;
+
+//前端用websocket连联登陆时提供的Login.Server.chatUrl
+//频道channel(NF_标志的带绿盾屏蔽)
+//前端定阅以下频道
+//   cmd=sub&channel=NF_w
+//	'sys'   	系统频道(无屏蔽,前端自行合到世界或任意频道)
+//	'NF_w'   	世界频道
+//	'NF_a'..allianceId 公会频道(无公会不定,退会取消进会加入)
+//	'NF_u'..uid 对我私聊
+
+
+//1051发世界频道
+message WorldChat_C {
+	int32 protoId = 1;//[default = 1051];		//生成mapping
+	string msg = 2;						//主文本(聊天云绿盾屏蔽)
+	string annex = 3;						//附加数据(前端自定义)
+}
+
+//1053发联盟频道
+message AllianceChat_C {
+	int32 protoId = 1;//[default = 1053];		//生成mapping
+	string msg = 2;						//主文本(聊天云绿盾屏蔽)
+	string annex = 3;						//附加数据(前端自定义)
+}
+
+//1055发私聊
+message WhisperChat_C {
+	int32 protoId = 1;//[default = 1055];		//生成mapping
+	string msg = 2;						//主文本(聊天云绿盾屏蔽)
+	string annex = 3;						//附加数据(前端自定义)
+	
+	int64 toUid = 4;						//发给玩家UID(有UID发不知道发0)
+	string toName = 5;						//发给玩家名(不知道UID发名字)
+}
+
+//ext json结构说明, 非proto
+message ChatExt_S {
+	int64 time = 1;						//发送时间
+	string annex = 2;						//附加数据(前端发来的)
+	
+	int64 uid = 3;							//发送者UID(0为系统)
+	//以下重发太多,看能不能通过UserView_C AllianceView_C异步取得用本地数据查
+	string name = 4;						//发送者玩家名
+	int32 icon = 5;						//发送者头像
+	int32 iconB = 6;						//发送者头框
+	int32 level = 7;						//发送者级
+	string allianceName = 8;				//发送者公会名
+	int64 allianceId = 9;					//发送者公会ID
+
+}

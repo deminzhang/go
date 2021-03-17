@@ -1,0 +1,129 @@
+syntax="proto3";
+package protos;
+
+import "protoUser.proto";
+import "protoHero.proto";
+import "protoItem.proto";
+import "protoAlliance.proto";
+import "protoCity.proto";
+import "world.proto";
+import "protoMail.proto";
+import "activity.proto";
+import "common.proto";
+//!!!注意跨文件import的引用需加protos.包名前缀 否则前端无法导出
+
+//更新
+message Updates {
+	repeated protos.User user = 1;								//角色数据
+	repeated protos.UserEx userEx = 2;							//角色扩展
+	repeated protos.Item item = 3;								//道具
+	repeated protos.Res res = 4;								//资源
+	repeated protos.Buff buff = 5;								//buff
+	repeated protos.Unit unit = 6;								//兵种
+	repeated protos.Unit wounded = 7;							//伤兵
+	repeated protos.Job job = 8;								//工作队列
+	repeated protos.UserTick userTick = 9;						//时间变化类数据
+	repeated protos.UserCount userCount = 10;					//个人统计
+	repeated protos.Troop troop = 11;							//部队
+	repeated protos.Tile tile = 12;							//格子
+	repeated protos.Task task = 13;							//主线和支线任务
+	repeated protos.VipChest vipChest = 14;					//vip级别宝箱奖励
+	repeated protos.Building building = 15;					//建筑
+	//以上15以上放常用
+	repeated protos.Tech tech = 16;							//科技
+	repeated protos.Mail mail = 17;							//邮件(上线不带)
+	repeated protos.MailNum mailNum = 18;						//邮件计数(上线带)
+	repeated protos.ActicityReward box = 19;					//日常宝箱
+	repeated protos.ResOut resOut = 20;						//资源产出
+	repeated protos.Hero hero = 21;							//英雄
+	repeated protos.Recruit recruit = 22; 						//英雄招募数据
+	repeated protos.Rally rally = 23;							//集结联军
+	repeated protos.HeadIcon headIcon = 24;					//拥有的头像
+	repeated protos.HeadIconB headIconB = 25;					//拥有的头像框
+	repeated protos.CityArea cityArea = 26;					//领地区域解锁
+	repeated protos.UserDaily userDaily = 27;					//日常计限量
+	repeated protos.UserMark userMark = 28;					//前端记录
+	repeated protos.ShopFlush mysteryShopFlush = 29;			//神秘商店刷新数据
+	repeated protos.ShopGoods mysteryShopGoods = 30;			//神秘商店商品数据
+	repeated protos.UserAllianceApply userAllianceApply = 31;	//我发出的联盟申请
+	repeated protos.Alliance alliance = 32;					//联盟信息
+	repeated protos.AllianceMember allianceMember = 33;		//联盟成员
+	repeated protos.AllianceApply allianceApply = 34;			//联盟申请
+	repeated protos.AllianceHelp allianceHelp = 35;			//联盟帮助
+	repeated protos.AllianceTech allianceTech = 36;			//联盟科技
+	repeated protos.AllianceBuff allianceBuff = 37;			//联盟Buff
+	repeated protos.AllianceGift allianceGift = 38;			//联盟礼物
+	repeated protos.AllianceSuperGift allianceSuperGift = 39;	//联盟大宝箱
+	repeated protos.ReinforceLog reinforceLog = 40;			//联盟被支援日志
+	repeated protos.City city = 41;							//城市杂项
+	repeated protos.DataActivity activity = 42;				//活动状态
+	repeated protos.Throne throne = 43;						//王座战数据
+	repeated protos.Explored explored = 44;					//探索时间记录
+	repeated protos.ExploreEvent exploreEvent = 45;			//探索事件
+}
+//删除(主键)
+message Removes {
+	repeated protos.ItemPK item = 1;							//道具
+	repeated protos.ResPK res = 2;								//资源/计数
+	repeated protos.BuffPK buff = 3;							//buff
+	repeated protos.JobPK job = 4;								//工作队列
+	repeated protos.UserTickPK userTick = 5;					//时间变化类数据
+	repeated protos.UserCountPK userCount = 6;					//个人统计
+	repeated protos.TroopPK troop = 7;							//部队
+	repeated protos.TilePK tile = 8;							//格子
+	repeated protos.TaskPK task = 9;							//任务
+	repeated protos.UnitPK unit = 10;							//兵种
+	repeated protos.UnitPK wounded = 11;						//伤兵
+	repeated protos.TechPK tech = 12;							//科技
+	repeated protos.RallyPK rally = 13;						//联军概要
+	repeated protos.BuildingPK building = 14;					//建筑
+	repeated protos.MailPK mail = 15;							//邮件
+	//以上15以上放常用
+	repeated protos.HeroPK hero = 16;							//英雄(唯一保留的话就不会删)
+	repeated protos.HeadIconBPK headIcon = 17;					//拥有的头像框(不限时就不会删)
+	repeated protos.UserDailyPK userDaily = 18;				//日常计限量
+	repeated protos.UserMarkPK userMark = 19;					//前端记录
+	repeated protos.AllianceGiftPK allianceGift = 20;			//联盟礼物
+	repeated protos.ShopGoodsPK mysteryShopGoods = 21;			//神秘商店商品数据
+	repeated protos.UserAllianceApplyPK userAllianceApply = 22;//我发出的申请列表
+	repeated protos.AllianceApplyPK allianceApply = 23;		//联盟申请
+	repeated protos.AllianceMemberPK allianceMember = 24;		//联盟成员
+	repeated protos.AllianceHelpPK allianceHelp = 25;			//联盟帮助
+	repeated protos.AllianceTechPK allianceTech = 26;			//联盟科技
+	repeated protos.AllianceBuffPK allianceBuff = 27;			//联盟Buff
+	repeated protos.AllianceSuperGiftPK allianceSuperGift = 28;//联盟大宝箱
+	repeated protos.DataActivityPK activity = 29;				//活动关闭
+	repeated protos.ExploredPK explored = 44;					//探索时间记录
+	repeated protos.ExploreEventPK exploreEvent = 45;			//探索事件
+}
+
+//*_C+1通用回应
+//12主动推送
+message Response_S {
+    int32 protoId = 1; // 请求原协议号 0为主动
+	Updates updates = 2;	//全量更新 主键必带 rep变空数据必用
+	Removes removes = 3;	//删除,必须只有主键
+	Updates props = 4;		//增量更新 主键必带,opt只发变动的,rep变不可用
+	//Clear clear = 5;		//指定全表删除
+}
+//14通用错误
+message Error_S {
+    int32 protoId = 1;//[default = 14]; // 14生成mapping, 请求原协议号
+    int32 code = 2;        // 正常返回为0, 否则为错误代码
+    string msg = 3;       	// 错误信息
+	repeated string params = 4;		// 错误参数,由错误号决定
+}
+//16跨天了跨天了
+message NewDay_S {
+    int32 protoId = 1;//[default = 16];        //生成mapping
+    int64 time = 2;        //新的一天
+}
+
+//---------------------------------------------------
+
+//1不存在
+message Ping {
+}
+//2不存在
+message Pong {
+}

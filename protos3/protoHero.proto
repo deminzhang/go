@@ -1,0 +1,82 @@
+syntax="proto3";
+package protos;
+import "common.proto";
+
+
+//英雄
+message Hero {
+    int64 sid = 1; 		// sid
+    int64 uid = 2; 		// uid
+    int32 cid = 3; 		// 表ID
+    int32 level = 4; 		// 等级
+    int32 exp = 5; 		// 经验
+    int32 step = 6; 		// 品阶
+    int32 stat = 7; 		// 状态0空闲1出征2重伤?
+}
+message HeroPK {
+    int64 sid = 1; 		// sid
+}
+//招募数据
+message Recruit{
+    int64 uid = 1; 		// uid
+    int64 useTimesLow = 2; 	// 普通每日已用免费次数
+    int64 nextFreeTimeHigh = 3; // 高招下次免费时间
+    int32 timesHigh = 4; 		// 高招保底计数
+    int64 nextFreeTimeLow = 5; // 普招下次免费时间
+}
+
+//以上数据结构-------------------------------------------------//
+//-------------------------------------------------------------//
+//以下协议-----------------------------------------------------//
+
+//421升品
+message HeroStepUp_C {
+	int32 protoId = 1;//[default = 421];		//生成mapping
+	int64 sid = 2;		//heroSid
+	bool common = 3;	//不足时使用万能
+}
+
+//423喂经验
+message HeroAddExp_C {
+	int32 protoId = 1;//[default = 423];		//生成mapping
+	int64 sid = 2;		//heroSid
+	int32 itemId = 3;	//道具ID
+	int32 num = 4;		//数量
+}
+//424
+message HeroAddExp_S {
+	int32 protoId = 1;//[default = 424];		//生成mapping
+	int64 sid = 2;		//heroSid
+	int32 itemId = 3;	//道具ID
+	int32 num = 4;		//数量
+}
+
+//425查看英雄
+message HeroView_C {
+	int32 protoId = 1;//[default = 425];		//生成mapping
+	repeated int64 sid = 2;		//heroSid
+}
+message HeroView_S {
+	int32 protoId = 1;//[default = 426];		//生成mapping
+	repeated Hero hero = 2;			//英雄
+}
+
+//427英雄合成
+message HeroCompose_C {
+	int32 protoId = 1;//[default = 427];		//生成mapping
+	int32 cid = 2;		//英雄cid
+}
+message HeroCompose_S {
+	int32 protoId = 1;//[default = 428];		//生成mapping
+	int64 sid = 2;		//英雄sid
+}
+
+//429英雄招募
+message HeroRecruit_C {
+	int32 protoId = 1;//[default = 429];		//生成mapping
+	int32 tp = 2;		//1小单2小连3大单4大连
+}
+message HeroRecruit_S {
+	int32 protoId = 1;//[default = 430];		//生成mapping
+	repeated protos.IdNum recruitResult = 2; 	//英雄招募结果(以道具方式,英雄道具负值为分解)
+}

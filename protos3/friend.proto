@@ -1,0 +1,164 @@
+syntax="proto3";
+package protos;
+
+message FriendInfo
+{
+	string head = 1; //玩家头像
+	int32 level = 2;//等级
+	string allianceName =3;//军团名称
+	string name = 4;//玩家名称
+	int32 mainBuildlevel = 5;//主堡等级
+	int64 power = 6;//战力
+	int64 friendValue = 7;//亲密度
+	int64 lastOnlineTime =8; //上次上线时间
+	int64 rewardStatus = 9; //礼物的状态，三种（1 待领取礼物> 2发送礼物> 3已发送礼物）
+	int64 uid = 10;//玩家id
+}
+
+message FriendApplyInfo
+{
+	string head = 1; //玩家头像
+	int32 level = 2;//等级
+	string allianceName =3;//军团名称
+	string name = 4;//玩家名称
+	int64 uid = 5;//玩家id
+	int64 apply = 6;// 1 未申请 2 已申请
+}
+//获得好友列表
+message GetFriendList_C
+{
+	int32 protoId = 1;//[default = 1201];
+}
+
+message GetFriendList_S
+{
+	int32 protoId = 1;//[default = 1202];
+	repeated FriendInfo friendlist = 2;	
+	int32 getReward = 3; // 可以领 1
+	int32 sendReward = 4; //可以收 1
+}
+//搜索好友
+message SearchFriendList_C
+{
+	int32 protoId = 1;//[default = 1203];
+	string searchInfo = 2; //查询的id或者名称
+}
+
+message SearchFriendList_S
+{
+	int32 protoId = 1;//[default = 1204];
+	repeated FriendApplyInfo friendlist = 2;	
+}
+
+//收/发 礼物
+message GetFriendReward_C
+{
+	int32 protoId = 1;//[default = 1205];
+	int64 uid = 2;//玩家id
+}
+
+message GetFriendReward_S
+{
+	int32 protoId = 1;//[default = 1206];
+	int64 uid = 2;//玩家id
+	int64 rewardStatus = 3;//礼物的状态，三种（1 待领取礼物> 2发送礼物> 3已发送礼物）
+	int64 friendValue = 4;//-1 有则正数
+}
+
+//删除好友
+message DelFriend_C
+{
+	int32 protoId = 1;//[default = 1207];
+	int64 uid = 2;//玩家id
+}
+
+message DelFriend_S
+{
+	int32 protoId = 1;//[default = 1208];
+	int64 uid = 2;//玩家id
+}
+
+//申请加好友
+message ApplyFriend_C
+{
+	int32 protoId = 1;//[default = 1209];
+	int64 uid = 2;//玩家id
+}
+
+message ApplyFriend_S
+{
+	int32 protoId = 1;//[default = 1210];
+	int64 AddStatus = 2;//1 成功 2 已经是好友了
+}
+
+//同意加好友
+message AgreeFriend_C
+{
+	int32 protoId = 1;//[default = 1211];
+	int64 uid = 2;//玩家id
+}
+
+message AgreeFriend_S
+{
+	int32 protoId = 1;//[default = 1212];
+	int64 AddStatus = 2;//1 成功 2已申请
+}
+
+//获取推荐列表
+message GetRecommend_C
+{
+	int32 protoId = 1;//[default = 1213];
+}
+
+message GetRecommend_S
+{
+	int32 protoId = 1;//[default = 1214];
+	repeated FriendApplyInfo friendlist = 2;	
+}
+
+//一键获取礼物
+message OneKeyGetReward_C
+{
+	int32 protoId = 1;//[default = 1215];
+}
+
+message OneKeyGetReward_S
+{
+	int32 protoId = 1;//[default = 1216];
+	repeated FriendInfo friendlist = 2;	
+	int32 getRewardNum = 3; // 可以领 1
+}
+
+//一键加好友
+message OneKeyAddFriend_C
+{
+	int32 protoId = 1;//[default = 1217];
+}
+
+message OneKeyAddFriend_S
+{
+	int32 protoId = 1;//[default = 1218];
+	repeated FriendApplyInfo friendlist = 2;	
+}
+
+
+//同意加好友
+message GetApplyFriendList_C
+{
+	int32 protoId = 1;//[default = 1219];
+}
+
+
+message GetApplyFriendList_S
+{
+	int32 protoId = 1;//[default = 1220];
+	repeated FriendApplyInfo friendlist = 2;	
+}
+
+message TellFriendOnline_S
+{
+	int32 protoId = 1;//[default = 1222];
+	int64 uid = 2;//玩家id
+}
+
+

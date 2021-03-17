@@ -2,29 +2,27 @@ package Entity
 
 import (
 	"protos"
-
-	"github.com/golang/protobuf/proto"
 )
 
 //资源计数
 type Unit struct {
 	Uid int64 `xorm:"pk"`
 	Cid int32 `xorm:"pk"`
-	Num int32
+	Num int64
 }
 
 //转proto对象
 func (this *Unit) ToProto() *protos.Unit {
 	return &protos.Unit{
-		Cid: proto.Int32(this.Cid),
-		Num: proto.Int32(this.Num),
+		Cid: this.Cid,
+		Num: this.Num,
 	}
 }
 
 //转proto前端主键对象
 func (this *Unit) ToProtoPK() *protos.UnitPK {
 	return &protos.UnitPK{
-		Cid: proto.Int32(this.Cid),
+		Cid: this.Cid,
 	}
 }
 

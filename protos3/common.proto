@@ -1,0 +1,150 @@
+syntax="proto3";
+package protos;
+
+//元
+message IdNum {
+	int32 cid = 1;			//配置ID
+	int64 num = 2;			//数量
+}
+
+//道具
+message Item {
+	int64 sid = 1;			//主键
+	int32 cid = 2;			//配置ID
+	int64 num = 3;			//数量
+	int64 show = 4;		//显示至
+	int64 invalid = 5;		//失效时间TODO
+}
+message ItemPK {
+	int64 sid = 1;			//配置ID
+}
+
+//资源/计数
+message Res {
+	int32 cid = 1;			//配置ID
+	int64 num = 2;			//数量
+	int64 time = 3;		//上次变化时间(无/0不变)
+	double rate = 4;		//变化值(/ms,无/0不变)
+	int64 max = 5;			//上限(无/0无限) 
+}
+message ResPK {
+	int32 cid = 1;			//配置ID
+}
+
+
+//变化器
+message Ticker {
+	int64 rest = 1;		//上次值
+	int64 time = 2;		//上次变化时间(0不变)
+	double rate = 3;		//变化值(/ms,0不变)
+	int64 max = 4;			//上限(无/0不变) TODO
+}
+
+//世界格子
+message Tile {
+	int32 x = 1;			//坐标X
+	int32 y = 2;			//坐标Y
+	int32 tp = 3;			//类型 TileConfig.id
+	int32 tp2 = 4;			//子类型 按各类型定义
+	int32 level = 5;		//级别 按各类型定义
+	
+	int64 uid = 6;			//所属玩家(缺省0无)
+	int64 allianceId = 7;	//所属联盟(缺省0无)
+	
+	repeated int64 troopId = 8;		//驻扎部队sid组
+	
+	//Ticker durability = 9; //城墙耐久度(迟超:世界不显城防城门)
+	Ticker resVal = 10;	//资源采集度
+	
+	int64 peaceShield = 11; //护盾到期时间
+    int64 antiScout = 12; 	//反侦察到期时间
+    int64 onFire = 13; 	//着火时间至
+	
+    int64 explore = 14; 	//探索点实例ID
+	
+	//repeated int64 building = ++;		//建筑表现id组 TODO
+	//repeated int64 datas = ++;		//附加实例数据 TODO
+}
+message TilePK {
+	int32 x = 1;			//X
+	int32 y = 2;			//Y
+}
+
+//兵种单元
+message Unit {
+    int32 cid = 1; 		// 配置ID
+    int64 num = 2; 		// 数量
+    int64 uid = 3; 		// 所属(可能联军有用)
+}
+message UnitPK {
+    int32 cid = 1; 		// 配置ID
+}
+
+//工作队列
+message Job{
+	int64 sid = 1;			//主键
+	int32 tp = 2;			//类(1建筑/升级 2拆建 3训兵 4升兵 5疗兵 6科技 7城防)
+	int64 stTime = 3;		//开始时间
+	int64 edTime = 4;		//结束时间
+	int64 bid = 5;			//指定建筑sid(限 建/升/拆)
+	int32 techId = 6;		//科技配置cid
+	int32 unitTp = 7;		//训/升兵配置cid(查询用冗余)
+	repeated Unit unit = 8;			//产品组(兵/疗(兵种,数量))
+	int64 sumTime = 9;		//初始总时间
+}
+message JobPK{
+	int64 sid = 1;			//主键
+}
+
+//科技
+message Tech {
+	int32 cid = 1;			//主键
+	int32 lv = 2;			//级别
+}
+message TechPK {
+	int32 cid = 1;			//主键
+}
+
+//Buff
+message Buff {
+	int32 cid = 1;			//配置ID
+	string src = 2;		//源 building,tech,item,vip,hero,...
+	double val = 3;			//值
+	int64 timeStart = 4;	//限时类 开始时间(无或0:无限时)
+	int64 timeOut = 5;		//限时至 (无或0:无限时)
+}
+message BuffPK {
+	int32 cid = 1;			//主键1ID
+	string src = 2;		//主键2源
+}
+//联盟Buff
+message AllianceBuff {
+	int32 cid = 1;			//主键
+	string src = 2;		//源 allianceTech,...
+	double val = 3;			//值
+	int64 timeOut = 4;		//限时至 (无或0:无限时)
+	int64 allianceId = 5;	//联盟ID
+}
+message AllianceBuffPK {
+	int32 cid = 1;			//主键
+	string src = 2;		//主键源
+}
+
+//task 主线支线任务
+message Task {
+    int64 sid = 1;			//主键 任务Id
+	int32 cid = 2;		
+	int32 classify = 3;	//类别 主线1 支线2 每日3
+	int64 num = 4;			//当前完成数量
+	int32 tstate = 5;		//当前任务状态 0预备状态 1进行状态 2已完成 3已领取
+}
+//task 主线支线任务 主键
+message TaskPK {
+    int64 sid = 1;			//主键 任务Id
+}
+
+//ActicityReward 活跃度宝箱
+message ActicityReward {
+    int64 dbid = 1;		//主键 宝箱id - 对应表
+	int32 dbstate = 2;		//当前状态 0不可领取 1可领取 2已领取
+}

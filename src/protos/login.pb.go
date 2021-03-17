@@ -20,12 +20,13 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+//服务器数据 仅上线时同步一次 TODO转到login
 type Server struct {
-	Time                 *int64   `protobuf:"varint,3,req,name=time" json:"time,omitempty"`
-	Appid                *int32   `protobuf:"varint,4,req,name=appid" json:"appid,omitempty"`
-	Region               *int32   `protobuf:"varint,5,req,name=region" json:"region,omitempty"`
-	ChatUrl              *string  `protobuf:"bytes,6,req,name=chatUrl" json:"chatUrl,omitempty"`
-	Version              *string  `protobuf:"bytes,7,opt,name=version" json:"version,omitempty"`
+	Time                 int64    `protobuf:"varint,3,opt,name=time,proto3" json:"time,omitempty"`
+	Appid                int32    `protobuf:"varint,4,opt,name=appid,proto3" json:"appid,omitempty"`
+	Region               int32    `protobuf:"varint,5,opt,name=region,proto3" json:"region,omitempty"`
+	ChatUrl              string   `protobuf:"bytes,6,opt,name=chatUrl,proto3" json:"chatUrl,omitempty"`
+	Version              string   `protobuf:"bytes,7,opt,name=version,proto3" json:"version,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -57,47 +58,48 @@ func (m *Server) XXX_DiscardUnknown() {
 var xxx_messageInfo_Server proto.InternalMessageInfo
 
 func (m *Server) GetTime() int64 {
-	if m != nil && m.Time != nil {
-		return *m.Time
+	if m != nil {
+		return m.Time
 	}
 	return 0
 }
 
 func (m *Server) GetAppid() int32 {
-	if m != nil && m.Appid != nil {
-		return *m.Appid
+	if m != nil {
+		return m.Appid
 	}
 	return 0
 }
 
 func (m *Server) GetRegion() int32 {
-	if m != nil && m.Region != nil {
-		return *m.Region
+	if m != nil {
+		return m.Region
 	}
 	return 0
 }
 
 func (m *Server) GetChatUrl() string {
-	if m != nil && m.ChatUrl != nil {
-		return *m.ChatUrl
+	if m != nil {
+		return m.ChatUrl
 	}
 	return ""
 }
 
 func (m *Server) GetVersion() string {
-	if m != nil && m.Version != nil {
-		return *m.Version
+	if m != nil {
+		return m.Version
 	}
 	return ""
 }
 
+//91 登陆
 type Login_C struct {
-	ProtoId              *int32   `protobuf:"varint,1,opt,name=protoId,def=91" json:"protoId,omitempty"`
-	OpenId               *string  `protobuf:"bytes,2,req,name=openId" json:"openId,omitempty"`
-	Uid                  *int64   `protobuf:"varint,3,opt,name=uid" json:"uid,omitempty"`
-	Version              *string  `protobuf:"bytes,4,opt,name=version" json:"version,omitempty"`
-	DeviceId             *string  `protobuf:"bytes,5,opt,name=deviceId" json:"deviceId,omitempty"`
-	ServerName           *string  `protobuf:"bytes,6,opt,name=serverName" json:"serverName,omitempty"`
+	ProtoId              int32    `protobuf:"varint,1,opt,name=protoId,proto3" json:"protoId,omitempty"`
+	OpenId               string   `protobuf:"bytes,2,opt,name=openId,proto3" json:"openId,omitempty"`
+	Uid                  int64    `protobuf:"varint,3,opt,name=uid,proto3" json:"uid,omitempty"`
+	Version              string   `protobuf:"bytes,4,opt,name=version,proto3" json:"version,omitempty"`
+	DeviceId             string   `protobuf:"bytes,5,opt,name=deviceId,proto3" json:"deviceId,omitempty"`
+	ServerName           string   `protobuf:"bytes,6,opt,name=serverName,proto3" json:"serverName,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -128,52 +130,52 @@ func (m *Login_C) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Login_C proto.InternalMessageInfo
 
-const Default_Login_C_ProtoId int32 = 91
-
 func (m *Login_C) GetProtoId() int32 {
-	if m != nil && m.ProtoId != nil {
-		return *m.ProtoId
+	if m != nil {
+		return m.ProtoId
 	}
-	return Default_Login_C_ProtoId
+	return 0
 }
 
 func (m *Login_C) GetOpenId() string {
-	if m != nil && m.OpenId != nil {
-		return *m.OpenId
+	if m != nil {
+		return m.OpenId
 	}
 	return ""
 }
 
 func (m *Login_C) GetUid() int64 {
-	if m != nil && m.Uid != nil {
-		return *m.Uid
+	if m != nil {
+		return m.Uid
 	}
 	return 0
 }
 
 func (m *Login_C) GetVersion() string {
-	if m != nil && m.Version != nil {
-		return *m.Version
+	if m != nil {
+		return m.Version
 	}
 	return ""
 }
 
 func (m *Login_C) GetDeviceId() string {
-	if m != nil && m.DeviceId != nil {
-		return *m.DeviceId
+	if m != nil {
+		return m.DeviceId
 	}
 	return ""
 }
 
 func (m *Login_C) GetServerName() string {
-	if m != nil && m.ServerName != nil {
-		return *m.ServerName
+	if m != nil {
+		return m.ServerName
 	}
 	return ""
 }
 
+//92 登陆
 type Login_S struct {
-	ProtoId              *int32   `protobuf:"varint,1,opt,name=protoId,def=92" json:"protoId,omitempty"`
+	ProtoId              int32    `protobuf:"varint,1,opt,name=protoId,proto3" json:"protoId,omitempty"`
+	Uid                  int64    `protobuf:"varint,2,opt,name=uid,proto3" json:"uid,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -204,17 +206,23 @@ func (m *Login_S) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Login_S proto.InternalMessageInfo
 
-const Default_Login_S_ProtoId int32 = 92
-
 func (m *Login_S) GetProtoId() int32 {
-	if m != nil && m.ProtoId != nil {
-		return *m.ProtoId
+	if m != nil {
+		return m.ProtoId
 	}
-	return Default_Login_S_ProtoId
+	return 0
 }
 
+func (m *Login_S) GetUid() int64 {
+	if m != nil {
+		return m.Uid
+	}
+	return 0
+}
+
+//93 获得角色信息
 type GetRoleInfo_C struct {
-	ProtoId              *int32   `protobuf:"varint,1,opt,name=protoId,def=93" json:"protoId,omitempty"`
+	ProtoId              int32    `protobuf:"varint,1,opt,name=protoId,proto3" json:"protoId,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -245,19 +253,18 @@ func (m *GetRoleInfo_C) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetRoleInfo_C proto.InternalMessageInfo
 
-const Default_GetRoleInfo_C_ProtoId int32 = 93
-
 func (m *GetRoleInfo_C) GetProtoId() int32 {
-	if m != nil && m.ProtoId != nil {
-		return *m.ProtoId
+	if m != nil {
+		return m.ProtoId
 	}
-	return Default_GetRoleInfo_C_ProtoId
+	return 0
 }
 
+//94 获得角色信息
 type GetRoleInfo_S struct {
-	ProtoId              *int32   `protobuf:"varint,1,opt,name=protoId,def=94" json:"protoId,omitempty"`
-	Uid                  *int64   `protobuf:"varint,2,opt,name=uid" json:"uid,omitempty"`
-	Server               *Server  `protobuf:"bytes,3,opt,name=server" json:"server,omitempty"`
+	ProtoId              int32    `protobuf:"varint,1,opt,name=protoId,proto3" json:"protoId,omitempty"`
+	Uid                  int64    `protobuf:"varint,2,opt,name=uid,proto3" json:"uid,omitempty"`
+	Server               *Server  `protobuf:"bytes,3,opt,name=server,proto3" json:"server,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -288,18 +295,16 @@ func (m *GetRoleInfo_S) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetRoleInfo_S proto.InternalMessageInfo
 
-const Default_GetRoleInfo_S_ProtoId int32 = 94
-
 func (m *GetRoleInfo_S) GetProtoId() int32 {
-	if m != nil && m.ProtoId != nil {
-		return *m.ProtoId
+	if m != nil {
+		return m.ProtoId
 	}
-	return Default_GetRoleInfo_S_ProtoId
+	return 0
 }
 
 func (m *GetRoleInfo_S) GetUid() int64 {
-	if m != nil && m.Uid != nil {
-		return *m.Uid
+	if m != nil {
+		return m.Uid
 	}
 	return 0
 }
@@ -322,21 +327,23 @@ func init() {
 func init() { proto.RegisterFile("login.proto", fileDescriptor_67c21677aa7f4e4f) }
 
 var fileDescriptor_67c21677aa7f4e4f = []byte{
-	// 253 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x90, 0x41, 0x4b, 0xc3, 0x30,
-	0x14, 0x80, 0x69, 0xda, 0xa4, 0xee, 0xd5, 0x4d, 0x89, 0x97, 0x9c, 0x46, 0x28, 0x1e, 0x72, 0x1a,
-	0x38, 0xbd, 0xe8, 0xd5, 0x83, 0x14, 0x44, 0xd0, 0x21, 0x1e, 0xa5, 0x2c, 0xcf, 0x19, 0xe8, 0x9a,
-	0x92, 0xd6, 0xfe, 0x7e, 0xc9, 0x2b, 0x03, 0x85, 0x9e, 0x42, 0x1e, 0x8f, 0xef, 0xfb, 0x78, 0x50,
-	0x34, 0xfe, 0xe0, 0xda, 0x4d, 0x17, 0xfc, 0xe0, 0xa5, 0xa0, 0xa7, 0x2f, 0x3f, 0x40, 0xec, 0x30,
-	0x8c, 0x18, 0xe4, 0x39, 0x64, 0x83, 0x3b, 0xa2, 0x4a, 0x35, 0x33, 0xa9, 0x5c, 0x02, 0xaf, 0xbb,
-	0xce, 0x59, 0x95, 0x69, 0x66, 0xb8, 0x5c, 0x81, 0x08, 0x78, 0x70, 0xbe, 0x55, 0x9c, 0xfe, 0x17,
-	0x90, 0xef, 0xbf, 0xeb, 0xe1, 0x3d, 0x34, 0x4a, 0x68, 0x66, 0x16, 0x71, 0x30, 0x62, 0xe8, 0xe3,
-	0x46, 0xae, 0x13, 0xb3, 0x28, 0x03, 0xe4, 0xcf, 0xd1, 0xf7, 0xf9, 0x28, 0xaf, 0x20, 0x27, 0x5b,
-	0x65, 0x55, 0xa2, 0x13, 0xc3, 0x1f, 0xd8, 0xfd, 0x4d, 0x24, 0xfa, 0x0e, 0xdb, 0xca, 0x2a, 0x46,
-	0x80, 0x02, 0xd2, 0x1f, 0x67, 0x55, 0xaa, 0x13, 0x93, 0xfe, 0xa5, 0x65, 0x91, 0x26, 0x2f, 0xe1,
-	0xcc, 0xe2, 0xe8, 0xf6, 0x58, 0x59, 0xc5, 0x69, 0x22, 0x01, 0x7a, 0x0a, 0x7f, 0xa9, 0x8f, 0xa8,
-	0x04, 0x39, 0xd7, 0x27, 0xe7, 0x6e, 0xce, 0xb9, 0x2d, 0xaf, 0x61, 0xf9, 0x84, 0xc3, 0x9b, 0x6f,
-	0xb0, 0x6a, 0xbf, 0xfc, 0x7c, 0xd9, 0x6d, 0xf9, 0xfa, 0x7f, 0x6b, 0x96, 0x75, 0x77, 0xea, 0x65,
-	0xd4, 0xbb, 0x06, 0x31, 0xc5, 0x50, 0x7f, 0xb1, 0x5d, 0x4d, 0x57, 0xee, 0x37, 0xd3, 0x6d, 0x7f,
-	0x03, 0x00, 0x00, 0xff, 0xff, 0xdc, 0x26, 0x59, 0x6a, 0x7b, 0x01, 0x00, 0x00,
+	// 278 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x91, 0x4d, 0x4b, 0xf3, 0x40,
+	0x10, 0xc7, 0x49, 0xf3, 0xf6, 0x74, 0xca, 0x23, 0x32, 0x88, 0x2c, 0x1e, 0x24, 0xec, 0x41, 0xe2,
+	0xa5, 0x07, 0xc5, 0x4f, 0xe0, 0x41, 0x02, 0xe2, 0x61, 0x8b, 0x67, 0x89, 0xd9, 0xb1, 0x2e, 0xa4,
+	0xd9, 0xb0, 0x89, 0x39, 0xfa, 0x65, 0xfc, 0xa2, 0xb2, 0x2f, 0x29, 0xed, 0xa5, 0xe0, 0x29, 0xf3,
+	0x9f, 0x97, 0xfc, 0x7f, 0x3b, 0x03, 0xab, 0x56, 0x6f, 0x55, 0xb7, 0xee, 0x8d, 0x1e, 0x35, 0x66,
+	0xee, 0x33, 0xf0, 0x6f, 0xc8, 0x36, 0x64, 0x26, 0x32, 0x88, 0x90, 0x8c, 0x6a, 0x47, 0x2c, 0x2e,
+	0xa2, 0x32, 0x16, 0x2e, 0xc6, 0x0b, 0x48, 0xeb, 0xbe, 0x57, 0x92, 0x25, 0x45, 0x54, 0xa6, 0xc2,
+	0x0b, 0xbc, 0x84, 0xcc, 0xd0, 0x56, 0xe9, 0x8e, 0xa5, 0x2e, 0x1d, 0x14, 0x32, 0xc8, 0x9b, 0xcf,
+	0x7a, 0x7c, 0x35, 0x2d, 0xcb, 0x8a, 0xa8, 0x5c, 0x8a, 0x59, 0xda, 0xca, 0x44, 0x66, 0xb0, 0x23,
+	0xb9, 0xaf, 0x04, 0xc9, 0x7f, 0x22, 0xc8, 0x9f, 0x2d, 0xd7, 0xdb, 0xa3, 0xed, 0x72, 0x54, 0x95,
+	0x64, 0x91, 0xfb, 0xf1, 0x2c, 0xad, 0xa3, 0xee, 0xa9, 0xab, 0x24, 0x5b, 0xb8, 0xf1, 0xa0, 0xf0,
+	0x1c, 0xe2, 0x2f, 0x25, 0x03, 0xb2, 0x0d, 0x0f, 0x9d, 0x92, 0x23, 0x27, 0xbc, 0x82, 0x7f, 0x92,
+	0x26, 0xd5, 0x50, 0x25, 0x1d, 0xf7, 0x52, 0xec, 0x35, 0x5e, 0x03, 0x0c, 0x6e, 0x0b, 0x2f, 0xf5,
+	0x8e, 0x02, 0xfc, 0x41, 0x86, 0x3f, 0xcc, 0x90, 0x9b, 0x13, 0x90, 0x01, 0x66, 0xb1, 0x87, 0xe1,
+	0xb7, 0xf0, 0xff, 0x89, 0x46, 0xa1, 0x5b, 0xaa, 0xba, 0x0f, 0x7d, 0xea, 0x85, 0xbc, 0x39, 0x6e,
+	0xfd, 0x93, 0x0f, 0xde, 0x40, 0xe6, 0x61, 0xdd, 0x26, 0x56, 0x77, 0x67, 0xfe, 0xc8, 0xc3, 0xda,
+	0x9f, 0x56, 0x84, 0xea, 0xbb, 0x3f, 0xfa, 0xfd, 0x6f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x08, 0x24,
+	0xb7, 0x8d, 0x0a, 0x02, 0x00, 0x00,
 }

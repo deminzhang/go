@@ -1,0 +1,13 @@
+syntax="proto3";
+package protos;
+
+//553 VIP一次性宝箱购买 DataVipBox cid
+message VipBuyChest_C {
+	int32 protoId = 1;//[default = 553];		//生成mapping
+	int32 cid = 2;		//级别ID
+}
+
+//557 VIP每日宝箱领取(只领当前级别) DataUserCount cid=6 val=0未领/1已领
+message VipGetDailyChest_C {
+	int32 protoId = 1;//[default = 557];		//生成mapping
+}

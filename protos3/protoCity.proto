@@ -1,0 +1,177 @@
+syntax="proto3";
+package protos;
+
+import "common.proto";
+
+//城市杂项
+message City {
+    int64 uid = 1;
+    bool statTrap = 2; 	//陷阱状态1开0关
+    repeated int64 guardHero = 3; 	//城墙英雄sid 主副副
+    int64 onFire = 4; 		//城墙着火时间至(见Tile)
+}
+message CityPK {
+    int64 uid = 1;
+}
+
+//城建建筑
+message Building {
+	int64 sid = 1;			//主键(实例ID)
+	int32 tp = 2;			//类型(配表ID)
+	int32 level = 3;		//级别
+	
+	int64 uid = 6;			//所属玩家(弃x,对外缩略优化再议)
+	int32 pos = 7;			//位置索引(建造选位时前端提供,0:内城不需要索引)
+	//int32 stat = 8;		//状态(用再加)
+}
+message BuildingPK {
+	int64 sid = 1;			//主键
+}
+//领地区域解锁
+message CityArea {
+	int32 cid = 1;			//配置ID
+}
+
+//资源产出
+message ResOut {
+	int32 cid = 1;			//资源ID
+	int64 resTime = 2;		//上次结算时间
+	double resOut = 3;		//产量/s
+	int32 resVal = 4;		//已产出
+	int32 resMax = 5;		//容量上限
+}
+message ResOutPK {
+	int32 cid = 1;			//资源ID
+}
+
+
+//以上数据结构-------------------------------------------------//
+//-------------------------------------------------------------//
+//以下协议-----------------------------------------------------//
+
+
+//401 建筑新建
+message Build_C {
+	int32 protoId = 1;//[default = 401];		//生成mapping
+	int32 tp = 2; 		//建筑类型
+	int32 x = 3; 		//位置X(弃)
+	int32 y = 4; 		//位置Y(弃)
+	bool immed = 5;	//用钻秒
+	int32 pos = 6;		//位置索引
+}
+
+//403 建筑升级
+message BuildUp_C {
+	int32 protoId = 1;//[default = 403];		//生成mapping
+	int64 sid = 2; 	//建筑ID
+	bool immed = 3;	//用钻秒
+}
+
+//405 建筑拆除(仅可拆除可建多个的.即配在building_count_config中的)
+message BuildDel_C {
+	int32 protoId = 1;//[default = 405];		//生成mapping
+	int64 sid = 2; 	//建筑ID
+}
+
+//407 收取资源
+message Harvest_C {
+	int32 protoId = 1;//[default = 407];		//生成mapping
+	int32 cid = 2; 	//资源ID 1234
+}
+
+//409 解锁领地下一级
+message UnlockArea_C {
+	int32 protoId = 1;//[default = 409];		//生成mapping
+	int32 cid = 2; 		//区ID
+}
+
+//411 修复城防(CD)
+message RestoreWall_C {
+	int32 protoId = 1;//[default = 411];		//生成mapping
+}
+
+//413 灭火(耗道具)
+message QuellFire_C {
+	int32 protoId = 1;//[default = 413];		//生成mapping
+}
+
+//415 设置陷阱开关
+message SetTrap_C {
+	int32 protoId = 1;//[default = 415];		//生成mapping
+	bool on = 2;	//true开false关
+}
+
+//417 设置守城英雄
+message GuardWall_C {
+	int32 protoId = 1;//[default = 417];		//生成mapping
+	repeated int64 heros = 2;		//英雄sid3个无为下岗
+}
+
+//419 修复城门(耗道具)
+message RestoreGate_C {
+	int32 protoId = 1;//[default = 419];		//生成mapping
+}
+
+
+//451 兵训练
+message UnitTrain_C {
+	int32 protoId = 1;//[default = 451];		//生成mapping
+	int32 cid = 2; 	//兵ID
+	int32 num = 3; 	//兵数量
+	bool immed = 4;	//用钻秒
+}
+
+//459 兵遣散
+message UnitDisMiss_C {
+	int32 protoId = 1;//[default = 459];		//生成mapping
+	int32 cid = 2; 	//兵ID
+	int32 num = 3; 	//兵数量
+}
+
+//461 兵升级
+message UnitUp_C {
+	int32 protoId = 1;//[default = 461];		//生成mapping
+	int32 cid = 2; 	//兵ID
+	int32 num = 3; 	//兵数量
+	bool immed = 4;	//用钻秒
+}
+//462 兵升级
+message UnitUp_S {
+	int32 protoId = 1;//[default = 462];		//生成mapping
+}
+
+//471 兵治疗
+message UnitHeal_C {
+	int32 protoId = 1;//[default = 471];		//生成mapping
+	repeated protos.Unit unit = 2;		//治疗种类数量IdNum组
+	bool immed = 3;	//用钻秒
+}
+
+//481 研究科技
+message Research_C {
+	int32 protoId = 1;//[default = 481];		//生成mapping
+	int32 cid = 2; 	//科技ID
+	bool immed = 3;	//用钻秒
+}
+
+//491 通用队列验收
+message JobDone_C {
+	int32 protoId = 1;//[default = 491];		//生成mapping
+	int64 sid = 2; 	//队列ID
+}
+
+//493 通用队列取消
+message JobCancel_C {
+	int32 protoId = 1;//[default = 493];		//生成mapping
+	int64 sid = 2; 	//队列ID
+}
+
+//495 通用队列加速
+message JobFast_C {
+	int32 protoId = 1;//[default = 495];		//生成mapping
+	int64 sid = 2; 	//队列ID
+	bool immed = 3;	//用钻秒(否则用道具)
+	repeated protos.IdNum item = 4; //加速道具组(cid,num)
+}
+
+

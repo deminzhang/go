@@ -3,8 +3,6 @@ package Entity
 import (
 	"protos"
 	"sync"
-
-	"github.com/golang/protobuf/proto"
 )
 
 //地板格
@@ -25,10 +23,10 @@ type Tile struct {
 //转proto对象
 func (this *Tile) ToProto() *protos.Tile {
 	return &protos.Tile{
-		X:   proto.Int32(this.X),
-		Y:   proto.Int32(this.Y),
-		Tp:  proto.Int32(this.Tp),
-		Tp2: proto.Int32(this.Tp2),
+		X:   this.X,
+		Y:   this.Y,
+		Tp:  this.Tp,
+		Tp2: this.Tp2,
 	}
 }
 

@@ -3,8 +3,6 @@ package Entity
 import (
 	"protos"
 	"sync"
-
-	"github.com/golang/protobuf/proto"
 )
 
 //部队
@@ -41,24 +39,24 @@ type Troop struct {
 //转proto对象
 func (this *Troop) ToProto() *protos.Troop {
 	return &protos.Troop{
-		Sid:  proto.Int64(this.Sid),
-		Uid:  proto.Int64(this.Uid),
-		Tp:   proto.Int32(this.Tp),
-		Stat: proto.Int32(this.Stat),
-		Sx:   proto.Int32(this.Sx),
-		Sy:   proto.Int32(this.Sy),
-		Tx:   proto.Int32(this.Tx),
-		Ty:   proto.Int32(this.Ty),
-		St:   proto.Int64(this.St),
-		Et:   proto.Int64(this.Et),
-		Lsid: proto.Int64(this.Lsid),
+		Sid:  this.Sid,
+		Uid:  this.Uid,
+		Tp:   this.Tp,
+		Stat: this.Stat,
+		Sx:   this.Sx,
+		Sy:   this.Sy,
+		Tx:   this.Tx,
+		Ty:   this.Ty,
+		St:   this.St,
+		Et:   this.Et,
+		Lsid: this.Lsid,
 	}
 }
 
 //转proto前端主键对象
 func (this *Troop) ToProtoPK() *protos.TroopPK {
 	return &protos.TroopPK{
-		Sid: proto.Int64(this.Sid),
+		Sid: this.Sid,
 	}
 }
 

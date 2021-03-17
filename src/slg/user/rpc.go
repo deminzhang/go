@@ -11,8 +11,6 @@ import (
 	"slg/const"
 	"slg/entity"
 	"slg/world"
-
-	"github.com/golang/protobuf/proto"
 )
 
 //Net版RPC
@@ -95,7 +93,7 @@ func init() {
 			Updates: updates,
 		})
 		c.CallOut(Const.GetRoleInfo_S, &protos.GetRoleInfo_S{
-			Uid: proto.Int64(uid),
+			Uid: uid,
 		})
 	})
 	Net.RegRpc(Const.Rename_C, func(c *Net.Conn, pid int, buf []byte, uid int64) {

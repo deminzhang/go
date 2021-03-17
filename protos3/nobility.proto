@@ -1,0 +1,139 @@
+syntax="proto3";
+package protos;
+
+
+message LevelIndex{
+	int32 level = 1;								//等级
+	int32 buffIndex = 2;							//选择哪个buff 0开始
+}
+
+//1101 获得爵位信息
+message GetNobility_C {
+	int32 protoId = 1;//[default = 1101];
+	int64 uid = 2;								//角色Id
+}
+
+//1102 获得爵位信息
+message GetNobility_S {
+	int32 protoId = 1;//[default = 1102];
+	int32 level = 2;						//爵位等级
+	int64 merit = 3;						//当前军功
+	repeated LevelIndex levelIndex = 4;				//当前选择的特权 0开始	
+	int32 getDayRewardStatus = 5;			//每日俸禄领取状态 
+	int32 rankBuff = 6;			//排行榜压制buff
+	int64 honor = 7;						//荣耀
+	int64 toLastTime = 8;						//当天24点的时间戳
+	int64 uid = 9;								//角色Id
+	int64 historyMerit = 10;						//历史军功
+}
+
+//1103 爵位获得 俸禄奖励
+message GetDayReward_C {
+	int32 protoId = 1;//[default = 1103];
+	int64 uid = 2;								//角色Id
+}
+
+//1104 爵位获得 俸禄奖励
+message GetDayReward_S {
+	int32 protoId = 1;//[default = 1104];
+	int32 rewardStatus = 2;					//0 失败 1成功
+}
+
+
+//1105 爵位升级
+message LevelUptNobility_C {
+	int32 protoId = 1;//[default = 1105];
+	int32 buffIndex = 2;						//选择哪个buff	
+}
+
+message LevelUptNobility_S {
+	int32 protoId = 1;//[default = 1106];
+	int32 level = 2;						//升级后的等级
+	int32 buffIndex = 3;						//选择哪个buff	
+}
+
+
+//1107 爵位技能重置
+message ResetNobilityBuff_C {
+	int32 protoId = 1;//[default = 1107];
+	repeated LevelIndex levelIndex = 2;						//选择哪个buff 0开始	
+}
+
+message RankInfo{
+	int64 uid = 1;	//角色id
+	string name = 2;	//名称
+	string head = 3;	//头像
+	int32 nobilityLevel = 4;	 //当前爵位等级
+	int64 power = 5;	//战力
+}
+
+//1109 爵位 军工 排行榜 
+message GetMeritRank_C {
+	int32 protoId = 1;//[default = 1109];
+}
+
+message GetMeritRank_S {
+	int32 protoId = 1;//[default = 1110];
+	repeated RankInfo rankInfo =2;//排行数据
+}
+
+//1111 爵位 军工 上周 排行榜 
+message GetMeritLastWeekRank_C {
+	int32 protoId = 1;//[default = 1111];
+
+}
+
+message GetMeritLastWeekRank_S {
+	int32 protoId = 1;//[default = 1112];
+	repeated RankInfo rankInfo =2;//排行数据
+}
+
+message ShopItem{
+	int32 shopId = 1;	//表Id
+	int32 num = 2; //可购买数量
+}
+
+message GetNobilityShop_C {
+	int32 protoId = 1;//[default = 1113];
+	int32 shopType = 2;	//表Id
+}
+
+message GetNobilityShop_S {
+	int32 protoId = 1;//[default = 1114];
+	repeated ShopItem shopType =2;//商品
+}
+
+
+message BuyNobilityShop_C {
+	int32 protoId = 1;//[default = 1115];
+	int32 shopId = 2;	//表Id
+	int32 num = 3; //购买数量
+}
+
+message BuyNobilityShop_S{
+	int32 protoId = 1;//[default = 1116];
+	int32 shopId = 2;	//表Id
+	int32 num = 3; //可购买数量
+}
+
+
+//1109 爵位 军工 排行榜 
+message GetHonorRank_C {
+	int32 protoId = 1;//[default = 1117];
+}
+
+message GetHonorRank_S {
+	int32 protoId = 1;//[default = 1118];
+	repeated RankInfo rankInfo =2;//排行数据
+}
+
+//1111 爵位 军工 上周 排行榜 
+message GetHonorLastWeekRank_C {
+	int32 protoId = 1;//[default = 1119];
+
+}
+
+message GetHonorLastWeekRank_S {
+	int32 protoId = 1;//[default = 1120];
+	repeated RankInfo rankInfo =2;//排行数据
+}

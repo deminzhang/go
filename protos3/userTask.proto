@@ -1,0 +1,44 @@
+syntax="proto3";
+package protos;
+
+
+//601 领取主线支线任务奖励
+message UserTaskReward_C {
+	int32 protoId = 1;//[default = 601];
+	int64 sid = 2;								//任务Id
+	int32 classify = 3;						//主线1 支线2 每日3 支线4
+}
+
+//602 领取章节任务奖励
+message UserTaskReward_S {
+	int32 protoId = 1;//[default = 602];
+	int32 classify = 2;				//主线1 支线2 每日3 支线4
+	bool hasNextChapter = 3;	//
+	int32 chapterId =4;//
+	int32 taskCid = 5;					//任务cid
+}
+
+//603 获取今天每日任务
+message DailyTaskToDay_C {
+	int32 protoId = 1;//[default = 603];
+}
+
+//605 领取每日任务奖励
+message DailyTaskReward_C {
+	int32 protoId = 1;//[default = 605];
+	int32 did = 2;								// 每日任务Id	
+}
+
+//607 领取活跃度宝箱
+message DailyBoxReward_C {
+	int32 protoId = 1;//[default = 607];			
+	int32 dbid = 2;							// 宝箱配数cid
+}
+
+//608
+message DailyBoxReward_S {
+	int32 protoId = 1;//[default = 608];			
+	int32 dbid = 2;							// 宝箱cid
+}
+
+

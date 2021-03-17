@@ -20,10 +20,11 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+//601 领取主线支线任务奖励
 type UserTaskReward_C struct {
-	ProtoId              *int32   `protobuf:"varint,1,opt,name=protoId,def=601" json:"protoId,omitempty"`
-	Tid                  *int32   `protobuf:"varint,2,req,name=tid" json:"tid,omitempty"`
-	Classify             *int32   `protobuf:"varint,3,req,name=classify" json:"classify,omitempty"`
+	ProtoId              int32    `protobuf:"varint,1,opt,name=protoId,proto3" json:"protoId,omitempty"`
+	Sid                  int64    `protobuf:"varint,2,opt,name=sid,proto3" json:"sid,omitempty"`
+	Classify             int32    `protobuf:"varint,3,opt,name=classify,proto3" json:"classify,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -54,31 +55,102 @@ func (m *UserTaskReward_C) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UserTaskReward_C proto.InternalMessageInfo
 
-const Default_UserTaskReward_C_ProtoId int32 = 601
-
 func (m *UserTaskReward_C) GetProtoId() int32 {
-	if m != nil && m.ProtoId != nil {
-		return *m.ProtoId
+	if m != nil {
+		return m.ProtoId
 	}
-	return Default_UserTaskReward_C_ProtoId
+	return 0
 }
 
-func (m *UserTaskReward_C) GetTid() int32 {
-	if m != nil && m.Tid != nil {
-		return *m.Tid
+func (m *UserTaskReward_C) GetSid() int64 {
+	if m != nil {
+		return m.Sid
 	}
 	return 0
 }
 
 func (m *UserTaskReward_C) GetClassify() int32 {
-	if m != nil && m.Classify != nil {
-		return *m.Classify
+	if m != nil {
+		return m.Classify
 	}
 	return 0
 }
 
+//602 领取章节任务奖励
+type UserTaskReward_S struct {
+	ProtoId              int32    `protobuf:"varint,1,opt,name=protoId,proto3" json:"protoId,omitempty"`
+	Classify             int32    `protobuf:"varint,2,opt,name=classify,proto3" json:"classify,omitempty"`
+	HasNextChapter       bool     `protobuf:"varint,3,opt,name=hasNextChapter,proto3" json:"hasNextChapter,omitempty"`
+	ChapterId            int32    `protobuf:"varint,4,opt,name=chapterId,proto3" json:"chapterId,omitempty"`
+	TaskCid              int32    `protobuf:"varint,5,opt,name=taskCid,proto3" json:"taskCid,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UserTaskReward_S) Reset()         { *m = UserTaskReward_S{} }
+func (m *UserTaskReward_S) String() string { return proto.CompactTextString(m) }
+func (*UserTaskReward_S) ProtoMessage()    {}
+func (*UserTaskReward_S) Descriptor() ([]byte, []int) {
+	return fileDescriptor_83e255e0de24983d, []int{1}
+}
+
+func (m *UserTaskReward_S) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UserTaskReward_S.Unmarshal(m, b)
+}
+func (m *UserTaskReward_S) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UserTaskReward_S.Marshal(b, m, deterministic)
+}
+func (m *UserTaskReward_S) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UserTaskReward_S.Merge(m, src)
+}
+func (m *UserTaskReward_S) XXX_Size() int {
+	return xxx_messageInfo_UserTaskReward_S.Size(m)
+}
+func (m *UserTaskReward_S) XXX_DiscardUnknown() {
+	xxx_messageInfo_UserTaskReward_S.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UserTaskReward_S proto.InternalMessageInfo
+
+func (m *UserTaskReward_S) GetProtoId() int32 {
+	if m != nil {
+		return m.ProtoId
+	}
+	return 0
+}
+
+func (m *UserTaskReward_S) GetClassify() int32 {
+	if m != nil {
+		return m.Classify
+	}
+	return 0
+}
+
+func (m *UserTaskReward_S) GetHasNextChapter() bool {
+	if m != nil {
+		return m.HasNextChapter
+	}
+	return false
+}
+
+func (m *UserTaskReward_S) GetChapterId() int32 {
+	if m != nil {
+		return m.ChapterId
+	}
+	return 0
+}
+
+func (m *UserTaskReward_S) GetTaskCid() int32 {
+	if m != nil {
+		return m.TaskCid
+	}
+	return 0
+}
+
+//603 获取今天每日任务
 type DailyTaskToDay_C struct {
-	ProtoId              *int32   `protobuf:"varint,1,opt,name=protoId,def=603" json:"protoId,omitempty"`
+	ProtoId              int32    `protobuf:"varint,1,opt,name=protoId,proto3" json:"protoId,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -88,7 +160,7 @@ func (m *DailyTaskToDay_C) Reset()         { *m = DailyTaskToDay_C{} }
 func (m *DailyTaskToDay_C) String() string { return proto.CompactTextString(m) }
 func (*DailyTaskToDay_C) ProtoMessage()    {}
 func (*DailyTaskToDay_C) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83e255e0de24983d, []int{1}
+	return fileDescriptor_83e255e0de24983d, []int{2}
 }
 
 func (m *DailyTaskToDay_C) XXX_Unmarshal(b []byte) error {
@@ -109,18 +181,17 @@ func (m *DailyTaskToDay_C) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DailyTaskToDay_C proto.InternalMessageInfo
 
-const Default_DailyTaskToDay_C_ProtoId int32 = 603
-
 func (m *DailyTaskToDay_C) GetProtoId() int32 {
-	if m != nil && m.ProtoId != nil {
-		return *m.ProtoId
+	if m != nil {
+		return m.ProtoId
 	}
-	return Default_DailyTaskToDay_C_ProtoId
+	return 0
 }
 
+//605 领取每日任务奖励
 type DailyTaskReward_C struct {
-	ProtoId              *int32   `protobuf:"varint,1,opt,name=protoId,def=605" json:"protoId,omitempty"`
-	Did                  *int32   `protobuf:"varint,2,req,name=did" json:"did,omitempty"`
+	ProtoId              int32    `protobuf:"varint,1,opt,name=protoId,proto3" json:"protoId,omitempty"`
+	Did                  int32    `protobuf:"varint,2,opt,name=did,proto3" json:"did,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -130,7 +201,7 @@ func (m *DailyTaskReward_C) Reset()         { *m = DailyTaskReward_C{} }
 func (m *DailyTaskReward_C) String() string { return proto.CompactTextString(m) }
 func (*DailyTaskReward_C) ProtoMessage()    {}
 func (*DailyTaskReward_C) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83e255e0de24983d, []int{2}
+	return fileDescriptor_83e255e0de24983d, []int{3}
 }
 
 func (m *DailyTaskReward_C) XXX_Unmarshal(b []byte) error {
@@ -151,25 +222,24 @@ func (m *DailyTaskReward_C) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DailyTaskReward_C proto.InternalMessageInfo
 
-const Default_DailyTaskReward_C_ProtoId int32 = 605
-
 func (m *DailyTaskReward_C) GetProtoId() int32 {
-	if m != nil && m.ProtoId != nil {
-		return *m.ProtoId
-	}
-	return Default_DailyTaskReward_C_ProtoId
-}
-
-func (m *DailyTaskReward_C) GetDid() int32 {
-	if m != nil && m.Did != nil {
-		return *m.Did
+	if m != nil {
+		return m.ProtoId
 	}
 	return 0
 }
 
+func (m *DailyTaskReward_C) GetDid() int32 {
+	if m != nil {
+		return m.Did
+	}
+	return 0
+}
+
+//607 领取活跃度宝箱
 type DailyBoxReward_C struct {
-	ProtoId              *int32   `protobuf:"varint,1,opt,name=protoId,def=607" json:"protoId,omitempty"`
-	Dbid                 *int32   `protobuf:"varint,2,req,name=dbid" json:"dbid,omitempty"`
+	ProtoId              int32    `protobuf:"varint,1,opt,name=protoId,proto3" json:"protoId,omitempty"`
+	Dbid                 int32    `protobuf:"varint,2,opt,name=dbid,proto3" json:"dbid,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -179,7 +249,7 @@ func (m *DailyBoxReward_C) Reset()         { *m = DailyBoxReward_C{} }
 func (m *DailyBoxReward_C) String() string { return proto.CompactTextString(m) }
 func (*DailyBoxReward_C) ProtoMessage()    {}
 func (*DailyBoxReward_C) Descriptor() ([]byte, []int) {
-	return fileDescriptor_83e255e0de24983d, []int{3}
+	return fileDescriptor_83e255e0de24983d, []int{4}
 }
 
 func (m *DailyBoxReward_C) XXX_Unmarshal(b []byte) error {
@@ -200,42 +270,95 @@ func (m *DailyBoxReward_C) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DailyBoxReward_C proto.InternalMessageInfo
 
-const Default_DailyBoxReward_C_ProtoId int32 = 607
-
 func (m *DailyBoxReward_C) GetProtoId() int32 {
-	if m != nil && m.ProtoId != nil {
-		return *m.ProtoId
+	if m != nil {
+		return m.ProtoId
 	}
-	return Default_DailyBoxReward_C_ProtoId
+	return 0
 }
 
 func (m *DailyBoxReward_C) GetDbid() int32 {
-	if m != nil && m.Dbid != nil {
-		return *m.Dbid
+	if m != nil {
+		return m.Dbid
+	}
+	return 0
+}
+
+//608
+type DailyBoxReward_S struct {
+	ProtoId              int32    `protobuf:"varint,1,opt,name=protoId,proto3" json:"protoId,omitempty"`
+	Dbid                 int32    `protobuf:"varint,2,opt,name=dbid,proto3" json:"dbid,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *DailyBoxReward_S) Reset()         { *m = DailyBoxReward_S{} }
+func (m *DailyBoxReward_S) String() string { return proto.CompactTextString(m) }
+func (*DailyBoxReward_S) ProtoMessage()    {}
+func (*DailyBoxReward_S) Descriptor() ([]byte, []int) {
+	return fileDescriptor_83e255e0de24983d, []int{5}
+}
+
+func (m *DailyBoxReward_S) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DailyBoxReward_S.Unmarshal(m, b)
+}
+func (m *DailyBoxReward_S) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DailyBoxReward_S.Marshal(b, m, deterministic)
+}
+func (m *DailyBoxReward_S) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DailyBoxReward_S.Merge(m, src)
+}
+func (m *DailyBoxReward_S) XXX_Size() int {
+	return xxx_messageInfo_DailyBoxReward_S.Size(m)
+}
+func (m *DailyBoxReward_S) XXX_DiscardUnknown() {
+	xxx_messageInfo_DailyBoxReward_S.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DailyBoxReward_S proto.InternalMessageInfo
+
+func (m *DailyBoxReward_S) GetProtoId() int32 {
+	if m != nil {
+		return m.ProtoId
+	}
+	return 0
+}
+
+func (m *DailyBoxReward_S) GetDbid() int32 {
+	if m != nil {
+		return m.Dbid
 	}
 	return 0
 }
 
 func init() {
 	proto.RegisterType((*UserTaskReward_C)(nil), "protos.UserTaskReward_C")
+	proto.RegisterType((*UserTaskReward_S)(nil), "protos.UserTaskReward_S")
 	proto.RegisterType((*DailyTaskToDay_C)(nil), "protos.DailyTaskToDay_C")
 	proto.RegisterType((*DailyTaskReward_C)(nil), "protos.DailyTaskReward_C")
 	proto.RegisterType((*DailyBoxReward_C)(nil), "protos.DailyBoxReward_C")
+	proto.RegisterType((*DailyBoxReward_S)(nil), "protos.DailyBoxReward_S")
 }
 
 func init() { proto.RegisterFile("userTask.proto", fileDescriptor_83e255e0de24983d) }
 
 var fileDescriptor_83e255e0de24983d = []byte{
-	// 170 bytes of a gzipped FileDescriptorProto
+	// 241 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2b, 0x2d, 0x4e, 0x2d,
-	0x0a, 0x49, 0x2c, 0xce, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x03, 0x53, 0xc5, 0x52,
-	0x3c, 0xc9, 0xf9, 0xb9, 0xb9, 0xf9, 0x79, 0x10, 0x51, 0x25, 0x77, 0x2e, 0x81, 0x50, 0xa8, 0xba,
-	0xa0, 0xd4, 0xf2, 0xc4, 0xa2, 0x94, 0x78, 0x67, 0x21, 0x11, 0x2e, 0x76, 0xb0, 0xa4, 0x67, 0x8a,
-	0x04, 0xa3, 0x02, 0xa3, 0x06, 0xab, 0x15, 0xb3, 0x99, 0x81, 0xa1, 0x10, 0x37, 0x17, 0x73, 0x49,
-	0x66, 0x8a, 0x04, 0x93, 0x02, 0x93, 0x06, 0xab, 0x90, 0x00, 0x17, 0x47, 0x72, 0x4e, 0x62, 0x71,
-	0x71, 0x66, 0x5a, 0xa5, 0x04, 0x33, 0x48, 0x44, 0x49, 0x83, 0x4b, 0xc0, 0x25, 0x31, 0x33, 0xa7,
-	0x12, 0x64, 0x52, 0x48, 0xbe, 0x4b, 0x62, 0x25, 0x0e, 0x83, 0x8c, 0x95, 0xcc, 0xb8, 0x04, 0xe1,
-	0x2a, 0xf1, 0xda, 0x69, 0x0a, 0xb2, 0x33, 0x05, 0x66, 0xa7, 0x92, 0x19, 0xd4, 0x06, 0xa7, 0xfc,
-	0x0a, 0xbc, 0xda, 0xcc, 0x85, 0x78, 0xb8, 0x58, 0x52, 0x92, 0x60, 0xfa, 0x00, 0x01, 0x00, 0x00,
-	0xff, 0xff, 0xf6, 0xcd, 0xde, 0x17, 0x09, 0x01, 0x00, 0x00,
+	0x0a, 0x49, 0x2c, 0xce, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x03, 0x53, 0xc5, 0x4a,
+	0x51, 0x5c, 0x02, 0xa1, 0x50, 0x99, 0xa0, 0xd4, 0xf2, 0xc4, 0xa2, 0x94, 0x78, 0x67, 0x21, 0x09,
+	0x2e, 0x76, 0xb0, 0xac, 0x67, 0x8a, 0x04, 0xa3, 0x02, 0xa3, 0x06, 0x6b, 0x10, 0x8c, 0x2b, 0x24,
+	0xc0, 0xc5, 0x5c, 0x9c, 0x99, 0x22, 0xc1, 0xa4, 0xc0, 0xa8, 0xc1, 0x1c, 0x04, 0x62, 0x0a, 0x49,
+	0x71, 0x71, 0x24, 0xe7, 0x24, 0x16, 0x17, 0x67, 0xa6, 0x55, 0x4a, 0x30, 0x83, 0x15, 0xc3, 0xf9,
+	0x4a, 0x2b, 0x18, 0x31, 0x0c, 0x0f, 0xc6, 0x63, 0x38, 0xb2, 0x51, 0x4c, 0xa8, 0x46, 0x09, 0xa9,
+	0x71, 0xf1, 0x65, 0x24, 0x16, 0xfb, 0xa5, 0x56, 0x94, 0x38, 0x67, 0x24, 0x16, 0x94, 0xa4, 0x16,
+	0x81, 0x2d, 0xe3, 0x08, 0x42, 0x13, 0x15, 0x92, 0xe1, 0xe2, 0x4c, 0x86, 0x30, 0x3d, 0x53, 0x24,
+	0x58, 0xc0, 0x86, 0x20, 0x04, 0x40, 0x76, 0x97, 0x24, 0x16, 0x67, 0x3b, 0x67, 0xa6, 0x48, 0xb0,
+	0x42, 0xec, 0x86, 0x72, 0x95, 0x74, 0xb8, 0x04, 0x5c, 0x12, 0x33, 0x73, 0x2a, 0x41, 0x4e, 0x0d,
+	0xc9, 0x77, 0x49, 0xac, 0xc4, 0x17, 0x0c, 0x4a, 0xf6, 0x5c, 0x82, 0x70, 0xd5, 0xc4, 0x85, 0x5a,
+	0x0a, 0x34, 0xd4, 0x58, 0x83, 0x40, 0x4c, 0x25, 0x07, 0xa8, 0x75, 0x4e, 0xf9, 0x15, 0x44, 0xe8,
+	0x17, 0xe2, 0x62, 0x49, 0x49, 0x82, 0x1b, 0x00, 0x66, 0x63, 0x31, 0x21, 0x98, 0x34, 0x13, 0x92,
+	0x20, 0x29, 0xc0, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0x7c, 0xfd, 0x26, 0x01, 0x1a, 0x02, 0x00,
+	0x00,
 }

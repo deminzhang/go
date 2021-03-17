@@ -29,7 +29,7 @@ func init() {
 		for _, o := range mails {
 			o.AppendTo(updates)
 		}
-		c.CallOut(pid+1, &protos.Response_S{ProtoId: proto.Int32(int32(pid)),
+		c.CallOut(pid+1, &protos.Response_S{ProtoId: int32(pid),
 			Updates: updates,
 		})
 	})
@@ -50,13 +50,13 @@ func init() {
 		if force {
 			for _, sid := range sids {
 				Sql.Exec("delete from u_mail where sid=?", sid)
-				ms = append(ms, &protos.MailPK{Sid: proto.Int64(sid)})
+				ms = append(ms, &protos.MailPK{Sid: sid})
 			}
 		} else {
 			for _, sid := range sids {
 				a, _, _ := Sql.Exec("delete from u_mail where sid=? and take=1", sid)
 				if a > 0 {
-					ms = append(ms, &protos.MailPK{Sid: proto.Int64(sid)})
+					ms = append(ms, &protos.MailPK{Sid: sid})
 				}
 			}
 		}
@@ -65,7 +65,8 @@ func init() {
 		}
 		removes := &protos.Removes{}
 		removes.Mail = ms
-		c.CallOut(pid+1, &protos.Response_S{ProtoId: proto.Int32(int32(pid)),
+		c.CallOut(pid+1, &protos.Response_S{
+			ProtoId: int32(pid),
 			Removes: removes,
 		})
 	})

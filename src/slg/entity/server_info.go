@@ -3,8 +3,6 @@ package Entity
 import (
 	"common/util"
 	"protos"
-
-	"github.com/golang/protobuf/proto"
 )
 
 type ServerInfo struct {
@@ -18,7 +16,7 @@ type ServerInfo struct {
 //转proto对象
 func (this *ServerInfo) ToProto() *protos.Server {
 	return &protos.Server{
-		Region: proto.Int32(this.Sid),
-		Time:   proto.Int64(Util.MilliSecond()),
+		Region: this.Sid,
+		Time:   Util.MilliSecond(),
 	}
 }

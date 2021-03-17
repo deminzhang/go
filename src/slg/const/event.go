@@ -15,11 +15,12 @@ const (
 	OnMinute //服务器计时
 	OnNewDay //服务器跨天
 
-	OnUserNew     //角色创建初始化
-	OnUserLogin   //角色登陆 可处理离线结算 新功能数据初始化 异常数据修复
-	OnUserOffline //角色离线 可处理离线结算 社交关系通知 私有缓存释放
-	OnUserGetData //角色收集数据 给前端或跨服集
-	OnUserLevelUp //角色升级 更新任务/解锁/成就
+	OnUserNew       //角色创建初始化
+	OnUserLogin     //角色登陆 可处理离线结算 新功能数据初始化 异常数据修复
+	OnUserOffline   //角色离线 可处理离线结算 社交关系通知 私有缓存释放
+	OnUserGetData   //角色收集数据 同步给前端或跨服集
+	OnUserAsyncData //角色收集数据 异步给前端或跨服集
+	OnUserLevelUp   //角色升级 更新任务/解锁/成就
 
 	OnJobDone       //工作结束 工作队列验收
 	OnTroopStatDone //部队状态结束 检查交战 结算等

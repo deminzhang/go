@@ -2,8 +2,6 @@ package Entity
 
 import (
 	"protos"
-
-	"github.com/golang/protobuf/proto"
 )
 
 //建筑
@@ -18,17 +16,17 @@ type Building struct {
 //转proto对象
 func (this *Building) ToProto() *protos.Building {
 	return &protos.Building{
-		Sid:   proto.Int64(this.Sid),
-		Tp:    proto.Int32(this.Cid),
-		Level: proto.Int32(this.Level),
-		Pos:   proto.Int32(this.Pos),
+		Sid:   this.Sid,
+		Tp:    this.Cid,
+		Level: this.Level,
+		Pos:   this.Pos,
 	}
 }
 
 //转proto前端主键对象
 func (this *Building) ToProtoPK() *protos.BuildingPK {
 	return &protos.BuildingPK{
-		Sid: proto.Int64(this.Sid),
+		Sid: this.Sid,
 	}
 }
 

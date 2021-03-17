@@ -7,15 +7,14 @@ import (
 	"protos"
 	"slg/entity"
 	"slg/rpc"
-
-	"github.com/golang/protobuf/proto"
 )
 
 //TODO 优化
 func itemUp(uid int64, item *Entity.Item) {
 	updates := &protos.Updates{}
 	item.AppendTo(updates)
-	Net.CallUid(uid, Rpc.Response_S, &protos.Response_S{ProtoId: proto.Int32(0),
+	Net.CallUid(uid, Rpc.Response_S, &protos.Response_S{
+		ProtoId: 0,
 		Updates: updates,
 	})
 }

@@ -1,0 +1,141 @@
+syntax="proto3";
+package protos;
+
+import "common.proto";
+
+//角色信息(公)
+message User {
+	int64 uid = 1;			//UID
+	string name = 2;		//角色名
+	int32 gender = 3;		//性别
+	int32 icon = 4;		//头像
+	int32 iconB = 5;		//头像
+	int32 level = 6;		//级别
+	int32 cityX = 7;		//城坐标X
+	int32 cityY = 8;		//城坐标Y
+	int64 power = 10;		//战力
+	int64 allianceId = 11;	//联盟Id
+	int32 vipId = 12;		//vipId
+	int32 serverId = 13;	//服ID
+	int64 offlineTime = 14;//上次下线时间
+}
+message UserPK {
+	int64 uid = 1;			//UID
+}
+
+//角色数据扩展(私人截断User独立散数)
+message UserEx {
+	int64 uid = 1;				//UID
+}
+
+
+//日常限制(日常重置)
+message UserDaily{
+	string group = 1;		// shop:商店 vipShop:VIP商店 mysticShop:神秘商店 mall:商城 mixed:杂项
+    int32 cid = 2; 		// shop*:商品ID mall:商品ID mixed:约定
+    int32 num = 3; 		// 日用量
+}
+message UserDailyPK{
+	string group = 1;		// shop:商店 vipShop:VIP商店 mysticShop:神秘商店 mall:商城
+    int32 cid = 2; 		// shop*:商品ID mall:商品ID
+}
+
+//角色计数(不计时间的)
+message UserCount {
+	int32 cid = 1;			//前后端约定
+	int64 val = 2;			//val
+}
+message UserCountPK {
+	int32 cid = 1;			//
+}
+
+//角色计数(时间计算)
+message UserTick {
+	int32 cid = 1;			//前后端约定
+	protos.Ticker ticker = 2;		//变化器
+}
+message UserTickPK {
+	int32 cid = 1;			//前后端约定
+}
+
+//角色前端标记
+message UserMark {
+	int32 cid = 1;			//前端自定义
+	int64 val = 2;			//val
+}
+message UserMarkPK {
+	int32 cid = 1;			//前端自定义
+}
+
+//头像
+message HeadIcon {
+	int32 cid = 1;			//配置ID
+}
+
+//头像框
+message HeadIconB {
+	int32 cid = 1;			//配置ID
+	int64 timeTo = 2;		//限时至0不限
+}
+message HeadIconBPK {
+	int32 cid = 1;			//配置ID
+}
+
+//VIP宝箱已购买
+message VipChest {
+	int32 cid = 1;			//vipId
+}
+
+//以上数据结构-------------------------------------------------//
+//-------------------------------------------------------------//
+//以下协议-----------------------------------------------------//
+
+//103 角色改名
+message Rename_C {
+	int32 protoId = 1;//[default = 103];		//生成mapping
+	string name = 2; //角色名
+	int32 gender = 3; //性别
+	int32 icon = 4;//头像
+}
+
+
+//105 改头像
+message ReIcon_C {
+	int32 protoId = 1;//[default = 105];		//生成mapping
+	int32 icon = 2;//头像
+}
+
+//107 改头像框
+message ReIconB_C {
+	int32 protoId = 1;//[default = 107];		//生成mapping
+	int32 iconB = 4;//头像
+}
+
+//109 查看角色
+message UserView_C {
+	int32 protoId = 1;//[default = 109];		//生成mapping
+	int64 uid = 2;		//UID
+}
+
+//111 前端自定义计数
+message SetMark_C {
+	int32 protoId = 1;//[default = 111];		//生成mapping
+	int32 cid = 2;		//cid
+	int64 val = 3;		//val
+}
+
+//113 强制更新一次UserTick数据
+message TickUpdate_C {
+	int32 protoId = 1;//[default = 113];		//生成mapping
+}
+
+//115 查看角色
+message UserFind_C {
+	int32 protoId = 1;//[default = 115];		//生成mapping
+	string name = 2;		//名字
+}
+message UserFind_S {
+	int32 protoId = 1;//[default = 116];		//生成mapping
+	int64 uid = 2;		//角色UID 未找到则为0
+	User user = 3;		//角色
+}

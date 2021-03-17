@@ -2,8 +2,6 @@ package Entity
 
 import (
 	"protos"
-
-	"github.com/golang/protobuf/proto"
 )
 
 //邮件
@@ -14,8 +12,7 @@ type Mail struct {
 	Cid      int32   //多语言配置ID
 	FromUid  int64   //发送者UID
 	FromName string  //发送者名
-	Title    string  //标题[]
-	Context  string  //正文[]
+	Params   string  //标题正文参数集
 	Time     int64   //发送时间
 	Read     bool    //已读
 	Take     bool    //已取附件
@@ -27,24 +24,23 @@ type Mail struct {
 //转proto对象
 func (this *Mail) ToProto() *protos.Mail {
 	return &protos.Mail{
-		Sid:      proto.Int64(this.Sid),
-		Tp:       proto.Int32(this.Type),
-		Cid:      proto.Int32(this.Cid),
-		FromUid:  proto.Int64(this.FromUid),
-		FromName: proto.String(this.FromName),
-		Title:    proto.String(this.Title),
-		Content:  proto.String(this.Context),
-		Time:     proto.Int64(this.Time),
-		Read:     proto.Bool(this.Read),
-		Take:     proto.Bool(this.Take),
-		Favor:    proto.Bool(this.Favor),
+		Sid:      this.Sid,
+		Tp:       this.Type,
+		Cid:      this.Cid,
+		FromUid:  this.FromUid,
+		FromName: this.FromName,
+		Params:   this.Params,
+		Time:     this.Time,
+		Read:     this.Read,
+		Take:     this.Take,
+		Favor:    this.Favor,
 	}
 }
 
 //转proto前端主键对象
 func (this *Mail) ToProtoPK() *protos.MailPK {
 	return &protos.MailPK{
-		Sid: proto.Int64(this.Sid),
+		Sid: this.Sid,
 	}
 }
 

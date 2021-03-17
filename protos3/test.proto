@@ -1,0 +1,18 @@
+syntax="proto3";
+package protos;
+
+
+//99调试指令
+	//item cid num加道具
+	//res cid num加资源
+	//unit tp lv num加兵
+	//wounded tp lv num加伤兵
+	//hero cid lv step加英雄
+	//triggerUserTask type count id任务进度变化
+	//triggerDayTask type count id日常任务进度变化
+message Cmd_C {
+    int32 protoId = 1;//[default = 99]; // 生成mapping
+	repeated string args = 2; //args[0]命令,args[1+]参数...
+	
+}
+
