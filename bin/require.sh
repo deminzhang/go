@@ -1,5 +1,7 @@
-# protoc
-#wget https://github.com/protocolbuffers/protobuf/releases/download/v3.15.6/protoc-3.15.6-win64.zip
+# protoc from
+# wget https://github.com/protocolbuffers/protobuf/releases/download/v3.15.6/protoc-3.15.6-win64.zip
+
+go env -w GO111MODULE=auto
 
 # go postgresql
 go get -u github.com/lib/pq
