@@ -3,9 +3,8 @@
 # export GOPATH=/data/app/slgdev/go
 # export PATH=$PATH:/data/app/slgdev/go/bin
 
-cd protos3
 protoc --version
-protoc --go_out=../src/protos *.proto
+protoc --go_out=src/protos protos3/*.proto --proto_path=protos3
 
 echo "Done!"
 
