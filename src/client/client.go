@@ -37,7 +37,7 @@ func main() {
 			c.CallIn(pid, buf[4:])
 		}, time.Second*10, time.Minute*1, time.Second*10)
 
-	},  func(c *Net.Conn,, err string) {
+	}, func(c *Net.Conn, err interface{}) {
 		panic(err)
 	})
 

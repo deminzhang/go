@@ -285,12 +285,12 @@ func ListenUnix() {
 }
 
 //Client------------------------------------------------------------------------
-func onConnect(conn *Conn, onConn func(*Conn), onDisconn func(*Conn, string)) {
+func onConnect(conn *Conn, onConn func(*Conn), onDisconn func(*Conn, interface{})) {
 	fmt.Println("onConnect:", conn.RemoteAddr(), conn.LocalAddr())
 	defer func() {
 		err := recover()
 		if err != nil {
-			onDisconn(conn, err.(error).Error())
+			onDisconn(conn, err)
 		} else {
 			onDisconn(conn, "?")
 		}
@@ -298,12 +298,12 @@ func onConnect(conn *Conn, onConn func(*Conn), onDisconn func(*Conn, string)) {
 	}()
 	onConn(conn)
 }
-func Connect(addr string, onConn func(*Conn), onDisconn func(*Conn, string)) *Conn {
+func Connect(addr string, onConn func(*Conn), onDisconn func(*Conn, interface{})) *Conn {
 	fmt.Println(">>Connecting:", addr)
 	conn, err := net.Dial("tcp", addr)
 	if err != nil {
 		// panic(err)
-		onDisconn(nil, err.Error())
+		onDisconn(nil, err)
 		return nil
 	}
 	connEx := &Conn{
