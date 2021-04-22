@@ -13,18 +13,18 @@ import (
 	"slg/const"
 
 	"slg/config"
-	"slg/server"
-	_ "slg/user"
-
-	_ "slg/building"
 	_ "slg/item"
-	_ "slg/job"
 	_ "slg/mail"
+	"slg/server"
 	_ "slg/test"
 	_ "slg/ticker"
-	_ "slg/troop"
-	_ "slg/unit"
+	_ "slg/user"
 	_ "slg/world"
+
+	// _ "slg/building"
+	// _ "slg/job"
+	// _ "slg/troop"
+	// _ "slg/unit"
 
 	"github.com/BurntSushi/toml"
 )
