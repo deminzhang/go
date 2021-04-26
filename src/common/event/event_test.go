@@ -25,7 +25,7 @@ func ExampleEvent() {
 	_EventTest2 := -2
 	//单响应
 	Event.Reg(_EventTest, func() {
-		fmt.Println("_EventTest")
+		fmt.Println("_EventTest1")
 	})
 	Event.Call(_EventTest)
 

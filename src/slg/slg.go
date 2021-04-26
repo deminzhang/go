@@ -21,11 +21,6 @@ import (
 	_ "slg/user"
 	_ "slg/world"
 
-	// _ "slg/building"
-	// _ "slg/job"
-	// _ "slg/troop"
-	// _ "slg/unit"
-
 	"github.com/BurntSushi/toml"
 )
 

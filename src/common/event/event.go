@@ -112,7 +112,7 @@ func GoCall(id int, a ...interface{}) {
 }
 
 //触发事件_同步并行(事件名,参数集)确定互不冲突可用
-func GoCallS(id int, a ...interface{}) {
+func GoCallWaitAll(id int, a ...interface{}) {
 	list := events[id]
 	num := len(list)
 	if num == 0 {

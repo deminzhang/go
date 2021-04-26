@@ -7,8 +7,8 @@ import (
 	"log"
 	"protos"
 
+	"slg/const"
 	"slg/entity"
-	"slg/rpc"
 	"strings"
 )
 
@@ -75,7 +75,7 @@ func SystemSend(uid int64, cid int32, titles []string, contexts []string, item [
 
 	updates := &protos.Updates{}
 	mail.AppendTo(updates)
-	Net.CallUid(uid, Rpc.Response_S, &protos.Response_S{
+	Net.CallUid(uid, Const.Response_S, &protos.Response_S{
 		ProtoId: 0,
 		Updates: updates,
 	})
@@ -105,7 +105,7 @@ func UserSend(uid int64, sender *Entity.User, title string, context string, item
 
 	updates := &protos.Updates{}
 	mail.AppendTo(updates)
-	Net.CallUid(uid, Rpc.Response_S, &protos.Response_S{
+	Net.CallUid(uid, Const.Response_S, &protos.Response_S{
 		ProtoId: 0,
 		Updates: updates,
 	})

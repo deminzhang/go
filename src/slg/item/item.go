@@ -5,15 +5,15 @@ import (
 	"common/sql"
 	"common/util"
 	"protos"
+	"slg/const"
 	"slg/entity"
-	"slg/rpc"
 )
 
 //TODO 优化
 func itemUp(uid int64, item *Entity.Item) {
 	updates := &protos.Updates{}
 	item.AppendTo(updates)
-	Net.CallUid(uid, Rpc.Response_S, &protos.Response_S{
+	Net.CallUid(uid, Const.Response_S, &protos.Response_S{
 		ProtoId: 0,
 		Updates: updates,
 	})
