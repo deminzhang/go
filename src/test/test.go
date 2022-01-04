@@ -219,7 +219,7 @@ func test() {
 	log.Println(buf)
 	m := make(map[int64]int32)
 	m[3] = 7
-	m[6] = 5
+	// m[6] = 5
 	buf, err = proto.Marshal(&protos.TestType{
 		// Fint32:       130,
 		// Fint64:       -8,
