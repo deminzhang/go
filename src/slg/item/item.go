@@ -3,7 +3,7 @@ package Item
 import (
 	"common/net"
 	"common/sql"
-	"common/util"
+	"common/utilX"
 	"protos"
 	"slg/const"
 	"slg/entity"
@@ -24,7 +24,7 @@ func Add(uid int64, cid int32, num int64, src string) {
 	if num <= 0 {
 		return
 	}
-	now := Util.MilliSecond()
+	now := utilX.MilliSecond()
 	var item Entity.Item
 	has, _ := Sql.ORM().Where("uid = ? and cid = ?", uid, cid).Get(&item)
 	if has {

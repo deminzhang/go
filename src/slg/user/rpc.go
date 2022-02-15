@@ -4,7 +4,7 @@ import (
 	"common/event"
 	"common/net"
 	"common/sql"
-	"common/util"
+	"common/utilX"
 	"fmt"
 	"log"
 	"protos"
@@ -33,7 +33,7 @@ func init() {
 		}
 		//sid := 999
 		passport := ps.GetOpenId()
-		now := Util.MilliSecond()
+		now := utilX.MilliSecond()
 
 		x := Sql.ORM()
 

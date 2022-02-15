@@ -8,7 +8,7 @@ import (
 
 	"common/event"
 	"common/sql"
-	"common/util"
+	"common/utilX"
 
 	"slg/const"
 
@@ -35,7 +35,7 @@ type GameConf struct {
 
 func init() {
 	rand.Seed(time.Now().UnixNano())
-	Util.Info()
+	utilX.Info()
 }
 
 func main() {

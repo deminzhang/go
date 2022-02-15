@@ -3,7 +3,7 @@ package main
 import (
 	_ "client/rpc"
 	"common/net"
-	"common/util"
+	"common/utilX"
 	"fmt"
 	"protos"
 	"runtime"
@@ -16,7 +16,7 @@ import (
 var DEBUG bool
 
 func init() {
-	Util.Info()
+	util.Info()
 }
 
 func main() {

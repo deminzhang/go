@@ -2,7 +2,7 @@ package Ticker
 
 import (
 	"common/event"
-	"common/util"
+	"common/utilX"
 	"log"
 	"slg/const"
 	"time"
@@ -12,7 +12,7 @@ func ticker() {
 	log.Println(">>ticker")
 	for {
 		time.Sleep(time.Millisecond * 300)
-		Event.Call(Const.OnTick, Util.MilliSecond())
+		Event.Call(Const.OnTick, utilX.MilliSecond())
 	}
 }
 
@@ -20,7 +20,7 @@ func tickerSecond() {
 	log.Println(">>tickerSecond")
 	for {
 		time.Sleep(time.Second)
-		Event.Call(Const.OnSecond, Util.MilliSecond())
+		Event.Call(Const.OnSecond, utilX.MilliSecond())
 	}
 }
 
@@ -28,7 +28,7 @@ func tickerMinute() {
 	log.Println(">>tickerMinute")
 	for {
 		time.Sleep(time.Minute)
-		Event.GoCall(Const.OnMinute, Util.MilliSecond())
+		Event.GoCall(Const.OnMinute, utilX.MilliSecond())
 	}
 }
 

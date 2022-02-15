@@ -1,10 +1,20 @@
 package main
 
+/*
+#include<stdio.h>
+#include<stdlib.h>
+static void myprint(char* s) {
+	printf("%s\n", s);
+}
+*/
+// import "C"
+// import "unsafe"
+
 import (
 	"net"
 	// "common/net"
 	// "common/sql"
-	"common/util"
+	"common/utilX"
 	"crypto/md5"
 	"fmt"
 	"log"
@@ -19,8 +29,20 @@ import (
 	"time"
 
 	"github.com/Luxurioust/excelize"
+	// "github.com/aarzilli/golua/lua"
 	"github.com/golang/protobuf/proto"
 )
+
+// func sRandom(x int) int {
+// 	//C.srandom(C.uint(x))
+// 	cstr := C.CString("HELLO, WORLDXXX")
+// 	C.puts(cstr)
+// 	C.myprint(C.CString("HELLO, WORXXLDXXX"))
+// 	C.free(unsafe.Pointer(cstr))
+// 	// c := C.random()
+// 	// xx := int(c)
+// 	return x
+// }
 
 //配置
 type GameConf struct {
@@ -33,8 +55,15 @@ func init() {
 }
 
 func main() {
-	Util.Info()
-	test()
+	// L := lua.NewState()
+	// defer L.Close()
+	// L.OpenLibs()
+	// L.GetGlobal("print")
+	// L.PushString("Hello GoLua!")
+	// L.Call(1, 0)
+
+	utilX.Info()
+	//test()
 }
 
 func test() {
@@ -268,6 +297,8 @@ func test() {
 
 	log.Println("TestType:", buf)
 
+	// dddxx := sRandom(123)
+	// log.Println("XxxxXXXX:", dddxx)
 }
 
 type DDDD struct {

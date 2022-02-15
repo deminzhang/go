@@ -1,7 +1,7 @@
 package Entity
 
 import (
-	"common/util"
+	"common/utilX"
 	"protos"
 )
 
@@ -17,6 +17,6 @@ type ServerInfo struct {
 func (this *ServerInfo) ToProto() *protos.Server {
 	return &protos.Server{
 		Region: this.Sid,
-		Time:   Util.MilliSecond(),
+		Time:   utilX.MilliSecond(),
 	}
 }
