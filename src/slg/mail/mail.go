@@ -44,7 +44,7 @@ func ReadFrom(uid int64, from int64) []Entity.Mail {
 }
 
 func SystemSend(uid int64, cid int32, titles []string, contexts []string, item []*protos.IdNum, res []*protos.IdNum) {
-	now := utilX.MilliSecond()
+	now := time.Now().UnixNano() / 1e6
 	// timeOut := now + 7*24*86400000
 	params := strings.Join(titles, ",")
 
@@ -82,7 +82,7 @@ func SystemSend(uid int64, cid int32, titles []string, contexts []string, item [
 }
 
 func UserSend(uid int64, sender *Entity.User, title string, context string, item []*protos.IdNum, res []*protos.IdNum) {
-	now := utilX.MilliSecond()
+	now := time.Now().UnixNano() / 1e6
 	// timeOut := now + 7*24*86400000
 	x := Sql.ORM()
 	mail := Entity.Mail{

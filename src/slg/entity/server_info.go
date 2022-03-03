@@ -17,6 +17,6 @@ type ServerInfo struct {
 func (this *ServerInfo) ToProto() *protos.Server {
 	return &protos.Server{
 		Region: this.Sid,
-		Time:   utilX.MilliSecond(),
+		Time:   time.Now().UnixNano() / 1e6,
 	}
 }

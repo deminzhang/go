@@ -1,12 +1,12 @@
 package Item
 
 import (
-	"common/net"
-	"common/sql"
-	"common/utilX"
+	Net "common/net"
+	Sql "common/sql"
 	"protos"
-	"slg/const"
-	"slg/entity"
+	Const "slg/const"
+	Entity "slg/entity"
+	"time"
 )
 
 //TODO 优化
@@ -24,7 +24,7 @@ func Add(uid int64, cid int32, num int64, src string) {
 	if num <= 0 {
 		return
 	}
-	now := utilX.MilliSecond()
+	now := time.Now().UnixNano() / 1e6
 	var item Entity.Item
 	has, _ := Sql.ORM().Where("uid = ? and cid = ?", uid, cid).Get(&item)
 	if has {

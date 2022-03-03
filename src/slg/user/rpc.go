@@ -1,16 +1,16 @@
 package User
 
 import (
-	"common/event"
-	"common/net"
-	"common/sql"
-	"common/utilX"
+	Event "common/event"
+	Net "common/net"
+	Sql "common/sql"
 	"fmt"
 	"log"
 	"protos"
-	"slg/const"
-	"slg/entity"
-	"slg/world"
+	Const "slg/const"
+	Entity "slg/entity"
+	World "slg/world"
+	"time"
 )
 
 //Net版RPC
@@ -33,7 +33,7 @@ func init() {
 		}
 		//sid := 999
 		passport := ps.GetOpenId()
-		now := utilX.MilliSecond()
+		now := time.Now().UnixNano() / 1e6
 
 		x := Sql.ORM()
 

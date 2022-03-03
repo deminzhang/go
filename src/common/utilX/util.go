@@ -7,11 +7,6 @@ import (
 	"time"
 )
 
-//unix时间ms级
-func MilliSecond() int64 {
-	return time.Now().UnixNano() / 1e6
-}
-
 //运行环境,参数,INFO等
 func Info() {
 	fmt.Println(">>osinfo========================{")
@@ -32,7 +27,7 @@ func Info() {
 	t := time.Now()
 	fmt.Println("", t)
 	fmt.Println(" unixtime =", t.Unix())
-	fmt.Println(" Millisecond =", MilliSecond())
+	fmt.Println(" Millisecond =", time.Now().UnixNano()/1e6)
 	fmt.Println(" args =", os.Args)
 	wd, _ := os.Getwd()
 	fmt.Println(" pwd =", wd)

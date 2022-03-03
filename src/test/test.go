@@ -1,15 +1,5 @@
 package main
 
-/*
-#include<stdio.h>
-#include<stdlib.h>
-static void myprint(char* s) {
-	printf("%s\n", s);
-}
-*/
-// import "C"
-// import "unsafe"
-
 import (
 	"net"
 	// "common/net"
@@ -33,17 +23,6 @@ import (
 	"github.com/golang/protobuf/proto"
 )
 
-// func sRandom(x int) int {
-// 	//C.srandom(C.uint(x))
-// 	cstr := C.CString("HELLO, WORLDXXX")
-// 	C.puts(cstr)
-// 	C.myprint(C.CString("HELLO, WORXXLDXXX"))
-// 	C.free(unsafe.Pointer(cstr))
-// 	// c := C.random()
-// 	// xx := int(c)
-// 	return x
-// }
-
 //配置
 type GameConf struct {
 	Listen string
@@ -55,13 +34,6 @@ func init() {
 }
 
 func main() {
-	// L := lua.NewState()
-	// defer L.Close()
-	// L.OpenLibs()
-	// L.GetGlobal("print")
-	// L.PushString("Hello GoLua!")
-	// L.Call(1, 0)
-
 	utilX.Info()
 	//test()
 }

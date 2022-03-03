@@ -1,15 +1,12 @@
 package Event_test
 
 import (
-	"common/event"
+	Event "common/event"
 	"fmt"
 	"log"
 	"reflect"
 	"testing"
-
-	"protos"
-
-	"github.com/golang/protobuf/proto"
+	// "github.com/golang/protobuf/proto"
 )
 
 func TestEvent(t *testing.T) {
@@ -93,15 +90,15 @@ func ExampleEventR() {
 		String() string
 		ProtoMessage()
 	}
-	pb := &protos.Error_S{Code: proto.Int32(123)}
-	buf, err := proto.Marshal(pb)
-	if err != nil {
-		log.Fatal("Marshal error: ", err)
-	}
-	RegRPC(1, protos.Error_S{}, func(pid int, dec protos.Error_S) {
-		log.Println("CallRPC", pid, dec)
-		dec.Code = proto.Int32(1234)
-	})
+	// pb := &protos.Error_S{Code: proto.Int32(123)}
+	// buf, err := proto.Marshal(pb)
+	// if err != nil {
+	// 	log.Fatal("Marshal error: ", err)
+	// }
+	// RegRPC(1, protos.Error_S{}, func(pid int, dec protos.Error_S) {
+	// 	log.Println("CallRPC", pid, dec)
+	// 	dec.Code = proto.Int32(1234)
+	// })
 
 	// func() {
 	// 	if err := proto.Unmarshal(data, &xx); err != nil {
@@ -109,5 +106,5 @@ func ExampleEventR() {
 	// 		return
 	// 	}
 	// }
-	CallRPC(1, buf)
+	// CallRPC(1, buf)
 }
