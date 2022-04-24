@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"os"
 	"runtime"
+	"strings"
 	"time"
 )
 
@@ -49,9 +50,29 @@ func info() {
 	fmt.Println("", t)
 	fmt.Println(" unixtime =", t.Unix())
 	fmt.Println(" Millisecond =", time.Now().UnixNano()/1e6)
-	fmt.Println(" args =", os.Args)
+	fmt.Println(" args =", os.Args, len(os.Args))
 	wd, _ := os.Getwd()
 	fmt.Println(" pwd =", wd)
+	args := Args2Map()
+	fmt.Println(" Args2Map =", args)
+	fmt.Println(" Args2Map =", args["123XXX"] == "")
+	fmt.Println(" Args2Map =", args["a"] == "")
+}
+
+func Args2Map() map[string]string {
+	m := make(map[string]string)
+	for i, s := range os.Args {
+		if i == 0 {
+			continue
+		}
+		ss := strings.Split(s, "=")
+		if len(ss) > 1 {
+			m[ss[0]] = ss[1]
+		} else {
+			m[ss[0]] = "true"
+		}
+	}
+	return m
 }
 
 type Vec3F struct {
@@ -59,22 +80,6 @@ type Vec3F struct {
 	Y float32
 	Z float32
 }
-
-func (v3 *Vec3F) Set(X, Y, Z float32) {
-	v3.X = X
-	v3.Y = Y
-	v3.Z = Z
-}
-
-// type Vec3Fxxx Vec3F
-
-func (v3 *Vec3Fxxx) Set(X, Y, Z float32) {
-	v3.X = X
-	v3.Y = Y
-	v3.Z = Z
-}
-
-type VV3 [3]float32
 
 func test() {
 	// a := []byte{1, 2, 3}
@@ -84,15 +89,5 @@ func test() {
 	s2 := "123"
 
 	log.Println(s1 == s2)
-	var v3 Vec3F
-	v3.Set(1, 3, 4)
-	log.Println(v3)
-	var v33 Vec3Fxxx
-	v3 = Vec3F(v33)
-	v3.Set(1, 3, 42)
-	log.Println(v3)
-	var v333 VV3
-	vb := []byte(v333)
-	log.Println(vb)
 
 }

@@ -8,3 +8,4 @@ protoc --go_out=src/protos protos3/*.proto --proto_path=protos3
 
 echo "Done!"
 
+@pause

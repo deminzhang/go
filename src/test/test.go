@@ -62,8 +62,6 @@ func test() {
 	fmt.Println("XXXXX", strconv.Itoa(12334), 10&3)
 
 	fmt.Println("rand.Perm", rand.Perm(10))
-	fmt.Println("Util.Min", Util.Min(4, 3, 5, 6))
-	fmt.Println("Util.Min", Util.Min(3, 5, 6))
 	fmt.Println("Util.UnixNano", time.Now().UnixNano()/1e6)
 	fmt.Println("Util.Unix", time.Now().Unix())
 

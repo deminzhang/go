@@ -1,9 +1,13 @@
-package net_test
+package Net_test
 
 import (
-	Net "common/event"
+	Net "common/net"
+	"encoding/binary"
+	"log"
 	"testing"
+	"time"
 )
+
 func TestNet(t *testing.T) {
 	ExampleServer()
 	ExampleClient()
@@ -12,7 +16,7 @@ func TestNet(t *testing.T) {
 	// }
 }
 
-func ExampleServer()
+func ExampleServer() {
 	/*server*/
 	//开启网络监听
 	go Net.Listen(":8341", func(c *Net.Conn) {
@@ -26,7 +30,7 @@ func ExampleServer()
 		log.Println("S_onClose")
 	})
 }
-func ExampleClient(){
+func ExampleClient() {
 	/*client*/
 	//测试自连
 	SERVER := Net.Connect("localhost:8341", func(c *Net.Conn) {
