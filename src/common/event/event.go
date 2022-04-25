@@ -23,7 +23,7 @@ type listener struct {
 //事件
 var events = make(map[int]*Event)
 
-func def(id int, foo interface{}) {
+func def(id int, foo interface{}) *Event {
 	e := events[id]
 	if e != nil {
 		log.Fatalln("Event.Reg Duplicate Define:", id)
@@ -35,12 +35,14 @@ func def(id int, foo interface{}) {
 		log.Fatalf("Event.Reg %d #2 must be a func*, got %s", id, s)
 	}
 	call := reflect.ValueOf(foo)
-	events[id] = &Event{
+	e = &Event{
 		id:     id,
 		tp:     t,
 		caller: call,
 		argn:   call.Type().NumIn(),
 	}
+	events[id] = e
+	return e
 }
 
 var newWhen []interface{} //TODO 这个在并发情况下不安全,当然保证不动态Reg可没事
@@ -56,7 +58,7 @@ func When(cond ...interface{}) {
 func Reg(id int, cb interface{}) {
 	e := events[id]
 	if e == nil {
-		def(e.id, cb)
+		e = def(id, cb)
 	}
 	//	e.Reg(cb)
 	//}
