@@ -1,6 +1,7 @@
 package main
 
 import (
+	Net "common/net"
 	"encoding/binary"
 	"log"
 	"math/rand"
@@ -16,7 +17,7 @@ import (
 	_ "slg/item"
 	_ "slg/mail"
 	Server "slg/server"
-	_ "slg/test"
+	//_ "slg/test"
 	_ "slg/ticker"
 	_ "slg/user"
 	_ "slg/world"
@@ -24,7 +25,7 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
-//配置
+// 配置
 type GameConf struct {
 	Listen    string
 	DBType    string

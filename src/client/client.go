@@ -2,12 +2,11 @@ package main
 
 import (
 	_ "client/rpc"
-	"common/net"
-	"common/utilX"
+	"common/util"
+	"encoding/binary"
 	"fmt"
 	"protos"
 	"runtime"
-	"slg/const"
 	"time"
 
 	"github.com/golang/protobuf/proto"

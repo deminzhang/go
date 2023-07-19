@@ -1,8 +1,6 @@
 package World
 
 import (
-	"common/net"
-
 	"log"
 	"protos"
 	"slg/const"
@@ -18,7 +16,7 @@ func init() {
 		}
 		log.Println("<<<View_C", ps.GetServer(), ps.GetX(), ps.GetY())
 
-		// list := moveEyes(0, uid, ps.GetX(), ps.GetY(), ss.Get("sightX"), ss.Get("sightY"))
+		// list := moveEyes(0, uid, ps.GetX(), ps.GetY(), ss.get("sightX"), ss.get("sightY"))
 		// log.Println("<<<sendView_C Num", len(list))
 		// //删的前端自理
 		updates := &protos.Updates{}

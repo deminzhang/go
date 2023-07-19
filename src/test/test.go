@@ -1,18 +1,14 @@
 package main
 
 import (
-	"net"
-	// "common/net"
-	// "common/sql"
-	"common/utilX"
 	"crypto/md5"
 	"fmt"
 	"log"
 	"math"
 	"math/rand"
+	"net"
 	"net/http"
 	"os"
-	"protos"
 	"reflect"
 	"strconv"
 	"strings"
@@ -23,7 +19,7 @@ import (
 	"github.com/golang/protobuf/proto"
 )
 
-//配置
+// 配置
 type GameConf struct {
 	Listen string
 	DBHost string
@@ -34,7 +30,6 @@ func init() {
 }
 
 func main() {
-	utilX.Info()
 	//test()
 }
 
@@ -49,15 +44,9 @@ func test() {
 	sign := md5.Sum([]byte(""))
 	fmt.Printf(" md5('')=%x\n", sign)
 
-	t1 := &protos.Response_S{}
-	t2 := *t1
-	t3 := &t2
-	fmt.Println(">>>XXX", t3)
-
 	resp, _ := http.Get("http://baidu.com/")
 	fmt.Println("baidu:", resp)
 
-	rand.Seed(time.Now().UnixNano())
 	fmt.Println("RR", rand.Intn(10))
 	fmt.Println("XXXXX", strconv.Itoa(12334), 10&3)
 
@@ -93,7 +82,7 @@ func test() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	// Get value from cell by given sheet index and axis.
+	// get value from cell by given sheet index and axis.
 
 	for sheetIdx := 1; ; sheetIdx++ {
 		sheetName := xlsx.GetSheetName(sheetIdx)

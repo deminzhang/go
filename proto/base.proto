@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package base;
+option go_package = "common/proto/base";
+
+message Empty {
+}
+
+message PlayerId {
+    int64 player_id = 1;  // 用户id
+}
+// 通用Val
+message ValInt32 {
+    int32 v = 1;
+}
+
+message ValInt64 {
+    int64 v = 1;
+}
+
+message ValBool {
+    bool v = 1;
+}
+// 通用Id
+message IdInt32 {
+    int32 id = 1;
+}
+
+message IdsInt32 {
+    repeated int32 ids = 1;
+}
+
+message IdInt64 {
+    int64 id = 1;
+}
+
+message IdsInt64 {
+    repeated int64 ids = 1;
+}
+
+// 通用ModifyNumById
+message ModifyNum {
+    int64 id     = 1;  // 库id
+    int32 modify = 2;  // 正加负减
+}
+
+message Frame {
+    int32 frame_type = 1;
+    bytes data       = 2;
+}
+
+message ClientInfo {
+    int64 user_id        = 1;
+    string host          = 2;  // 域名
+    string client_ip     = 3;
+    string business_type = 4;  // ugc/homestead
+    string client_type   = 5;  // app/web
+    string platform      = 6;
+    string distinct_id   = 7;
+    string vprs_current  = 8;
+    string country       = 9;   // 数数.国家
+    double timezone      = 10;  // 数数.前端时区
+}
+
+message ClientInfoEx {
+    ClientInfo base = 1;
+    int64 player_id = 2;
+    int32 host_id   = 3;
+}
+
+message PlayerIds {
+    repeated int64 ids = 1;
+}
+
+message Id32ToId32Map {
+    map<int32, int32> map = 1;
+}
+
+message Id32ToStringMap {
+    map<int32, string> map = 1;
+}
