@@ -1,11 +1,10 @@
 package logic
 
 import (
-	"client1/logic/asset"
-	"client1/logic/ebiten/ui"
-	"client1/util"
-	"client1/world"
-	"common/defs"
+	"client0/logic/asset"
+	"client0/logic/ebiten/ui"
+	"client0/util"
+	"client0/world"
 	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -24,7 +23,7 @@ const (
 	StateGame
 )
 
-type gameWorld struct {
+type game struct {
 	gameState      int
 	playerId       int64
 	self           *Unit
@@ -58,7 +57,7 @@ type gameWorld struct {
 	sceneHouseId  int64
 }
 
-var World = &gameWorld{
+var World = &game{
 	players:      map[int64]*Unit{},
 	receiveQueue: util.NewConcurrentQueue[*ProtoMsg](),
 	spriteMap:    map[string]*ebiten.Image{},
@@ -68,33 +67,33 @@ var World = &gameWorld{
 	Die:          make(chan struct{}, 1),
 }
 
-func (this *gameWorld) GetPlayer(playerId int64) *Unit {
+func (this *game) GetPlayer(playerId int64) *Unit {
 	return this.players[playerId]
 }
 
-func (this *gameWorld) AddMe(player *Unit) {
+func (this *game) AddMe(player *Unit) {
 	this.self = player
 	this.players[player.id] = player
 	this.playerId = player.id
 }
 
-func (this *gameWorld) AddPlayer(player *Unit) {
+func (this *game) AddPlayer(player *Unit) {
 	this.players[player.id] = player
 }
 
-func (this *gameWorld) RemovePlayer(id int64) {
+func (this *game) RemovePlayer(id int64) {
 	delete(this.players, id)
 }
 
-func (this *gameWorld) Self() *Unit {
+func (this *game) Self() *Unit {
 	return this.self
 }
 
-func (this *gameWorld) serviceTick() int64 {
+func (this *game) serviceTick() int64 {
 	return this.ntpServiceTick + this.cumulateDt
 }
 
-func (this *gameWorld) otherUpdate(now int64, dt int) {
+func (this *game) otherUpdate(now int64, dt int) {
 	for _, player := range this.players {
 		if player != this.self {
 			player.update(now, dt)
@@ -102,7 +101,7 @@ func (this *gameWorld) otherUpdate(now int64, dt int) {
 	}
 }
 
-func (this *gameWorld) Update() error {
+func (this *game) Update() error {
 	ui.Update()
 	if !this.bStart {
 		return nil
@@ -127,7 +126,7 @@ func (this *gameWorld) Update() error {
 	return nil
 }
 
-func (this *gameWorld) initLogger(fileName string) {
+func (this *game) initLogger(fileName string) {
 	if len(strings.TrimSpace(fileName)) > 0 {
 		var p = fmt.Sprintf(`{
 		"Console": {
@@ -149,8 +148,9 @@ func (this *gameWorld) initLogger(fileName string) {
 	}
 }
 
-func (this *gameWorld) ShowLogin(host, user, passwd string) *gameWorld {
-	UIShowLogin(host, user, passwd, defs.HomeSteadName)
+func (this *game) ShowLogin(host, user, passwd string) *game {
+	//UIShowLogin(host, user, passwd, defs.HomeSteadName)
+	UIShowQiMen(world.ScreenWidth, world.ScreenHeight)
 
 	icon16, err := asset.LoadImage("images/icon_16x16.png")
 	if err != nil {
@@ -171,32 +171,18 @@ func (this *gameWorld) ShowLogin(host, user, passwd string) *gameWorld {
 		}
 	}
 
-	if val, ok := args["log"]; ok {
-		this.initLogger(val)
-		logger.Debug("test")
-	}
-
-	if val, ok := args["lag"]; ok {
-		iv, err := strconv.Atoi(val)
-		if err == nil && (iv > 0) {
-			world.LagSendInterval = iv
-		}
-	}
-	ebiten.SetWindowTitle("Home(Login)")
+	//if val, ok := args["lag"]; ok {
+	//	iv, err := strconv.Atoi(val)
+	//	if err == nil && (iv > 0) {
+	//		world.LagSendInterval = iv
+	//	}
+	//}
+	ebiten.SetWindowTitle("众妙之门")
 
 	return this
 }
 
-func (this *gameWorld) Enter(server string, author string) {
-	//assetsDir, _ := filepath.Abs(filepath.Dir(os.Args[0]))
-	//assetsDir := "../common/"
-	//assetsDir += "/asset/terrain/voxel.bin"
-	//static := &voxel.VoxelStaticVolume{}
-	//err := static.Load(assetsDir)
-	//util.AssertTrue(err == nil, err)
-	//cell := voxel.NewVoxelVolume(static)
-	//this.scene = &Scene{cell}
-
+func (this *game) Enter(server string, author string) {
 	this.self = NewUnit(0)
 	this.self.author = author
 
@@ -205,7 +191,7 @@ func (this *gameWorld) Enter(server string, author string) {
 
 }
 
-func (this *gameWorld) innerUpdate(now int64, dt int) {
+func (this *game) innerUpdate(now int64, dt int) {
 	for _, player := range this.players {
 		player.update(now, dt)
 	}

@@ -40,7 +40,7 @@ func FormatBirthday(s string, isUSA bool) string {
 
 	t, err := time.ParseInLocation("2006-01-02", s, time.Local)
 	if err != nil {
-		t, err = time.ParseInLocation("2006/01/02", s, time.Local)
+		t, err = time.ParseInLocation(time.DateOnly, s, time.Local)
 		if err != nil {
 			if isUSA {
 				t, err = time.ParseInLocation("01/02/2006", s, time.Local)

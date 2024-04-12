@@ -1,7 +1,6 @@
 package world
 
 import (
-	. "common/fix64"
 	"math"
 )
 
@@ -9,11 +8,6 @@ const (
 	TPSRate = 10
 	Speed   = float32(50.0)
 )
-
-var Inv = NewFix64(1000.0 / float32(TPSRate))
-var FixSpeed = NewFix64(0.08)
-var FixFlySpeedOne = NewFix64(0.2)
-var FixFlySpeedTwo = NewFix64(1)
 
 var TPSInterval = int(math.Ceil(float64(1) / float64(TPSRate)))
 var ReportInputInterval = TPSInterval/2 + 1
@@ -39,8 +33,8 @@ const (
 )
 
 const (
-	ScreenWidth     = 640
-	ScreenHeight    = 480
+	ScreenWidth     = 800
+	ScreenHeight    = 600
 	GridSize        = 5
 	PlayerBoundingX = 32
 	PlayerBoundingY = 32

@@ -1,7 +1,7 @@
 package ui
 
 import (
-	"common/util"
+	"fmt"
 	"github.com/atotto/clipboard"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -15,6 +15,7 @@ import (
 const (
 	textInputPadding = 8
 )
+const ()
 
 type InputBox struct {
 	BaseUI
@@ -24,6 +25,7 @@ type InputBox struct {
 	MaxChars     int    //最大长度
 	PasswordChar string //密文显示
 	offsetX      int    //文本偏移 TODO
+	Editable     bool
 
 	autoLinefeed   bool //自动换行
 	textHistory    []string
@@ -43,9 +45,9 @@ type InputBox struct {
 
 func NewInputBox(rect image.Rectangle) *InputBox {
 	return &InputBox{
-		BaseUI: BaseUI{Visible: true, EnableFocus: true},
-		Rect:   rect,
-
+		BaseUI:   BaseUI{Visible: true, EnableFocus: true},
+		Rect:     rect,
+		Editable: true,
 		//default resource
 		UIImage:   GetDefaultUIImage(),
 		ImageRect: image.Rect(0, 16, 16, 32),
@@ -67,7 +69,14 @@ func repeatingKeyPressed(key ebiten.Key) bool {
 	return false
 }
 
+func (i *InputBox) SetText(v interface{}) {
+	i.Text = fmt.Sprintf("%v", v)
+}
+
 func (i *InputBox) Update() {
+	if !i.Editable {
+		return
+	}
 	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 		x, y := ebiten.CursorPosition()
 		if i.Rect.Min.X <= x && x < i.Rect.Max.X && i.Rect.Min.Y <= y && y < i.Rect.Max.Y {
@@ -146,8 +155,8 @@ func (i *InputBox) Update() {
 					i.Text = i.Text[:left] + i.Text[right:]
 					i.cursorPos = left
 				}
-				i.cursorPos = util.Min(i.cursorPos, len(i.Text))
-				i.cursorPos = util.Max(i.cursorPos, 0)
+				i.cursorPos = min(i.cursorPos, len(i.Text))
+				i.cursorPos = max(i.cursorPos, 0)
 				i.cursorSelect = i.cursorPos
 			}
 		}
@@ -163,8 +172,8 @@ func (i *InputBox) Update() {
 					i.Text = i.Text[:left] + i.Text[right:]
 					i.cursorPos = left
 				}
-				i.cursorPos = util.Min(i.cursorPos, len(i.Text))
-				i.cursorPos = util.Max(i.cursorPos, 0)
+				i.cursorPos = min(i.cursorPos, len(i.Text))
+				i.cursorPos = max(i.cursorPos, 0)
 				i.cursorSelect = i.cursorPos
 			}
 		}
@@ -208,10 +217,33 @@ func (i *InputBox) Update() {
 				clipboard.WriteAll(i.Text)
 			}
 		}
-		//ctrl+c
-		if ebiten.IsKeyPressed(ebiten.KeyControl) && inpututil.IsKeyJustPressed(ebiten.KeyC) {
-			left, right := i.selected()
-			clipboard.WriteAll(i.Text[left:right])
+		if i.PasswordChar == "" {
+			//ctrl+x
+			if ebiten.IsKeyPressed(ebiten.KeyControl) && inpututil.IsKeyJustPressed(ebiten.KeyX) {
+				left, right := i.selected()
+				clipboard.WriteAll(i.Text[left:right])
+
+				lenTxt := len(i.Text)
+				if lenTxt > 0 {
+					left, right := i.selected()
+					if left == right { //删右1个
+						if left < lenTxt {
+							i.Text = i.Text[:left] + i.Text[right+1:]
+						}
+					} else { //删选中区
+						i.Text = i.Text[:left] + i.Text[right:]
+						i.cursorPos = left
+					}
+					i.cursorPos = min(i.cursorPos, len(i.Text))
+					i.cursorPos = min(i.cursorPos, 0)
+					i.cursorSelect = i.cursorPos
+				}
+			}
+			//ctrl+c
+			if ebiten.IsKeyPressed(ebiten.KeyControl) && inpututil.IsKeyJustPressed(ebiten.KeyC) {
+				left, right := i.selected()
+				clipboard.WriteAll(i.Text[left:right])
+			}
 		}
 		//ctrl+v
 		if ebiten.IsKeyPressed(ebiten.KeyControl) && inpututil.IsKeyJustPressed(ebiten.KeyV) {
@@ -292,8 +324,8 @@ func (i *InputBox) Draw(dst *ebiten.Image) {
 		}
 		//draw cursor
 		if i.Focused() {
-			i.cursorPos = util.Min(i.cursorPos, len(t))
-			i.cursorSelect = util.Min(i.cursorSelect, len(t))
+			i.cursorPos = min(i.cursorPos, len(t))
+			i.cursorSelect = min(i.cursorSelect, len(t))
 			//drawSelect
 			if i.cursorPos != i.cursorSelect {
 				left, right := i.selected()

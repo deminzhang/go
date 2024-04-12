@@ -1,9 +1,9 @@
 package logic
 
 import (
-	"client1/logic/ebiten/ui"
-	utilc "client1/util"
-	"client1/world"
+	"client0/logic/ebiten/ui"
+	utilc "client0/util"
+	"client0/world"
 	"common/defs"
 	"common/proto/client"
 	"common/proto/comm"

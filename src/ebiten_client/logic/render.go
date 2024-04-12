@@ -1,9 +1,9 @@
 package logic
 
 import (
-	"client1/logic/asset"
-	"client1/logic/ebiten/ui"
-	"client1/world"
+	"client0/logic/asset"
+	"client0/logic/ebiten/ui"
+	"client0/world"
 	"common/defs"
 	"common/util"
 	"fmt"
@@ -46,7 +46,7 @@ func init() {
 	}
 }
 
-func (this *gameWorld) Draw(screen *ebiten.Image) {
+func (this *game) Draw(screen *ebiten.Image) {
 	ui.Draw(screen)
 	if !this.bStart {
 		return
@@ -76,11 +76,11 @@ func (this *gameWorld) Draw(screen *ebiten.Image) {
 		))
 }
 
-func (this *gameWorld) Layout(outsideWidth, outsideHeight int) (int, int) {
+func (this *game) Layout(outsideWidth, outsideHeight int) (int, int) {
 	return world.ScreenWidth, world.ScreenHeight
 }
 
-func (this *gameWorld) playerSprite() *ebiten.Image {
+func (this *game) playerSprite() *ebiten.Image {
 	img := this.spriteMap["player"]
 	if img == nil {
 		rawImg, err := asset.LoadImage("sprite/playerball.png")
@@ -94,7 +94,7 @@ func (this *gameWorld) playerSprite() *ebiten.Image {
 	}
 	return img
 }
-func (this *gameWorld) npcSprite() *ebiten.Image {
+func (this *game) npcSprite() *ebiten.Image {
 	img := this.spriteMap["npc"]
 	if img == nil {
 		rawImg, err := asset.LoadImage("sprite/enemy.png")
@@ -109,7 +109,7 @@ func (this *gameWorld) npcSprite() *ebiten.Image {
 	return img
 }
 
-func (this *gameWorld) DrawUnit(unit *Unit, screen *ebiten.Image) {
+func (this *game) DrawUnit(unit *Unit, screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
 	size := 1.0 / 4
 	op.GeoM.Scale(size, size)

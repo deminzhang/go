@@ -1,8 +1,8 @@
 package logic
 
 import (
-	ui2 "client1/logic/ebiten/ui"
-	"client1/world"
+	ui2 "client0/logic/ebiten/ui"
+	"client0/world"
 	"image"
 )
 

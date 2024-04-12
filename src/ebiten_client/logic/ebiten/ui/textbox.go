@@ -1,7 +1,7 @@
 package ui
 
 import (
-	"common/util"
+	"fmt"
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text"
 	"golang.org/x/image/font"
@@ -39,7 +39,9 @@ func NewTextBox(rect image.Rectangle) *TextBox {
 		ImageRect: image.Rect(0, 16, 16, 32),
 	}
 }
-
+func (i *TextBox) SetText(v interface{}) {
+	i.Text = fmt.Sprintf("%v", v)
+}
 func (t *TextBox) AppendLine(line string) {
 	if t.Text == "" {
 		t.Text = line
@@ -94,8 +96,8 @@ func (t *TextBox) contentSize() (int, int) {
 	w := t.Rect.Dx()
 	for _, line := range lines {
 		bounds, _ := font.BoundString(uiFont, line)
-		w = util.Max(w, (bounds.Max.X-bounds.Min.X).Ceil()+2*textBoxPadding)
-		h = util.Max(h, (bounds.Max.Y - bounds.Min.Y).Ceil())
+		w = max(w, (bounds.Max.X-bounds.Min.X).Ceil()+2*textBoxPadding)
+		h = max(h, (bounds.Max.Y - bounds.Min.Y).Ceil())
 	}
 	return w, h
 }

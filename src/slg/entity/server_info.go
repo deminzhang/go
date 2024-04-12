@@ -1,8 +1,8 @@
 package Entity
 
 import (
-	"common/utilX"
 	"protos"
+	"time"
 )
 
 type ServerInfo struct {
@@ -13,7 +13,7 @@ type ServerInfo struct {
 	VersionL int32 `xorm:"-"` //小版本
 }
 
-//转proto对象
+// 转proto对象
 func (this *ServerInfo) ToProto() *protos.Server {
 	return &protos.Server{
 		Region: this.Sid,

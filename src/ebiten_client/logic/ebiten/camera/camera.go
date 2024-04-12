@@ -2,6 +2,7 @@ package camera
 
 import (
 	"fmt"
+	"github.com/hajimehoshi/ebiten/v2"
 	"golang.org/x/image/math/f64"
 	"math"
 )

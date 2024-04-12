@@ -105,4 +105,5 @@ func main() {
 	for {
 		time.Sleep(time.Second)
 	}
+	SERVER.Close()
 }

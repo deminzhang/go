@@ -1,10 +1,10 @@
 package logic
 
 import (
-	"client1/logic/asset"
-	ui2 "client1/logic/ebiten/ui"
-	"client1/util"
-	"client1/world"
+	"client0/logic/asset"
+	ui2 "client0/logic/ebiten/ui"
+	"client0/util"
+	"client0/world"
 	"fmt"
 	"github.com/hajimehoshi/ebiten/v2"
 	"golang.org/x/image/font"

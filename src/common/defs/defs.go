@@ -540,11 +540,11 @@ const (
 	OpCodeApplyBuildPrint     = 5331 //领取建筑建造图纸
 	OpCodeApplyBuildPrintResp = 5332 //
 	OpCodeBuildCancel         = 5333 //建造取消
-	OpCodeBuildCancelResp     = 5334 //OpCodeBridgeUpdate(广播)
+	OpCodeBuildCancelResp     = 5334 //OpCodeBuildingUpdate(广播)
 	OpCodeBuildDonate         = 5335 //建造捐资
-	OpCodeBuildDonateResp     = 5336 //OpCodeBridgeUpdate(广播)
+	OpCodeBuildDonateResp     = 5336 //OpCodeBuildingUpdate(广播)
 	OpCodeBuildSpeedUp        = 5338 //建造加速立即完成
-	OpCodeBuildSpeedUpResp    = 5339 //OpCodeBridgeUpdate(广播)
+	OpCodeBuildSpeedUpResp    = 5339 //OpCodeBuildingUpdate(广播)
 	OpCodeBuildComplete       = 5340 //建造竣工剪彩
 	OpCodeBuildCompleteResp   = 5341 //(广播)
 

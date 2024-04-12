@@ -1,7 +1,7 @@
 package logic
 
 import (
-	utilc "client1/util"
+	utilc "client0/util"
 	"common/defs"
 	"common/proto/comm"
 	"common/tlog"
@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-func (this *gameWorld) startNet(server string) {
+func (this *game) startNet(server string) {
 	ws, _ := this.connectServer(server)
 	util.AssertTrue(ws != nil, "connect error")
 	self := this.self
@@ -29,7 +29,7 @@ func (this *gameWorld) startNet(server string) {
 	//self.OutMsg(constant.NtpReq, &client.NtpReq{ClientTick: time.Now().UnixMilli()})
 }
 
-func (this *gameWorld) connectServer(host string) (*websocket.Conn, error) {
+func (this *game) connectServer(host string) (*websocket.Conn, error) {
 	//host = strings.Replace(host, "/pre", "", 1)
 	if !strings.HasPrefix(host, "http") {
 		host = "http://" + host
@@ -57,7 +57,7 @@ func (this *gameWorld) connectServer(host string) (*websocket.Conn, error) {
 	return ws, nil
 }
 
-func (this *gameWorld) OutMsg(op uint16, msg proto.Message) error {
+func (this *game) OutMsg(op uint16, msg proto.Message) error {
 	//logger.Debug("player send packet op:%d, msg:%+v", op, msg)
 	this.netSeqId++
 
@@ -85,14 +85,14 @@ func (this *gameWorld) OutMsg(op uint16, msg proto.Message) error {
 	}
 }
 
-func (this *gameWorld) ping(now int64) {
+func (this *game) ping(now int64) {
 	if now >= this.lastPingTick+10*1000 {
 		this.OutMsg(defs.OpcodePing, nil)
 		this.lastPingTick = now
 	}
 }
 
-func (this *gameWorld) handleRcvPacket() {
+func (this *game) handleRcvPacket() {
 	q := utilc.NewQueue[*ProtoMsg]()
 	this.receiveQueue.ExportQueue(q)
 
@@ -109,7 +109,7 @@ func (this *gameWorld) handleRcvPacket() {
 	}
 }
 
-func (this *gameWorld) getProtoMsg(msg []byte) (int16, []byte) {
+func (this *game) getProtoMsg(msg []byte) (int16, []byte) {
 	if len(msg) < 5 {
 		return -1, nil
 	}
@@ -127,7 +127,7 @@ func (this *gameWorld) getProtoMsg(msg []byte) (int16, []byte) {
 	return op, protoMsg
 }
 
-func (this *gameWorld) receiveMsg() ([]byte, error) {
+func (this *game) receiveMsg() ([]byte, error) {
 	//Text(json), Binary
 	//if _, data, err = conn.ReadMessage(); err != nil {
 	var data []byte
@@ -149,7 +149,7 @@ func (this *gameWorld) receiveMsg() ([]byte, error) {
 	return data, nil
 }
 
-func (this *gameWorld) recvProtoMsg() (*ProtoMsg, error) {
+func (this *game) recvProtoMsg() (*ProtoMsg, error) {
 	msg, err := this.receiveMsg()
 	if err != nil {
 		return nil, err
@@ -169,7 +169,7 @@ func (this *gameWorld) recvProtoMsg() (*ProtoMsg, error) {
 	}, nil
 }
 
-func (this *gameWorld) routeWsMsg() {
+func (this *game) routeWsMsg() {
 	for {
 		msg, err := this.recvProtoMsg()
 		if err == nil {
@@ -185,7 +185,7 @@ func (this *gameWorld) routeWsMsg() {
 	}
 }
 
-func (this *gameWorld) rpcLogin() bool {
+func (this *game) rpcLogin() bool {
 	login := comm.UserLoginReq{
 		Host:          defs.HomeSteadName,
 		Authorization: this.self.author,
@@ -211,14 +211,14 @@ func (this *gameWorld) rpcLogin() bool {
 	return true
 }
 
-func (this *gameWorld) rpcNtp() {
+func (this *game) rpcNtp() {
 	var req comm.NtpReq
 	req.ClientTick = time.Now().UnixMilli()
 	err := this.OutMsg(defs.OpcodeNtp, &req)
 	fmt.Println(err)
 }
 
-func (this *gameWorld) rpcPlayerInfo() bool {
+func (this *game) rpcPlayerInfo() bool {
 	err := this.OutMsg(defs.OpcodePlayerLogin, &comm.PlayerLoginReq{
 		PlayerId: this.self.id,
 		AppInfo: &comm.AppInfo{
@@ -235,7 +235,7 @@ func (this *gameWorld) rpcPlayerInfo() bool {
 	return true
 }
 
-func (this *gameWorld) rpcJoinBattle() bool {
+func (this *game) rpcJoinBattle() bool {
 	err := this.OutMsg(defs.OpcodePlayerJoinBattle, &comm.PlayerJoinBattleReq{
 		//MapTabId: 1,
 		//JoinId:     1234,
@@ -245,7 +245,7 @@ func (this *gameWorld) rpcJoinBattle() bool {
 	return true
 }
 
-func (this *gameWorld) rpcRebuilding() bool {
+func (this *game) rpcRebuilding() bool {
 	err := this.OutMsg(defs.OpcodePlayerRebuilding, &comm.PlayerRebuildingReq{
 		ClientTick: time.Now().UnixMilli(),
 	})

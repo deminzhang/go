@@ -1,13 +1,13 @@
 package main
 
 import (
-	"client1/logic"
-	"client1/util"
+	"client0/logic"
+	"client0/util"
 	"github.com/hajimehoshi/ebiten/v2"
 	"log"
 )
 
-//>./client1.exe host= user= passwd= api=
+//>./client0.exe host= user= passwd= api=
 
 func main() {
 	args := util.Args2Map()

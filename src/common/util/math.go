@@ -2,26 +2,6 @@ package util
 
 import "golang.org/x/exp/constraints"
 
-func Max[T constraints.Ordered](a0 T, a ...T) T {
-	r := a0
-	for _, t := range a {
-		if r < t {
-			r = t
-		}
-	}
-	return r
-}
-
-func Min[T constraints.Ordered](a0 T, a ...T) T {
-	r := a0
-	for _, t := range a {
-		if r > t {
-			r = t
-		}
-	}
-	return r
-}
-
 func Abs[T constraints.Signed | constraints.Float](t T) T {
 	if t < 0 {
 		return -t

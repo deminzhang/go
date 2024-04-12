@@ -29,26 +29,26 @@ message Pong {
 }
 
 message Player {
-    int64 id              = 1;                            // role id
-    int64 user_id         = 2;                            // plat id
-    int32 level           = 4;                            // 等级==家园房子等级
-    string name           = 8 [json_name = "null_name"];  // 名字
-    int64 last_login_time = 9;                            // 上次登陆时间
-    int64 midnight_time   = 10;                           // 午夜时间
-    string display_name   = 11;
+    int64  id              = 1;                            // role id
+    int64  user_id         = 2;                            // plat id
+    int32  level           = 4;                            // 等级==家园房子等级
+    string name            = 8 [json_name = "null_name"];  // 名字
+    int64  last_login_time = 9;                            // 上次登陆时间
+    int64  midnight_time   = 10;                           // 午夜时间
+    string display_name    = 11;
     enum PlayerCreateStage {
         CreateStageNone              = 0;
         CreateStageUpdateDisplayName = 1;
         CreateStageCharacterCreator  = 2;
     }
 
-    PlayerCreateStage stage       = 12;
-    int64 banned_login_start_time = 13;
-    int64 banned_login_end_time   = 14;
-    int64 created_at              = 15;
-    int64 updated_at              = 16;
-    string avatar                 = 17;
-    string description            = 18;
+    PlayerCreateStage stage                   = 12;
+    int64             banned_login_start_time = 13;
+    int64             banned_login_end_time   = 14;
+    int64             created_at              = 15;
+    int64             updated_at              = 16;
+    string            avatar                  = 17;
+    string            description             = 18;
 }
 
 message Players {
@@ -56,27 +56,27 @@ message Players {
 }
 
 message AppInfo {
-    int64 version           = 1;   // 前端版本号
+    int64  version          = 1;   // 前端版本号
     string platform         = 2;   // pc,ios,android,... (数数.client_type)
     string client_ip        = 3;   // 前端IP(客户端不用填)
     string distinct_id      = 4;   // (数数#distinct_id)
     string device_id        = 5;   // 设备id
     string vprs_current     = 6;   // 数数用 前端当前版本号(数数.vprs_current)
-    int32 external_source   = 7;   // 第三方用户源(客户端不用填)
+    int32  external_source  = 7;   // 第三方用户源(客户端不用填)
     string external_user_id = 8;   // 第三方用户ID(客户端不用填)
     string country          = 9;   // 数数.国家
-    float timezone          = 10;  // 数数.前端时区
+    float  timezone         = 10;  // 数数.前端时区
 }
 
 message Item {
-    int64 id          = 1;  // 道具id
-    int64 player_id   = 2;  // 角色id
-    int32 table_id    = 3;  // 策划表id
-    int32 number      = 4;  // 数量
-    int64 expire_time = 5;  // 过期时间
-    string attr       = 6;  // 附加属性
-    int64 created_at  = 7;
-    int64 updated_at  = 8;
+    int64  id          = 1;  // 道具id
+    int64  player_id   = 2;  // 角色id
+    int32  table_id    = 3;  // 策划表id
+    int32  number      = 4;  // 数量
+    int64  expire_time = 5;  // 过期时间
+    string attr        = 6;  // 附加属性
+    int64  created_at  = 7;
+    int64  updated_at  = 8;
 }
 
 message FrameHead {
@@ -103,26 +103,26 @@ message StatusFrame {
 
 // 任务
 message Quest {
-    int32 id               = 1;  // 任务配置id
-    int32 state            = 2;  // 任务状态
-    int64 accept_time      = 3;  // 接取时间戳
-    int64 expire_time      = 4;  // 过期时间
-    bool trace             = 5;  // 是否追踪
-    int32 pre_state        = 6;  // 前一个状态
-    repeated IdNum rewards = 7;  // 奖励
+    int32          id          = 1;  // 任务配置id
+    int32          state       = 2;  // 任务状态
+    int64          accept_time = 3;  // 接取时间戳
+    int64          expire_time = 4;  // 过期时间
+    bool           trace       = 5;  // 是否追踪
+    int32          pre_state   = 6;  // 前一个状态
+    repeated IdNum rewards     = 7;  // 奖励
 }
 // 任务条件
 message QuestCondition {
     int32 id        = 1;  // 任务条件配置id
     int32 reach_val = 2;  // 条件当前达成值
-    bool reached    = 3;  // 条件是否已达成
+    bool  reached   = 3;  // 条件是否已达成
 }
 
 //
 message UserLoginReq {
-    string host          = 1;  // 如果host为空, 使用websocket创建链接是的Host
-    string authorization = 2;
-    AppInfo app_info     = 3;
+    string  host          = 1;  // 如果host为空, 使用websocket创建链接是的Host
+    string  authorization = 2;
+    AppInfo app_info      = 3;
 }
 
 message UserLoginResp {
@@ -130,30 +130,30 @@ message UserLoginResp {
     int64 player_id = 2;
     // ugc
     string host_ip          = 3;
-    int64 inst_id           = 5;
-    int32 host_port         = 4;
-    int32 stage_id          = 6;
-    int32 external_source   = 7;
+    int64  inst_id          = 5;
+    int32  host_port        = 4;
+    int32  stage_id         = 6;
+    int32  external_source  = 7;
     string external_user_id = 8;
 
     int64 user_id = 9;  // 暴露给前端数数用
 }
 
 message PlayerLoginReq {
-    int64 player_id  = 1;  // 用户id
-    AppInfo app_info = 2;
+    int64   player_id = 1;  // 用户id
+    AppInfo app_info  = 2;
 }
 
 message PlayerLoginResp {
-    comm.Player base                     = 1;  // 玩家信息
-    bool need_rebuilding                 = 2;  // 是否断线重连 ? OpcodePlayerRebuilds : OpcodePlayerJoinBattle
-    repeated int32 fashion_ids           = 3;  // 穿在身上的时装列表
-    int32 homestead                      = 4;  // 家园地图ID if 0 OpcodeSelectHome
-    repeated int32 module_switch_ids     = 5;  // 开启的功能id列表
-    map<int32, int32> character_creator  = 6;  // 捏脸
-    repeated int32 emotion_ids           = 7;  // 解锁的表情动作
-    Avatar avatar                        = 8;
-    repeated int32 unlock_voxel_material = 9;
+    comm.Player       base                  = 1;  // 玩家信息
+    bool              need_rebuilding       = 2;  // 是否断线重连 ? OpcodePlayerRebuilds : OpcodePlayerJoinBattle
+    repeated int32    fashion_ids           = 3;  // 穿在身上的时装列表
+    int32             homestead             = 4;  // 家园地图ID if 0 OpcodeSelectHome
+    repeated int32    module_switch_ids     = 5;  // 开启的功能id列表
+    map<int32, int32> character_creator     = 6;  // 捏脸
+    repeated int32    emotion_ids           = 7;  // 解锁的表情动作
+    Avatar            avatar                = 8;
+    repeated int32    unlock_voxel_material = 9;
 }
 
 message PlayerInfoBatchReq {
@@ -169,15 +169,15 @@ message PlayerIdByUserResp {
 }
 
 message PlayerCache {
-    int64 user_id         = 1;
-    string name           = 2;
-    int32 level           = 3;
-    int64 last_login_time = 4;
-    int64 player_id       = 5;
-    string display_name   = 6;
-    Avatar avatar         = 7;
-    int64 create_at       = 8;
-    string description    = 9;
+    int64  user_id         = 1;
+    string name            = 2;
+    int32  level           = 3;
+    int64  last_login_time = 4;
+    int64  player_id       = 5;
+    string display_name    = 6;
+    Avatar avatar          = 7;
+    int64  create_at       = 8;
+    string description     = 9;
 }
 
 message PlayerCacheMap {
@@ -194,25 +194,25 @@ message PlayerJoinBattleReq {
 }
 
 message PlayerRebuildingReq {
-    int64 client_tick = 1;  // 客户端时间戳
-    string client_ip  = 2;  // 服务器内部使用
-    string platform   = 3;  // 平台ios,android,pc, web
+    int64  client_tick = 1;  // 客户端时间戳
+    string client_ip   = 2;  // 服务器内部使用
+    string platform    = 3;  // 平台ios,android,pc, web
 }
 
 message PlayerInfoByUserReq {
-    int64 user_id = 1;
-    string host   = 2;
+    int64  user_id = 1;
+    string host    = 2;
 }
 message PlayerCreateReq {
-    int64 user_id             = 1;
-    string player_name        = 2;
-    string host               = 3;
-    string region             = 4;
-    int32 host_id             = 5;  // 客户端不用上传,会被填充
-    int32 zone_offset_minutes = 7;
-    string country            = 6;
-    AppInfo app_info          = 8;
-    string display_name       = 9;
+    int64   user_id             = 1;
+    string  player_name         = 2;
+    string  host                = 3;
+    string  region              = 4;
+    int32   host_id             = 5;  // 客户端不用上传,会被填充
+    int32   zone_offset_minutes = 7;
+    string  country             = 6;
+    AppInfo app_info            = 8;
+    string  display_name        = 9;
 }
 
 message PlayerCreateResp {
@@ -240,12 +240,12 @@ message Strength {
 
 message Weather {
     repeated int32 weather = 1;
-    int32 season           = 2;
+    int32          season  = 2;
 }
 
 message FashionPreset {
-    int32 timestamp             = 1;
-    string name                 = 2;
+    int32          timestamp    = 1;
+    string         name         = 2;
     repeated int32 table_id_arr = 3;
 }
 
@@ -271,15 +271,15 @@ message HouseParts {
         Back  = 2;  // 后方
         Left  = 3;  // 左方
     }
-    PartsType parts_type = 1;     // 部件类型
-    uint32 tab_id        = 2;     // 该类型配置表中的Id
-    Vec3f pos            = 3;     // 暂时相对房子的坐标
-    Vec3f rot            = 4;     // 转向
-    uint32 color_index   = 5;     // 颜色下标(配置几种颜色)
-                                  // 材质或纹理todo...
-    int32 texture_id        = 6;  // 纹理id
-    uint32 id               = 7;  // 部件id
-    HouseDirection housedir = 8;  // 在房子中的方向
+    PartsType parts_type  = 1;      // 部件类型
+    uint32    tab_id      = 2;      // 该类型配置表中的Id
+    Vec3f     pos         = 3;      // 暂时相对房子的坐标
+    Vec3f     rot         = 4;      // 转向
+    uint32    color_index = 5;      // 颜色下标(配置几种颜色)
+                                    // 材质或纹理todo...
+    int32          texture_id = 6;  // 纹理id
+    uint32         id         = 7;  // 部件id
+    HouseDirection housedir   = 8;  // 在房子中的方向
 }
 // diy房子
 message DiyBuilding {
@@ -287,19 +287,19 @@ message DiyBuilding {
         Free = 0;  // 自由diy
         Suit = 1;  // 套装diy
     }
-    int64 house_id               = 1;
-    repeated HouseParts cmp_list = 2;
-    DiyMode diy_mode             = 3;
-    uint32 suit_tabId            = 4;  // 套装diy配置表中的id
+    int64               house_id   = 1;
+    repeated HouseParts cmp_list   = 2;
+    DiyMode             diy_mode   = 3;
+    uint32              suit_tabId = 4;  // 套装diy配置表中的id
 }
 
 // 图鉴总览
 message IllustratedBookSum {
     //    int32 group_id              = 1 [json_name = "id"];   // 组id 仅用在map里省略用mapK
-    int32 score                 = 2 [json_name = "sc"];   // 总积分(1级目录)
-    int32 unread                = 3 [json_name = "ur"];   // 新 未读条数 >0红点(基级目录)
+    int32            score      = 2 [json_name = "sc"];   // 总积分(1级目录)
+    int32            unread     = 3 [json_name = "ur"];   // 新 未读条数 >0红点(基级目录)
     map<int32, bool> reward_got = 4 [json_name = "got"];  // 奖励已领
-    int32 sum                   = 5 [json_name = "nm"];   // 总达成数(基级目录)
+    int32            sum        = 5 [json_name = "nm"];   // 总达成数(基级目录)
 }
 // 图鉴
 message IllustratedBook {
@@ -316,10 +316,10 @@ message ShopItem {
 }
 
 message ShopPage {
-    int32 page_id                 = 1;  // 页签
-    map<int32, ShopItem> item_map = 2;  // 所有商品
-    uint32 refresh_time           = 3;  // 刷新时间
-    uint32 next_refresh_time      = 4;  // 刷新时间
+    int32                page_id           = 1;  // 页签
+    map<int32, ShopItem> item_map          = 2;  // 所有商品
+    uint32               refresh_time      = 3;  // 刷新时间
+    uint32               next_refresh_time = 4;  // 刷新时间
 }
 
 message ShopGoods {
@@ -333,8 +333,8 @@ message ShopBuyItem {
 }
 // GM指令
 message GMReq {
-    string action   = 1;
-    int64 player_id = 2;  // 内部使用
+    string action    = 1;
+    int64  player_id = 2;  // 内部使用
 }
 
 message GMResp {
@@ -342,32 +342,32 @@ message GMResp {
 }
 
 message ItemCraft {
-    int64 player_id            = 1;
+    int64          player_id   = 1;
     repeated int32 learned_ids = 2;
     repeated int32 used_ids    = 3;
 }
 
 message ItemSell {
-    int64 player_id               = 1;
-    int64 next_refresh_time       = 2;
-    repeated int32 high_price_ids = 3;
+    int64          player_id         = 1;
+    int64          next_refresh_time = 2;
+    repeated int32 high_price_ids    = 3;
 }
 
 message Mail {
-    int64 id              = 1;
-    int64 source_id       = 3;
-    int32 source_type     = 2;
-    int32 table_id        = 4;
-    int32 template_id     = 5;
-    int64 recipientId     = 6;
-    string sender_name    = 7;
-    string subject        = 8;
-    string content        = 9;
-    repeated IdNum attach = 10;
-    int32 state           = 11;
-    int32 gmt_id          = 12;
-    int64 expire_at       = 14;
-    int64 create_at       = 15;
+    int64          id          = 1;
+    int64          source_id   = 3;
+    int32          source_type = 2;
+    int32          table_id    = 4;
+    int32          template_id = 5;
+    int64          recipientId = 6;
+    string         sender_name = 7;
+    string         subject     = 8;
+    string         content     = 9;
+    repeated IdNum attach      = 10;
+    int32          state       = 11;
+    int32          gmt_id      = 12;
+    int64          expire_at   = 14;
+    int64          create_at   = 15;
 }
 
 message MailBriefInfo {
@@ -376,24 +376,24 @@ message MailBriefInfo {
 }
 
 message Pet {
-    int32 id                   = 1;   // 槽位id(1-100)
-    int32 tab_id               = 2;   // 配置id
-    int32 exp                  = 3;   // 经验
-    int32 level                = 4;   // 等级
-    int32 state                = 5;   // 状态
-    int32 nature               = 6;   // 性格
-    string name                = 7;   // 名字
+    int32          id          = 1;   // 槽位id(1-100)
+    int32          tab_id      = 2;   // 配置id
+    int32          exp         = 3;   // 经验
+    int32          level       = 4;   // 等级
+    int32          state       = 5;   // 状态
+    int32          nature      = 6;   // 性格
+    string         name        = 7;   // 名字
     repeated int32 used_orders = 8;   // 使用过的指令
-    int32 size                 = 9;   // 缩放比例（除1000）
-    bool read                  = 10;  // 是否已读
+    int32          size        = 9;   // 缩放比例（除1000）
+    bool           read        = 10;  // 是否已读
 }
 
 message TextureDiy {
-    int32 id                    = 1 [json_name = "id"];
-    int32 tab_id                = 3 [json_name = "tb"];
-    string name                 = 2 [json_name = "na"];
+    int32           id          = 1 [json_name = "id"];
+    int32           tab_id      = 3 [json_name = "tb"];
+    string          name        = 2 [json_name = "na"];
     repeated string texture_url = 4 [json_name = "tu"];
-    int32 inst_id               = 5 [json_name = "i"];  // 实例id，在图纸变更时，找到对应的引用
+    int32           inst_id     = 5 [json_name = "i"];  // 实例id，在图纸变更时，找到对应的引用
 }
 
 message PlayerGamePlayTrigger {
@@ -416,9 +416,9 @@ enum FriendConfirmStatus {
 }
 
 message PlayerBriefInfo {
-    int64 id            = 1;  // 好友id
+    int64  id           = 1;  // 好友id
     string name         = 2;
-    int32 level         = 3;
+    int32  level        = 3;
     string display_name = 4;
     Avatar avatar       = 5;
 }
@@ -434,54 +434,54 @@ message FriendIntimacyEntry {
 }
 
 message FriendBaseInfo {
-    int64 created_time                         = 1;  // 创建时间
-    int64 player_id                            = 2;  // 好友id
-    string remark                              = 4;  // 备注
-    int32 confirm_status                       = 5;
-    int32 intimacy                             = 3;  // 亲密度
-    int64 last_intimacy_time                   = 6;
-    int32 used_intimacy_times                  = 7;
-    repeated FriendIntimacyEntry intimacy_list = 8;
+    int64                        created_time        = 1;  // 创建时间
+    int64                        player_id           = 2;  // 好友id
+    string                       remark              = 4;  // 备注
+    int32                        confirm_status      = 5;
+    int32                        intimacy            = 3;  // 亲密度
+    int64                        last_intimacy_time  = 6;
+    int32                        used_intimacy_times = 7;
+    repeated FriendIntimacyEntry intimacy_list       = 8;
 }
 
 message FriendInfo {
-    FriendBaseInfo base_info = 1;  // 基础信息
-    int32 map_tab_id         = 2;  // 所在地图
-    int32 level              = 7;
-    bool is_online           = 3;  // 是否在线
-    int32 ugc_map_tab_id     = 9;
-    int64 last_online_time   = 4;  // unix time
-    string name              = 5;  // 名字
-    string signature         = 6;  // 个性签名
-    int64 room_id            = 8;
-    int64 ugc_room_id        = 10;
-    string display_name      = 11;
-    int64 house_id           = 12;
-    string description       = 13;
-    comm.Avatar avatar       = 14;
-    bool info_refresh        = 15;  // 是否需要刷新好友信息
+    FriendBaseInfo base_info        = 1;  // 基础信息
+    int32          map_tab_id       = 2;  // 所在地图
+    int32          level            = 7;
+    bool           is_online        = 3;  // 是否在线
+    int32          ugc_map_tab_id   = 9;
+    int64          last_online_time = 4;  // unix time
+    string         name             = 5;  // 名字
+    string         signature        = 6;  // 个性签名
+    int64          room_id          = 8;
+    int64          ugc_room_id      = 10;
+    string         display_name     = 11;
+    int64          house_id         = 12;
+    string         description      = 13;
+    comm.Avatar    avatar           = 14;
+    bool           info_refresh     = 15;  // 是否需要刷新好友信息
 }
 
 message FriendApplyInfo {
-    int64 player_id     = 1;
-    string name         = 2;
-    int64 created_time  = 3;
-    string display_name = 4;
-    comm.Avatar avatar  = 5;
+    int64       player_id    = 1;
+    string      name         = 2;
+    int64       created_time = 3;
+    string      display_name = 4;
+    comm.Avatar avatar       = 5;
 }
 
 message FriendBlackInfo {
-    int64 player_id    = 1;
-    int64 created_time = 2;
-    comm.Avatar avatar = 3;
+    int64       player_id    = 1;
+    int64       created_time = 2;
+    comm.Avatar avatar       = 3;
 }
 
 message FriendAll {
-    map<int64, FriendInfo> friend_map     = 1;
-    map<int64, FriendBlackInfo> black_map = 2;
-    map<int64, FriendApplyInfo> apply_map = 3;
-    bool is_valid                         = 4;
-    int32 ver                             = 5;
+    map<int64, FriendInfo>      friend_map = 1;
+    map<int64, FriendBlackInfo> black_map  = 2;
+    map<int64, FriendApplyInfo> apply_map  = 3;
+    bool                        is_valid   = 4;
+    int32                       ver        = 5;
 }
 
 enum FriendOperateType {
@@ -499,19 +499,19 @@ enum FriendOperateType {
 }
 
 message FriendOperateReq {
-    int64 request_id            = 1;  // 请求的玩家id
-    string request_name         = 2;  // 请求者名字
-    int64 peer_id               = 3;  // 被操作的id
-    string peer_name            = 4;
-    FriendOperateType op_type   = 5;
-    string request_display_name = 6;
-    string peer_display_name    = 7;
+    int64             request_id           = 1;  // 请求的玩家id
+    string            request_name         = 2;  // 请求者名字
+    int64             peer_id              = 3;  // 被操作的id
+    string            peer_name            = 4;
+    FriendOperateType op_type              = 5;
+    string            request_display_name = 6;
+    string            peer_display_name    = 7;
 }
 
 message FriendUpdateRemarkReq {
-    int64 request_id = 1;  // 请求的玩家id
-    int64 peer_id    = 2;  // 被操作的id
-    string remark    = 3;
+    int64  request_id = 1;  // 请求的玩家id
+    int64  peer_id    = 2;  // 被操作的id
+    string remark     = 3;
 }
 
 enum IntimacyType {
@@ -522,59 +522,59 @@ enum IntimacyType {
 }
 
 message FriendAddIntimacyReq {
-    int64 request_id  = 1;  // 请求的玩家id
-    int64 peer_id     = 2;  // 被操作的id
-    int32 val         = 3;
-    IntimacyType type = 4;
+    int64        request_id = 1;  // 请求的玩家id
+    int64        peer_id    = 2;  // 被操作的id
+    int32        val        = 3;
+    IntimacyType type       = 4;
 }
 
 message FriendUpdateIntimacyResp {
-    int64 request_id          = 1;  // 请求的玩家id
-    int64 peer_id             = 2;  // 被操作的id
-    int64 intimacy            = 3;  // 当前亲密度
-    FriendIntimacyEntry entry = 4;
+    int64               request_id = 1;  // 请求的玩家id
+    int64               peer_id    = 2;  // 被操作的id
+    int64               intimacy   = 3;  // 当前亲密度
+    FriendIntimacyEntry entry      = 4;
 }
 
 message FriendLoginInfo {
     int64 player_id  = 1;
     int64 login_time = 2;
     int32 map_tab_id = 3;
-    bool is_ugc      = 4;
+    bool  is_ugc     = 4;
 }
 
 message FriendEnterMapInfo {
-    int64 player_id  = 1;
-    int64 room_id    = 3;
-    int32 map_tab_id = 2;
-    bool is_ugc      = 4;
-    int32 house_id   = 5;
-    int32 host_port  = 7;
-    string host_ip   = 6;
+    int64  player_id  = 1;
+    int64  room_id    = 3;
+    int32  map_tab_id = 2;
+    bool   is_ugc     = 4;
+    int32  house_id   = 5;
+    int32  host_port  = 7;
+    string host_ip    = 6;
 }
 
 message FriendLogoutInfo {
     int64 player_id   = 1;
     int64 logout_time = 2;
     int32 map_tab_id  = 3;
-    bool is_ugc       = 4;
+    bool  is_ugc      = 4;
 }
 
 message FriendDeleteInfo {
-    int64 peer_id      = 1;
-    int64 deleted_time = 2;
-    comm.Avatar avatar = 3;
+    int64       peer_id      = 1;
+    int64       deleted_time = 2;
+    comm.Avatar avatar       = 3;
 }
 
 message PlayerMapInfoCache {
-    int32 map_tab_id      = 1;
-    int64 room_id         = 2;
-    int32 ugc_map_tab_id  = 3;
-    int32 house_id        = 7;
-    int64 ugc_room_id     = 4;
-    int64 last_login_time = 6;
-    string ugc_host_ip    = 8;
-    bool is_online        = 5;
-    int32 ugc_host_port   = 9;
+    int32  map_tab_id      = 1;
+    int64  room_id         = 2;
+    int32  ugc_map_tab_id  = 3;
+    int32  house_id        = 7;
+    int64  ugc_room_id     = 4;
+    int64  last_login_time = 6;
+    string ugc_host_ip     = 8;
+    bool   is_online       = 5;
+    int32  ugc_host_port   = 9;
 }
 
 enum PlayerMapInfoCacheType {
@@ -585,81 +585,81 @@ enum PlayerMapInfoCacheType {
 
 message PlayerMapInfoCacheMap {
     map<int64, PlayerMapInfoCache> info_map = 1;
-    PlayerMapInfoCacheType type             = 2;
+    PlayerMapInfoCacheType         type     = 2;
 }
 
 message PlayerSearchReq {
-    int64 request_id = 1;
-    string name      = 2;
-    int64 peer_id    = 3;
+    int64  request_id = 1;
+    string name       = 2;
+    int64  peer_id    = 3;
 }
 
 message PlayerSearchResp {
-    int64 user_id         = 1;
-    string name           = 2;
-    int32 level           = 3;
-    bool is_online        = 6;
-    int64 last_login_time = 4;
-    int64 player_id       = 5;
-    string display_name   = 7;
-    comm.Avatar avatar    = 8;
-    string description    = 9;
+    int64       user_id         = 1;
+    string      name            = 2;
+    int32       level           = 3;
+    bool        is_online       = 6;
+    int64       last_login_time = 4;
+    int64       player_id       = 5;
+    string      display_name    = 7;
+    comm.Avatar avatar          = 8;
+    string      description     = 9;
 }
 // 蓝图 体素
 message Span {
     message Data {
-        int32 bottom = 1;
-        int32 top    = 2;
-        uint32 flag  = 3;
+        int32  bottom = 1;
+        int32  top    = 2;
+        uint32 flag   = 3;
     }
-    comm.Vec3 pos           = 1;  // 用于蓝图时为相对坐标
+    comm.Vec3     pos       = 1;  // 用于蓝图时为相对坐标
     repeated Data span_data = 2;
 }
 // 蓝图 元素
 message BuildElement {
     // 模板属性
-    int32 idx              = 1;   // 元素索引
-    int32 parent_idx       = 2;   // 父索引号
-    int32 tp               = 3;   // 类型: 5:建筑 7:植物 8:摆放物（家具） 9:桥或坡
-    int32 tab_id           = 4;   // 配置表id
-    comm.Vec3f pos         = 5;   // 位置(建筑/植物:体素级坐标; 摆放物:相对于蓝图总锚点的浮点坐标)
-    int32 face_to          = 6;   // 朝向 int16
-    comm.DiyBuilding diy   = 10;  // 建筑类:diy...
-    int32 horizontal_angle = 11;  // 家具类:挂件 水平角度，延X轴平面旋转
-    int32 vertical_angle   = 12;  // 家具类:挂件 垂直角度，延Y轴平面旋转
+    int32            idx              = 1;   // 元素索引
+    int32            parent_idx       = 2;   // 父索引号
+    int32            tp               = 3;   // 类型: 5:建筑 7:植物 8:摆放物（家具） 9:桥或坡
+    int32            tab_id           = 4;   // 配置表id
+    comm.Vec3f       pos              = 5;   // 位置(建筑/植物:体素级坐标; 摆放物:相对于蓝图总锚点的浮点坐标)
+    int32            face_to          = 6;   // 朝向 int16
+    comm.DiyBuilding diy              = 10;  // 建筑类:diy...
+    int32            horizontal_angle = 11;  // 家具类:挂件 水平角度，延X轴平面旋转
+    int32            vertical_angle   = 12;  // 家具类:挂件 垂直角度，延Y轴平面旋转
     //...其它
 }
 // 蓝图 建造信息
 message BlueprintBuild {
-    int32 width         = 1;  // 长宽ID 按格数
-    int32 height        = 2;  // Y最大高差
-    repeated Span spans = 3;  // 地面体素 .pos以相对坐标
+    int32         width  = 1;  // 长宽ID 按格数
+    int32         height = 2;  // Y最大高差
+    repeated Span spans  = 3;  // 地面体素 .pos以相对坐标
     // 矿石,掉落物,NPC不上蓝图
     repeated BuildElement element = 4;  // 地物元素 带父子关系的存必须先父后子
-    message ArrayPos {
+    message               ArrayPos {
         repeated int32 pos = 1;  // vx<<16+vz
     }
     map<string, ArrayPos> diy_texture = 5;  // 自定义贴图<URL,体素坐标s>
 }
 // 蓝图
 message Blueprint {
-    int64 id          = 1;                      // 蓝图id(首次自动不可改)
-    string name       = 2;                      // 蓝图名字
-    int32 width       = 3 [json_name = "w"];    // 长宽ID
-    int32 height      = 4 [json_name = "h"];    // data.height Y(冗余)
-    string des        = 5 [json_name = "des"];  // 描述
-    int64 create_time = 6 [json_name = "ct"];   // 创建/发布时间(首次自动不可改)
-    string data_url   = 8 [json_name = "dt"];   // 详情 云地址
-    string shot_url   = 9 [json_name = "st"];   // 截图 云地址多个逗号分隔
-    int64 player_id   = 10;                     // 作者ID(发布自动不可改.个人,官方蓝图为0)
-                                                // 用OpcodeQueryPlayersInfo取名字头像
-    int32 tag1      = 12;                       // 搜索标签1
-    int32 tag2      = 13;                       // 搜索标签2
-    int32 tag3      = 14;                       // 搜索标签3
-    int32 supports  = 15;                       // 点赞++
-    int32 favorites = 16;                       // 收藏++
-    bool sw_pass    = 17 [json_name = "swp"];   // 密码开关
-    string passwd   = 18 [json_name = "pwd"];   // 明密码 给发布者明文,给非发布者密文(passwd+id).md5()
+    int64  id          = 1;                      // 蓝图id(首次自动不可改)
+    string name        = 2;                      // 蓝图名字
+    int32  width       = 3 [json_name = "w"];    // 长宽ID
+    int32  height      = 4 [json_name = "h"];    // data.height Y(冗余)
+    string des         = 5 [json_name = "des"];  // 描述
+    int64  create_time = 6 [json_name = "ct"];   // 创建/发布时间(首次自动不可改)
+    string data_url    = 8 [json_name = "dt"];   // 详情 云地址
+    string shot_url    = 9 [json_name = "st"];   // 截图 云地址多个逗号分隔
+    int64  player_id   = 10;                     // 作者ID(发布自动不可改.个人,官方蓝图为0)
+                                                 // 用OpcodeQueryPlayersInfo取名字头像
+    int32  tag1      = 12;                       // 搜索标签1
+    int32  tag2      = 13;                       // 搜索标签2
+    int32  tag3      = 14;                       // 搜索标签3
+    int32  supports  = 15;                       // 点赞++
+    int32  favorites = 16;                       // 收藏++
+    bool   sw_pass   = 17 [json_name = "swp"];   // 密码开关
+    string passwd    = 18 [json_name = "pwd"];   // 明密码 给发布者明文,给非发布者密文(passwd+id).md5()
 }
 
 message CharacterCreatorUnit {
@@ -669,9 +669,9 @@ message CharacterCreatorUnit {
 
 message PlayerChangeDisplayNameReq {
     base.ClientInfo client_info = 1;
-    int64 player_id             = 2;
-    string name                 = 3;
-    string host                 = 4;  // 自动
+    int64           player_id   = 2;
+    string          name        = 3;
+    string          host        = 4;  // 自动
     enum Source {
         None         = 0;
         CreatePlayer = 1;
@@ -680,15 +680,15 @@ message PlayerChangeDisplayNameReq {
 }
 
 message SetCharacterCreatorReq {
-    int64 player_id                     = 1;
-    repeated CharacterCreatorUnit units = 2;
+    int64                         player_id = 1;
+    repeated CharacterCreatorUnit units     = 2;
     enum Source {
         None         = 0;
         CreatePlayer = 1;
     }
-    Source source = 3;
-    string host   = 4;  // 自动
-    int64 user_id = 5;  // 自动
+    Source source  = 3;
+    string host    = 4;  // 自动
+    int64  user_id = 5;  // 自动
 }
 
 message PlayerCreateStageReq {
@@ -708,27 +708,27 @@ message Avatar {
         Config    = 2;  // 系统自定义
     }
 
-    string thumbnail_url           = 1;  // 缩略图sh
-    string image_url               = 2;  // 原图
-    Type avatar_type               = 3;
-    string customize_image_url     = 4;   // 自定义头像url
-    string customize_thumbnail_url = 5;   // 自定义头像缩略图url
-    int32 avatar_tab_id            = 6;   // 当前使用官方头像id
-    int32 avatar_frame_tab_id      = 7;   // 当前使用的官方头像框id
-    repeated int32 unlock_id       = 9;   // 解锁的头像
-    repeated int32 unlock_frame_id = 10;  // 解锁的头像框
+    string         thumbnail_url           = 1;  // 缩略图sh
+    string         image_url               = 2;  // 原图
+    Type           avatar_type             = 3;
+    string         customize_image_url     = 4;   // 自定义头像url
+    string         customize_thumbnail_url = 5;   // 自定义头像缩略图url
+    int32          avatar_tab_id           = 6;   // 当前使用官方头像id
+    int32          avatar_frame_tab_id     = 7;   // 当前使用的官方头像框id
+    repeated int32 unlock_id               = 9;   // 解锁的头像
+    repeated int32 unlock_frame_id         = 10;  // 解锁的头像框
 }
 
 message AvatarUpdateResp {
-    Avatar avatar       = 1;
-    int64 player_id     = 2;
-    int32 map_tab_id    = 3;
-    int64 map_friend_id = 4;
+    Avatar avatar        = 1;
+    int64  player_id     = 2;
+    int32  map_tab_id    = 3;
+    int64  map_friend_id = 4;
 }
 
 message PlayerAvatarUpdateReq {
-    Avatar avatar   = 1;
-    int64 player_id = 2;
+    Avatar avatar    = 1;
+    int64  player_id = 2;
 }
 
 message NotifyAvatarReq {
@@ -742,7 +742,7 @@ message ItemShortCut {
 }
 
 message PlayerUpdateDescReq {
-    int64 player_id    = 1;
+    int64  player_id   = 1;
     string description = 2;
 }
 message PlayerInfoGetReq {
@@ -750,19 +750,19 @@ message PlayerInfoGetReq {
     int64 target_player_id = 2;  // 被查看的玩家id
 }
 message PlayerInfoGetRes {
-    Player player_base_info                     = 1;
-    int32 like_num                              = 2;  // 点赞数
-    bool can_like                               = 3;  // true 可以被点
-    bool is_online                              = 6;  // 是否在线
-    Avatar avatar                               = 4;
-    repeated int32 fashion_tab_ids              = 5;
-    int32 pet_tab_id                            = 7;  // 宠物id
-    int32 pet_size                              = 8;
-    int32 map_tab_id                            = 9;  // 当前所在地图id
-    int64 room_id                               = 10;
-    int32 house_id                              = 11;
-    map<int32, comm.TextureDiy> fashion_diy_map = 12;  // 当前正在应用的时装diy信息
-    map<int32, int32> character_creator_map     = 13;  // 当前正在应用的捏脸信息
+    Player                      player_base_info      = 1;
+    int32                       like_num              = 2;  // 点赞数
+    bool                        can_like              = 3;  // true 可以被点
+    bool                        is_online             = 6;  // 是否在线
+    Avatar                      avatar                = 4;
+    repeated int32              fashion_tab_ids       = 5;
+    int32                       pet_tab_id            = 7;  // 宠物id
+    int32                       pet_size              = 8;
+    int32                       map_tab_id            = 9;  // 当前所在地图id
+    int64                       room_id               = 10;
+    int32                       house_id              = 11;
+    map<int32, comm.TextureDiy> fashion_diy_map       = 12;  // 当前正在应用的时装diy信息
+    map<int32, int32>           character_creator_map = 13;  // 当前正在应用的捏脸信息
 }
 
 message AnnounceGetReq {
@@ -785,7 +785,7 @@ message AnnounceInfo {
         LimitedTime = 3;  // 预告/限时
     }
     SubType sub_type = 3;  // 小类 SubType
-    int32 is_top     = 4;  // 是否置顶
+    int32   is_top   = 4;  // 是否置顶
     enum Platform {
         None    = 0;
         IOS     = 1;
@@ -793,17 +793,17 @@ message AnnounceInfo {
         PC      = 3;
     }
     string show_platform = 5;   // 平台 Platform
-    int64 start_at       = 6;   // 可见开始
-    int64 end_at         = 7;   // 可见结束
+    int64  start_at      = 6;   // 可见开始
+    int64  end_at        = 7;   // 可见结束
     string subject       = 8;   // 标题
     string content       = 9;   // 内容
-    int32 state          = 10;  // 是否失效 0:正常
-    int32 is_push        = 12;  // 是否推送拍脸
-    string operator = 11;
-    string picture_url = 13;  // 图片地址
-    int64 created_at   = 14;
-    int32 preset_top   = 15;  // 预置顶
-    int64 updated_at   = 16;
+    int32  state         = 10;  // 是否失效 0:正常
+    int32  is_push       = 12;  // 是否推送拍脸
+    string operator      = 11;
+    string picture_url   = 13;  // 图片地址
+    int64  created_at    = 14;
+    int32  preset_top    = 15;  // 预置顶
+    int64  updated_at    = 16;
 }
 
 message AnnounceGetResp {
@@ -828,8 +828,8 @@ message ApiJoinMap {
 }
 
 message PlayerStringInfo {
-    int64 player_id = 1;
-    string info     = 2;
+    int64  player_id = 1;
+    string info      = 2;
 }
 
 message PackageVersionReq {
@@ -849,7 +849,7 @@ message PackageVersionReq {
 message PackageVersionResp {
     string version          = 1;
     string res_version      = 2;
-    bool force_update       = 3;
+    bool   force_update     = 3;
     string update_url       = 4;
     string publish_version  = 5;
     string launcher_version = 6;
@@ -858,13 +858,13 @@ message PackageVersionResp {
 }
 
 message ReceiveBoxByUgcLobbyScoreReq {
-    int64 player_id        = 1;
-    repeated int32 box_ids = 2;  // 要领取的宝箱id
+    int64          player_id = 1;
+    repeated int32 box_ids   = 2;  // 要领取的宝箱id
 }
 message ServerListInfo {
-    int64 id                       = 1;
-    string name                    = 2;
-    int32 state                    = 3;
+    int64           id             = 1;
+    string          name           = 2;
+    int32           state          = 3;
     repeated string server_address = 4;
 }
 
@@ -880,5 +880,5 @@ message ServerListInfoGetResp {
 }
 
 message ServerTimeStamp {
-    int64 time_stamp = 1; // 毫秒
+    int64 time_stamp = 1;  // 毫秒
 }

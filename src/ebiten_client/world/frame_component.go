@@ -1,19 +1,10 @@
 package world
 
 import (
-	utilc "client1/util"
+	utilc "client0/util"
 	"common/util"
 	"fmt"
 )
-
-//type FrameData struct {
-//	*comm.StatusFrame
-//	FrameType int
-//}
-//
-//func (frame *FrameData) GetSeqId() int {
-//	return int(frame.Head.SeqId)
-//}
 
 type FrameComponent struct {
 	queue         *utilc.FrameQueue

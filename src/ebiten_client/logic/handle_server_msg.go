@@ -1,7 +1,7 @@
 package logic
 
 import (
-	"client1/logic/ebiten/ui"
+	"client0/logic/ebiten/ui"
 	"common/defs"
 	"common/proto/client"
 	"common/proto/comm"

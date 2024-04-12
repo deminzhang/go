@@ -4,7 +4,7 @@ import "base.proto";
 import "comm.proto";
 
 package user;
-option go_package = "common/proto/user";
+option  go_package = "common/proto/user";
 
 enum Source {
     option allow_alias         = true;
@@ -17,27 +17,27 @@ enum Source {
 }
 
 message UserReq {
-    base.ClientInfo client_info    = 1;
-    string email                   = 2;
-    string password                = 3;
-    string otp                     = 4;   // 验证码 只有注册时使用
-    string name                    = 5;   // 用户名
-    string crypto_key              = 6;   // 客户端公钥
-    int32 check_type               = 7;   // 校验类型 编辑器需求使用   1 注册 2 登录
-    Source source                  = 8;   // 1 ugc
-    Source external_source         = 9;   //
-    string external_code           = 10;  // 三方oauth2 code
-    string external_token          = 11;  // 轮询 token 自己生成
-    string birthday                = 12;  // eg: 2000-01-01
-    string external_user_id        = 13;  // 三方user_id
-    string external_validate_token = 14;  // 三方验证登录token eg: google_id_token  meta: access_token
+    base.ClientInfo client_info             = 1;
+    string          email                   = 2;
+    string          password                = 3;
+    string          otp                     = 4;   // 验证码 只有注册时使用
+    string          name                    = 5;   // 用户名
+    string          crypto_key              = 6;   // 客户端公钥
+    int32           check_type              = 7;   // 校验类型 编辑器需求使用   1 注册 2 登录
+    Source          source                  = 8;   // 1 ugc
+    Source          external_source         = 9;   //
+    string          external_code           = 10;  // 三方oauth2 code
+    string          external_token          = 11;  // 轮询 token 自己生成
+    string          birthday                = 12;  // eg: 2000-01-01
+    string          external_user_id        = 13;  // 三方user_id
+    string          external_validate_token = 14;  // 三方验证登录token eg: google_id_token  meta: access_token
 }
 
 message UserResp {
     string authorization = 1;  // 会话验证密钥
     string crypto_key    = 2;
-    int64 id             = 3;
-    int64 player_id      = 4;
+    int64  id            = 3;
+    int64  player_id     = 4;
     string birthday      = 5;
     string name          = 6;
 }
@@ -48,39 +48,39 @@ message ModifyReq {
         BindExternal   = 1;
         UnBindExternal = 2;
     }
-    base.ClientInfo client_info = 1;
-    string name                 = 2;
-    string birthday             = 3;
-    string email                = 4;
-    string token                = 5;
-    string password             = 6;
-    Source external_source      = 7;
-    OptType opt_type            = 8;  // 操作类型
-    string external_code        = 9;  // 三方oauth2 code
+    base.ClientInfo client_info     = 1;
+    string          name            = 2;
+    string          birthday        = 3;
+    string          email           = 4;
+    string          token           = 5;
+    string          password        = 6;
+    Source          external_source = 7;
+    OptType         opt_type        = 8;  // 操作类型
+    string          external_code   = 9;  // 三方oauth2 code
 }
 
 message UserInfo {
-    int64 id               = 1;
+    int64  id              = 1;
     string name            = 2;
     string email           = 3;  // 注册邮箱
     Source source          = 4;  //
     string external_code   = 5;  // 三方user_id
     string birthday        = 6;
-    int32 verified         = 7;  // 邮箱是否验证  1 已验证
+    int32  verified        = 7;  // 邮箱是否验证  1 已验证
     Source external_source = 8;
 }
 
 message ChangePasswordReq {
-    base.ClientInfo client_info = 1;  // 客户端信息
-    string new_password         = 2;  // 新密码
-    string old_password         = 3;  // 旧密码
+    base.ClientInfo client_info  = 1;  // 客户端信息
+    string          new_password = 2;  // 新密码
+    string          old_password = 3;  // 旧密码
 }
 
 message OtpReq {
     base.ClientInfo client_info = 1;
-    string email                = 2;
-    int32 otp_type              = 3;  // 1 注册 2 找回密码
-    int64 user_id               = 4;  // user_id
+    string          email       = 2;
+    int32           otp_type    = 3;  // 1 注册 2 找回密码
+    int64           user_id     = 4;  // user_id
 }
 
 message HostResp {
@@ -89,19 +89,19 @@ message HostResp {
 
 message HostReq {
     base.ClientInfo client_info = 1;
-    string env                  = 2;
-    string name                 = 3;  // game name
-    int64 game_id               = 4;
-    int32 version               = 5;
+    string          env         = 2;
+    string          name        = 3;  // game name
+    int64           game_id     = 4;
+    int32           version     = 5;
 }
 message PlayerIdReq {
-    string host   = 1;
-    int64 user_id = 2;
+    string host    = 1;
+    int64  user_id = 2;
 }
 
 message GetOtherUserReq {
     base.ClientInfo client_info = 1;
-    int64 user_id               = 2;
+    int64           user_id     = 2;
 }
 
 message CheckOtpReq {
@@ -111,34 +111,34 @@ message CheckOtpReq {
         AfterRegister  = 2;
     }
     base.ClientInfo client_info = 1;
-    string email                = 2;
-    OtpType otp_type            = 3;  // 1 注册之前验证 2 注册之后验证
-    string code                 = 4;  // 验证码
-    int64 user_id               = 5;
-    string check_token          = 6;  // 非必要字段，只做校验
+    string          email       = 2;
+    OtpType         otp_type    = 3;  // 1 注册之前验证 2 注册之后验证
+    string          code        = 4;  // 验证码
+    int64           user_id     = 5;
+    string          check_token = 6;  // 非必要字段，只做校验
 }
 message CheckOtpRes {
     string success_token = 1;  // 验证成功凭证
 }
 message SetPasswordReq {
-    base.ClientInfo client_info = 1;
-    string email                = 2;
-    string password             = 3;
-    string set_password_token   = 4;
+    base.ClientInfo client_info        = 1;
+    string          email              = 2;
+    string          password           = 3;
+    string          set_password_token = 4;
 }
 
 message QuickRegisterReq {
     base.ClientInfo client_info = 1;
-    string email                = 2;
-    string password             = 3;
-    Source source               = 4;  // 1 ugc
-    string birthday             = 5;  // eg: 2000-01-01
-    string crypto_key           = 6;  // 客户端公钥
+    string          email       = 2;
+    string          password    = 3;
+    Source          source      = 4;  // 1 ugc
+    string          birthday    = 5;  // eg: 2000-01-01
+    string          crypto_key  = 6;  // 客户端公钥
 }
 
 message CheckPasswordReq {
     base.ClientInfo client_info = 1;
-    string password             = 3;
+    string          password    = 3;
 }
 
 message CheckPasswordRes {
@@ -159,33 +159,33 @@ message GenerateExternalTokenRes {
     string url             = 3;
 }
 message LogoutReq {
-    base.ClientInfo client_info = 1;
-    string authorization        = 2;
+    base.ClientInfo client_info   = 1;
+    string          authorization = 2;
 }
 
 message GMTModifyEmailReq {
-    int64 user_id = 1;
-    string email  = 2;
+    int64  user_id = 1;
+    string email   = 2;
 }
 
 message GMTUnbindExternalReq {
-    int64 user_id   = 1;
+    int64  user_id  = 1;
     string email    = 2;
     string password = 3;
 }
 
 message BindExternalReq {
-    base.ClientInfo client_info = 1;
-    string pull_token           = 2;  // 轮询 token 自己生成
-    Source external_source      = 3;  //
-    string external_user_id     = 4;  // 三方user_id
+    base.ClientInfo client_info      = 1;
+    string          pull_token       = 2;  // 轮询 token 自己生成
+    Source          external_source  = 3;  //
+    string          external_user_id = 4;  // 三方user_id
 }
 
 message BindEmailReq {
     base.ClientInfo client_info = 1;
-    string email                = 2;
-    string password             = 3;
-    string check_token          = 4;
+    string          email       = 2;
+    string          password    = 3;
+    string          check_token = 4;
 }
 
 message PreRegisterReq {
