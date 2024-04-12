@@ -20,11 +20,13 @@ type TextBox struct {
 	Rect image.Rectangle
 	Text string
 
-	contentBuf *ebiten.Image
-	vScrollBar *VScrollBar
-	hScrollBar *HScrollBar
-	offsetX    int
-	offsetY    int
+	contentBuf     *ebiten.Image
+	vScrollBar     *VScrollBar
+	hScrollBar     *HScrollBar
+	offsetX        int
+	offsetY        int
+	DisableVScroll bool
+	DisableHScroll bool
 
 	UIImage   *ebiten.Image
 	ImageRect image.Rectangle
@@ -52,7 +54,7 @@ func (t *TextBox) AppendLine(line string) {
 
 func (t *TextBox) Update() {
 	w, h := t.contentSize()
-	if h > t.Rect.Dy() {
+	if h > t.Rect.Dy() && !t.DisableVScroll {
 		if t.vScrollBar == nil {
 			t.vScrollBar = NewVScrollBar()
 		}
@@ -70,7 +72,7 @@ func (t *TextBox) Update() {
 		t.vScrollBar = nil
 		t.offsetY = 0
 	}
-	if w > t.Rect.Dx() {
+	if w > t.Rect.Dx() && !t.DisableHScroll {
 		if t.hScrollBar == nil {
 			t.hScrollBar = NewHScrollBar()
 		}

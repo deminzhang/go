@@ -103,7 +103,7 @@ func NewUILogin(host, user, pass, gameName string) *UILogin {
 			p.btnLogin.Click()
 		}
 	})
-	//p.cbNginx.SetOnCheckChanged(func(c *CheckBox) {
+	//p.cbType.SetOnCheckChanged(func(c *CheckBox) {
 	//})
 	//p.cbUseLogin.SetOnCheckChanged(func(c *CheckBox) {
 	//})

@@ -33,18 +33,17 @@ type UIQiMen struct {
 	inputSHour  *ui.InputBox
 	inputSMin   *ui.InputBox
 
-	inputLYear   *ui.InputBox
-	inputLMonth  *ui.InputBox
-	inputLDay    *ui.InputBox
-	inputLHour   *ui.InputBox
-	inputYearRB  *ui.InputBox
-	inputMonthRB *ui.InputBox
-	inputDayRB   *ui.InputBox
-	inputHourRB  *ui.InputBox
-	inputJieQi   *ui.InputBox
+	textLYear   *ui.InputBox
+	textLMonth  *ui.InputBox
+	textLDay    *ui.InputBox
+	textLHour   *ui.InputBox
+	textYearRB  *ui.InputBox
+	textMonthRB *ui.InputBox
+	textDayRB   *ui.InputBox
+	textHourRB  *ui.InputBox
+	textJu      *ui.InputBox
 
-	cbNginx    *ui.CheckBox
-	cbUseLogin *ui.CheckBox
+	cbType *ui.CheckBox
 
 	btnCalc      *ui.Button
 	btnPreHour2  *ui.Button
@@ -78,19 +77,19 @@ func NewUIQiMen(width, height int) *UIQiMen {
 	p.inputSMin = ui.NewInputBox(image.Rect(32+72*4, 32, 32+72*4+64, 64))
 	p.btnCalc = ui.NewButton(image.Rect(32+72*5, 32, 32+72*5+64, 64), "Go")
 
-	p.inputLYear = ui.NewInputBox(image.Rect(32, 32+32, 32+64, 32+64))
-	p.inputLMonth = ui.NewInputBox(image.Rect(32+72, 32+32, 32+72+64, 32+64))
-	p.inputLDay = ui.NewInputBox(image.Rect(32+72*2, 32+32, 32+72*2+64, 32+64))
-	p.inputLHour = ui.NewInputBox(image.Rect(32+72*3, 32+32, 32+72*3+64, 32+64))
+	p.textLYear = ui.NewInputBox(image.Rect(32, 32+32, 32+64, 32+64))
+	p.textLMonth = ui.NewInputBox(image.Rect(32+72, 32+32, 32+72+64, 32+64))
+	p.textLDay = ui.NewInputBox(image.Rect(32+72*2, 32+32, 32+72*2+64, 32+64))
+	p.textLHour = ui.NewInputBox(image.Rect(32+72*3, 32+32, 32+72*3+64, 32+64))
 	p.btnPreHour2 = ui.NewButton(image.Rect(32+72*4, 32+32, 32+72*4+64, 32+64), "Pre")
 	p.btnNextHour2 = ui.NewButton(image.Rect(32+72*5, 32+32, 32+72*5+64, 32+64), "Next")
 
-	p.inputYearRB = ui.NewInputBox(image.Rect(32, 32+32*2, 32+64, 32*2+64))
-	p.inputMonthRB = ui.NewInputBox(image.Rect(32+72, 32+32*2, 32+72+64, 32*2+64))
-	p.inputDayRB = ui.NewInputBox(image.Rect(32+72*2, 32+32*2, 32+72*2+64, 32*2+64))
-	p.inputHourRB = ui.NewInputBox(image.Rect(32+72*3, 32+32*2, 32+72*3+64, 32*2+64))
-	p.inputJieQi = ui.NewInputBox(image.Rect(32+72*4, 32+32*2, 32+72*4+128+8, 32*2+64))
-	//p.cbNginx = ui.NewCheckBox(cx-32, 206, "XXX")
+	p.textYearRB = ui.NewInputBox(image.Rect(32, 32+32*2, 32+64, 32*2+64))
+	p.textMonthRB = ui.NewInputBox(image.Rect(32+72, 32+32*2, 32+72+64, 32*2+64))
+	p.textDayRB = ui.NewInputBox(image.Rect(32+72*2, 32+32*2, 32+72*2+64, 32*2+64))
+	p.textHourRB = ui.NewInputBox(image.Rect(32+72*3, 32+32*2, 32+72*3+64, 32*2+64))
+	p.textJu = ui.NewInputBox(image.Rect(32+72*4, 32+32*2, 32+72*4+128+8+256, 32*2+64))
+	//p.cbType = ui.NewCheckBox(cx-32, 206, "XXX")
 
 	gongOffset := [][]int{{0, 0},
 		{150, 300}, {300, 0}, {0, 150},
@@ -113,20 +112,20 @@ func NewUIQiMen(width, height int) *UIQiMen {
 	p.AddChild(p.inputSMin)
 	p.AddChild(p.btnCalc)
 
-	p.AddChild(p.inputLYear)
-	p.AddChild(p.inputLMonth)
-	p.AddChild(p.inputLDay)
-	p.AddChild(p.inputLHour)
+	p.AddChild(p.textLYear)
+	p.AddChild(p.textLMonth)
+	p.AddChild(p.textLDay)
+	p.AddChild(p.textLHour)
 	p.AddChild(p.btnPreHour2)
 	p.AddChild(p.btnNextHour2)
 
-	p.AddChild(p.inputYearRB)
-	p.AddChild(p.inputMonthRB)
-	p.AddChild(p.inputDayRB)
-	p.AddChild(p.inputHourRB)
-	p.AddChild(p.inputJieQi)
+	p.AddChild(p.textYearRB)
+	p.AddChild(p.textMonthRB)
+	p.AddChild(p.textDayRB)
+	p.AddChild(p.textHourRB)
+	p.AddChild(p.textJu)
 
-	//p.AddChild(p.cbNginx)
+	//p.AddChild(p.cbType)
 	//p.AddChild(p.btnTestHost)
 	//p.AddChild(p.btnDevHost)
 	//p.AddChild(p.btnLocalhost)
@@ -200,16 +199,16 @@ func NewUIQiMen(width, height int) *UIQiMen {
 		p.Apply(year, month, day, hour, minute)
 	})
 
-	p.inputLYear.Editable = false
-	p.inputLMonth.Editable = false
-	p.inputLDay.Editable = false
-	p.inputLHour.Editable = false
+	p.textLYear.Editable = false
+	p.textLMonth.Editable = false
+	p.textLDay.Editable = false
+	p.textLHour.Editable = false
 
-	p.inputYearRB.Editable = false
-	p.inputMonthRB.Editable = false
-	p.inputDayRB.Editable = false
-	p.inputHourRB.Editable = false
-	p.inputJieQi.Editable = false
+	p.textYearRB.Editable = false
+	p.textMonthRB.Editable = false
+	p.textDayRB.Editable = false
+	p.textHourRB.Editable = false
+	p.textJu.Editable = false
 
 	t := time.Now()
 	p.Apply(t.Year(), int(t.Month()), t.Day(), t.Hour(), t.Minute())
@@ -259,20 +258,19 @@ func (p *UIQiMen) Apply(year, month, day, hour, minute int) {
 	p.inputSHour.SetText(pan.SolarHour)
 	p.inputSMin.SetText(pan.SolarMinute)
 
-	p.inputLYear.SetText(pan.LunarYearC)
-	p.inputLMonth.SetText(pan.LunarMonthC)
-	p.inputLDay.SetText(pan.LunarDayC)
-	p.inputLHour.SetText(pan.LunarHourC)
+	p.textLYear.SetText(pan.LunarYearC)
+	p.textLMonth.SetText(pan.LunarMonthC)
+	p.textLDay.SetText(pan.LunarDayC)
+	p.textLHour.SetText(pan.LunarHourC)
 
-	p.inputYearRB.SetText(pan.YearRB)
-	p.inputMonthRB.SetText(pan.MonthRB)
-	p.inputDayRB.SetText(pan.DayRB)
-	p.inputHourRB.SetText(pan.HourRB)
+	p.textYearRB.SetText(pan.YearRB)
+	p.textMonthRB.SetText(pan.MonthRB)
+	p.textDayRB.SetText(pan.DayRB)
+	p.textHourRB.SetText(pan.HourRB)
 
-	p.inputJieQi.Text = pan.JuText
+	p.textJu.Text = pan.JuText
 
 	for i := 1; i <= 9; i++ {
-
-		p.textGong[i].Text = fmt.Sprintf("神\n星\n门\n地\n\n%s%d", qimen.Gua8Gong9[i], i)
+		p.textGong[i].Text = pan.Gongs[i].FmtText
 	}
 }
