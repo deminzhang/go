@@ -3,6 +3,7 @@ package qimen
 // 奇门三元
 var _Yuan3Name = []string{"", "上元", "中元", "下元"}
 
+// 节气索引
 var _JieQiIndex = map[string]int{
 	"冬至": 1, "小寒": 2, "大寒": 3,
 	"立春": 4, "雨水": 5, "惊蛰": 6,
@@ -27,12 +28,49 @@ var _QiMenJu = [][]int{{0, 0, 0},
 	//{1, 7, 4},
 }
 
+// 盘式
+var _QMType = []string{"转盘", "飞盘", "鸣法"}
+
+const (
+	QMTypeRollDoor = 0
+	QMTypeFlyDoor  = 1
+	QMTypeAmaze    = 2
+)
+
+// 飞盘九星飞宫 "鸣法"=="阴阳皆顺"
+var _QMFlyType = []string{"阴阳皆顺", "阳顺阴逆?"}
+
+const (
+	QMFlyTypeAllOrder   = 0
+	QMFlyTypeYinReverse = 1
+)
+
+// 转盘寄宫
+var _QMRollHostingType = []string{"中宫寄坤?", "阳艮阴坤", "长夏寄四库?"}
+
+const (
+	QMRollHostingType2    = 0
+	QMRollHostingType28   = 1
+	QMRollHostingType2846 = 3
+)
+
+// 起局方式
+var _QMStartType = []string{"拆补", "茅山", "置闰", "自选"}
+
+// 暗干起法
+var _QMHideGanType = []string{"值使门起", "门地盘起"}
+
+// 宫序环
+var _GongIdx = []int{9, 1, 2, 3, 4, 5, 6, 7, 8, 9, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+
 // 九宫八卦
 var _Gua8In9 = []string{"", "坎", "坤", "震", "巽", "中", "乾", "兑", "艮", "离"}
 
 // 三奇六仪
-var _Qm3Q6Y = []string{"戊", "已", "庚", "辛", "壬", "癸", "丁", "丙", "乙"}
+var _Qm3Q6Y = []string{"戊", "己", "庚", "辛", "壬", "癸", "丁", "丙", "乙"}
+var _Qm3Q6YCircle = []string{"戊", "己", "庚", "辛", "壬", "癸", "丁", "丙", "乙", "戊", "己", "庚", "辛", "壬", "癸", "丁", "丙"}
 
+// 旬首遁甲
 var _HideJia = map[string]string{
 	"甲子": "戊",
 	"甲戌": "己",
@@ -41,9 +79,32 @@ var _HideJia = map[string]string{
 	"甲辰": "壬",
 	"甲寅": "癸",
 }
+var _XunIdx = map[string]string{
+	"甲子": "甲子乙",
+	"甲戌": "甲戌",
+	"甲申": "庚",
+	"甲午": "辛",
+	"甲辰": "壬",
+	"甲寅": "癸",
+}
 
 // 奇门九星
 var _QiMenStar9 = []string{"", "天蓬", "天芮", "天冲", "天辅", "天禽", "天心", "天柱", "天任", "天英"}
+var _QiMenStar9Circle = []string{"", "天蓬", "天芮", "天冲", "天辅", "天禽", "天心", "天柱", "天任", "天英",
+	"天蓬", "天芮", "天冲", "天辅", "天禽", "天心", "天柱", "天任"}
+
+// 奇门九神
+// 九神飞盘阳遁
+var _QiMenGod9S = []string{"值符", "腾蛇", "太阴", "六合", "勾陈", "太常", "朱雀", "九地", "九天"}
+var _QiMenGod9SCircle = []string{
+	"值符", "腾蛇", "太阴", "六合", "勾陈", "太常", "朱雀", "九地", "九天",
+	"值符", "腾蛇", "太阴", "六合", "勾陈", "太常", "朱雀", "九地", "九天"}
+
+// 九神飞盘阴遁
+var _QiMenGod9L = []string{"值符", "腾蛇", "太阴", "六合", "白虎", "太常", "玄武", "九地", "九天"}
+var _QiMenGod9LCircle = []string{
+	"值符", "腾蛇", "太阴", "六合", "白虎", "太常", "玄武", "九地", "九天",
+	"值符", "腾蛇", "太阴", "六合", "白虎", "太常", "玄武", "九地", "九天"}
 
 // 奇门八门
 var _QiMenDoor9 = []string{"", "休门", "死门", "伤门", "杜门", "中门", "开门", "惊门", "生门", "景门"}
