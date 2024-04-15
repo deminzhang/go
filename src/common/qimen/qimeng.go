@@ -86,25 +86,28 @@ func (p *QMPan) calcGong() {
 		//g9[i].Diagram8 = _Gua8In9[i]
 		//g9[i].HomeStar = QiMenStar9[i]
 		//g9[i].HomeDoor = QiMenDoor9[i]
-		g9[i].Door = "八门"
-		g9[i].AnGan = "暗"
-		g9[i].AnZhi = "暗"
 	}
 	ju := util.Abs(p.Ju)
 	//地盘 三奇六仪
 	if p.Ju > 0 { //阳遁顺仪奇逆布
-		for i := ju; i <= 9; i++ {
-			g9[i].EarthGan = _Qm3Q6Y[i-ju]
-		}
-		for i := 1; i < ju; i++ {
-			g9[i].EarthGan = _Qm3Q6Y[i-ju+9]
+		//for i := ju; i <= 9; i++ {
+		//	g9[i].EarthGan = _QM3Q6Y[i-ju]
+		//}
+		//for i := 1; i < ju; i++ {
+		//	g9[i].EarthGan = _QM3Q6Y[i-ju+9]
+		//}
+		for i := ju; i < ju+9; i++ {
+			g9[_GongIdx[i]].EarthGan = _QM3Q6YCircle[i-ju]
 		}
 	} else { //阴遁逆仪奇顺行
-		for i := ju; i > 0; i-- {
-			g9[i].EarthGan = _Qm3Q6Y[ju-i]
-		}
-		for i := 1; i < ju; i-- {
-			g9[i].EarthGan = _Qm3Q6Y[i-ju-9]
+		//for i := ju; i > 0; i-- {
+		//	g9[i].EarthGan = _QM3Q6Y[ju-i]
+		//}
+		//for i := 1; i < ju; i-- {
+		//	g9[i].EarthGan = _QM3Q6Y[i-ju-9]
+		//}
+		for i := ju + 9; i > ju; i-- {
+			g9[_GongIdx[i]].EarthGan = _QM3Q6YCircle[ju+9-i]
 		}
 	}
 	//定值符值使 时旬首所遁地仪宫
@@ -113,7 +116,7 @@ func (p *QMPan) calcGong() {
 		if g9[i].EarthGan == _HideJia[p.ShiXun] {
 			duty = i
 			p.Duty = i
-			p.DutyStar = _QiMenStar9[i]
+			p.DutyStar = _QMStar9[i]
 			p.DutyDoor = _QMDoor9[i] // TODO if 转盘值使寄坤宫
 			break
 		}
@@ -131,27 +134,46 @@ func (p *QMPan) calcGong() {
 			break
 		}
 	}
-	//天盘 三奇六仪
-	if p.Ju > 0 {
-		for i := dutyStarPos; i <= 9; i++ {
-			g9[i].SkyGan = _Qm3Q6Y[i-dutyStarPos]
+
+	//天盘 三奇六仪 值符宫起旬首仪
+	var xunGanIdx int
+	xunGan := p.ShiXun[:len(p.ShiXun)/2]
+	if xunGan == "甲" {
+		xunGan = _HideJia[p.ShiXun] //遁甲
+	}
+	for i, g := range _QM3Q6Y {
+		if g == xunGan {
+			xunGanIdx = i
 		}
-		for i := 1; i < dutyStarPos; i++ {
-			g9[i].SkyGan = _Qm3Q6Y[i-dutyStarPos+9]
+	}
+	if p.Ju > 0 {
+		//for i := dutyStarPos; i <= 9; i++ {
+		//	g9[i].SkyGan = _QM3Q6Y[i-dutyStarPos]
+		//}
+		//for i := 1; i < dutyStarPos; i++ {
+		//	g9[i].SkyGan = _QM3Q6Y[i-dutyStarPos+9]
+		//}
+		for i := dutyStarPos; i < dutyStarPos+9; i++ {
+			g9[_GongIdx[i]].SkyGan = _QM3Q6YCircle[xunGanIdx]
+			xunGanIdx++
 		}
 	} else {
-		for i := dutyStarPos; i > 0; i-- {
-			g9[i].SkyGan = _Qm3Q6Y[dutyStarPos-i]
-		}
-		for i := 1; i < dutyStarPos; i-- {
-			g9[i].SkyGan = _Qm3Q6Y[i-dutyStarPos-9]
+		//for i := dutyStarPos; i > 0; i-- {
+		//	g9[i].SkyGan = _QM3Q6Y[dutyStarPos-i]
+		//}
+		//for i := 1; i < dutyStarPos; i-- {
+		//	g9[i].SkyGan = _QM3Q6Y[i-dutyStarPos-9]
+		//}
+		for i := dutyStarPos + 9; i > dutyStarPos; i-- {
+			g9[_GongIdx[i]].SkyGan = _QM3Q6YCircle[xunGanIdx]
+			xunGanIdx++
 		}
 	}
 	//值符位起
 	//天盘 落九星 顺飞九宫
 	//if p.Type == QMTypeAmaze || p.FlyType == QMFlyTypeAllOrder {
 	for i := dutyStarPos; i < dutyStarPos+9; i++ {
-		g9[_GongIdx[i]].HStar = _QiMenStar9Circle[duty+i-dutyStarPos]
+		g9[_GongIdx[i]].HStar = _QMStar9Circle[duty+i-dutyStarPos]
 	}
 	//} else {
 	//}
@@ -162,39 +184,42 @@ func (p *QMPan) calcGong() {
 	//九神值符腾蛇是，太阴六合勾陈次。
 	//太常朱雀九地天，午后白虎玄武治。//阴遁用白虎玄武
 	if p.Ju > 0 { //阳遁
-		//for i := dutyStarPos; i < dutyStarPos+9; i++ {
-		//	g9[_GongIdx[i]].God = _QiMenGod9S[i-dutyStarPos]
+		//for i := dutyStarPos; i <= 9; i++ {
+		//	g9[i].God = _QMGod9S[i-dutyStarPos]
 		//}
-		for i := dutyStarPos; i <= 9; i++ {
-			g9[i].God = _QiMenGod9S[i-dutyStarPos]
-		}
-		for i := 1; i < dutyStarPos; i++ {
-			g9[i].God = _QiMenGod9S[i-dutyStarPos+9]
+		//for i := 1; i < dutyStarPos; i++ {
+		//	g9[i].God = _QMGod9S[i-dutyStarPos+9]
+		//}
+		for i := dutyStarPos; i < dutyStarPos+9; i++ {
+			g9[_GongIdx[i]].God = _QMGod9SCircle[i-dutyStarPos]
 		}
 	} else {
-		for i := dutyStarPos; i > 0; i-- {
-			g9[i].God = _QiMenGod9L[dutyStarPos-i]
-		}
-		for i := 1; i < dutyStarPos; i-- {
-			g9[i].God = _QiMenGod9L[i-dutyStarPos-9]
+		//for i := dutyStarPos; i > 0; i-- {
+		//	g9[i].God = _QMGod9L[dutyStarPos-i]
+		//}
+		//for i := 1; i < dutyStarPos; i-- {
+		//	g9[i].God = _QMGod9L[i-dutyStarPos-9]
+		//}
+		for i := dutyStarPos + 9; i > dutyStarPos; i-- {
+			g9[_GongIdx[i]].God = _QMGod9LCircle[dutyStarPos+9-i]
 		}
 	}
 	//排暗干支神
 	//找符使落宫
 	if p.Type == QMTypeAmaze {
-		var xunIdx int
+		var jiaZiIdx int
 		for i, x := range LunarUtil.JIA_ZI {
 			if x == p.ShiXun {
-				xunIdx = i
+				jiaZiIdx = i
 			}
 		}
 		if p.Ju > 0 { //阳遁
 			for i := duty; i <= duty+9; i++ {
 				gid := _GongIdx[i]
-				gz := LunarUtil.JIA_ZI[xunIdx]
-				xunIdx++
-				if xunIdx > 60 {
-					xunIdx = 0
+				gz := LunarUtil.JIA_ZI[jiaZiIdx]
+				jiaZiIdx++
+				if jiaZiIdx > 60 {
+					jiaZiIdx = 0
 				}
 				g, z := gz[:len(gz)/2], gz[len(gz)/2:]
 				g9[gid].AnGan = g
@@ -206,10 +231,10 @@ func (p *QMPan) calcGong() {
 		} else {
 			for i := duty + 9; i >= duty; i-- {
 				gid := _GongIdx[i]
-				gz := LunarUtil.JIA_ZI[xunIdx]
-				xunIdx++
-				if xunIdx > 60 {
-					xunIdx = 0
+				gz := LunarUtil.JIA_ZI[jiaZiIdx]
+				jiaZiIdx++
+				if jiaZiIdx > 60 {
+					jiaZiIdx = 0
 				}
 				g, z := gz[:len(gz)/2], gz[len(gz)/2:]
 				g9[gid].AnGan = g
