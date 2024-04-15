@@ -114,7 +114,7 @@ func (p *QMPan) calcGong() {
 			duty = i
 			p.Duty = i
 			p.DutyStar = _QiMenStar9[i]
-			p.DutyDoor = _QiMenDoor9[i] // TODO if 转盘值使寄坤宫
+			p.DutyDoor = _QMDoor9[i] // TODO if 转盘值使寄坤宫
 			break
 		}
 	}
@@ -157,6 +157,7 @@ func (p *QMPan) calcGong() {
 	//}
 
 	//神盘 落九神
+	//鸣法：值符加于时干上，值使加之在时支。
 	//九神顺逆随遁转，八门九星顺宫飞
 	//九神值符腾蛇是，太阴六合勾陈次。
 	//太常朱雀九地天，午后白虎玄武治。//阴遁用白虎玄武
@@ -179,6 +180,7 @@ func (p *QMPan) calcGong() {
 		}
 	}
 	//排暗干支神
+	//找符使落宫
 	if p.Type == QMTypeAmaze {
 		var xunIdx int
 		for i, x := range LunarUtil.JIA_ZI {
@@ -220,22 +222,12 @@ func (p *QMPan) calcGong() {
 	} else {
 		//TODO
 	}
-
-	//符使落宫
-	//鸣法：值符加于时干上，值使加之在时支。
-	shiZhi := p.HourZhi
-	if p.Type == QMTypeAmaze {
-		for i := 1; i <= 9; i++ {
-			if g9[i].AnGan == shiZhi {
-				p.DutyDoorPos = i
-			}
+	//布九门
+	if p.Type == QMTypeAmaze || p.Type == QMTypeFlyDoor {
+		for i := p.DutyDoorPos; i < p.DutyDoorPos+9; i++ {
+			g9[_GongIdx[i]].Door = _QMDoor9Circle[duty+i-p.DutyDoorPos]
 		}
 	} else {
-		for i := 1; i <= 9; i++ {
-		}
-	}
-	//布九门
-	for i := 1; i <= 9; i++ {
 	}
 
 }
