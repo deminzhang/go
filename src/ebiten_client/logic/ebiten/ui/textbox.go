@@ -41,8 +41,8 @@ func NewTextBox(rect image.Rectangle) *TextBox {
 		ImageRect: image.Rect(0, 16, 16, 32),
 	}
 }
-func (i *TextBox) SetText(v interface{}) {
-	i.Text = fmt.Sprintf("%v", v)
+func (t *TextBox) SetText(v interface{}) {
+	t.Text = fmt.Sprintf("%v", v)
 }
 func (t *TextBox) AppendLine(line string) {
 	if t.Text == "" {

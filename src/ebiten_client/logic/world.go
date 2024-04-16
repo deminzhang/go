@@ -12,7 +12,6 @@ import (
 	"image"
 	"log"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 )
@@ -163,22 +162,7 @@ func (this *game) ShowLogin(host, user, passwd string) *game {
 	ebiten.SetWindowIcon([]image.Image{icon32, icon16})
 	ebiten.SetMaxTPS(world.TPSRate)
 	ebiten.SetWindowSize(world.ScreenWidth, world.ScreenHeight)
-	args := util.Args2Map()
-	if val, ok := args["report"]; ok {
-		iv, err := strconv.Atoi(val)
-		if err == nil && (iv > world.ReportInputInterval) {
-			world.ReportInputInterval = iv
-		}
-	}
-
-	//if val, ok := args["lag"]; ok {
-	//	iv, err := strconv.Atoi(val)
-	//	if err == nil && (iv > 0) {
-	//		world.LagSendInterval = iv
-	//	}
-	//}
 	ebiten.SetWindowTitle("众妙之门")
-
 	return this
 }
 

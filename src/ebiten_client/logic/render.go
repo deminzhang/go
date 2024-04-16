@@ -83,7 +83,7 @@ func (this *game) Layout(outsideWidth, outsideHeight int) (int, int) {
 func (this *game) playerSprite() *ebiten.Image {
 	img := this.spriteMap["player"]
 	if img == nil {
-		rawImg, err := asset.LoadImage("sprite/playerball.png")
+		rawImg, err := asset.LoadImage("sprite/yellowball.png")
 		util.AssertTrue(err == nil, "image decode :%v", err)
 
 		img = ebiten.NewImage(32, 32)
@@ -97,7 +97,7 @@ func (this *game) playerSprite() *ebiten.Image {
 func (this *game) npcSprite() *ebiten.Image {
 	img := this.spriteMap["npc"]
 	if img == nil {
-		rawImg, err := asset.LoadImage("sprite/enemy.png")
+		rawImg, err := asset.LoadImage("sprite/player.png")
 		util.AssertTrue(err == nil, "image decode :%v", err)
 
 		img = ebiten.NewImage(32, 32)

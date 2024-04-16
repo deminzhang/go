@@ -6,6 +6,7 @@ import (
 	"common/qimen"
 	"errors"
 	"fmt"
+	"github.com/6tail/lunar-go/LunarUtil"
 	"github.com/6tail/lunar-go/SolarUtil"
 	"golang.org/x/image/font"
 	"golang.org/x/image/font/opentype"
@@ -43,13 +44,16 @@ type UIQiMen struct {
 	textHourRB  *ui.InputBox
 	textJu      *ui.InputBox
 
-	cbType *ui.CheckBox
+	cbTypeRoll  *ui.CheckBox
+	cbTypeFly   *ui.CheckBox
+	cbTypeAmaze *ui.CheckBox
 
 	btnCalc      *ui.Button
 	btnPreHour2  *ui.Button
 	btnNextHour2 *ui.Button
 
 	textGong []*ui.TextBox
+	zhiPan   []*ui.TextBox
 }
 
 var uiQiMen *UIQiMen
@@ -70,39 +74,69 @@ func UIHideQiMen() {
 func NewUIQiMen(width, height int) *UIQiMen {
 	//cx, cy := width/2, height/2 //win center
 	p := &UIQiMen{}
-	p.inputSYear = ui.NewInputBox(image.Rect(32, 32, 32+64, 64))
-	p.inputSMonth = ui.NewInputBox(image.Rect(32+72, 32, 32+72+64, 64))
-	p.inputSDay = ui.NewInputBox(image.Rect(32+72*2, 32, 32+72*2+64, 64))
-	p.inputSHour = ui.NewInputBox(image.Rect(32+72*3, 32, 32+72*3+64, 64))
-	p.inputSMin = ui.NewInputBox(image.Rect(32+72*4, 32, 32+72*4+64, 64))
-	p.btnCalc = ui.NewButton(image.Rect(32+72*5, 32, 32+72*5+64, 64), "Go")
+	px0, py0 := 32, 0
+	h := 32
+	p.inputSYear = ui.NewInputBox(image.Rect(px0, py0, px0+64, py0+h))
+	p.inputSMonth = ui.NewInputBox(image.Rect(px0+72, py0, px0+72+64, py0+h))
+	p.inputSDay = ui.NewInputBox(image.Rect(px0+72*2, py0, px0+72*2+64, py0+h))
+	p.inputSHour = ui.NewInputBox(image.Rect(px0+72*3, py0, px0+72*3+64, py0+h))
+	p.inputSMin = ui.NewInputBox(image.Rect(px0+72*4, py0, px0+72*4+64, py0+h))
+	p.btnCalc = ui.NewButton(image.Rect(px0+72*5, py0, px0+72*5+64, py0+h), "排局")
+	p.cbTypeRoll = ui.NewCheckBox(px0+72*6, py0, qimen.QMType[0])
+	p.cbTypeFly = ui.NewCheckBox(px0+72*7, py0, qimen.QMType[1])
+	p.cbTypeAmaze = ui.NewCheckBox(px0+72*8, py0, qimen.QMType[2])
 
-	p.textLYear = ui.NewInputBox(image.Rect(32, 32+32, 32+64, 32+64))
-	p.textLMonth = ui.NewInputBox(image.Rect(32+72, 32+32, 32+72+64, 32+64))
-	p.textLDay = ui.NewInputBox(image.Rect(32+72*2, 32+32, 32+72*2+64, 32+64))
-	p.textLHour = ui.NewInputBox(image.Rect(32+72*3, 32+32, 32+72*3+64, 32+64))
-	p.btnPreHour2 = ui.NewButton(image.Rect(32+72*4, 32+32, 32+72*4+64, 32+64), "Pre")
-	p.btnNextHour2 = ui.NewButton(image.Rect(32+72*5, 32+32, 32+72*5+64, 32+64), "Next")
+	py0 += 32
+	p.textLYear = ui.NewInputBox(image.Rect(px0, py0, px0+64, py0+h))
+	p.textLMonth = ui.NewInputBox(image.Rect(px0+72, py0, px0+72+64, py0+h))
+	p.textLDay = ui.NewInputBox(image.Rect(px0+72*2, py0, px0+72*2+64, py0+h))
+	p.textLHour = ui.NewInputBox(image.Rect(px0+72*3, py0, px0+72*3+64, py0+h))
+	p.btnPreHour2 = ui.NewButton(image.Rect(px0+72*4, py0, px0+72*4+64, py0+h), "上一局")
+	p.btnNextHour2 = ui.NewButton(image.Rect(px0+72*5, py0, px0+72*5+64, py0+h), "下一局")
+	py0 += 32
+	p.textYearRB = ui.NewInputBox(image.Rect(px0, py0, px0+64, py0+h))
+	p.textMonthRB = ui.NewInputBox(image.Rect(px0+72, py0, px0+72+64, py0+h))
+	p.textDayRB = ui.NewInputBox(image.Rect(px0+72*2, py0, px0+72*2+64, py0+h))
+	p.textHourRB = ui.NewInputBox(image.Rect(px0+72*3, py0, px0+72*3+64, py0+h))
+	p.textJu = ui.NewInputBox(image.Rect(px0+72*4, py0, px0+72*8, py0+h))
 
-	p.textYearRB = ui.NewInputBox(image.Rect(32, 32+32*2, 32+64, 32*2+64))
-	p.textMonthRB = ui.NewInputBox(image.Rect(32+72, 32+32*2, 32+72+64, 32*2+64))
-	p.textDayRB = ui.NewInputBox(image.Rect(32+72*2, 32+32*2, 32+72*2+64, 32*2+64))
-	p.textHourRB = ui.NewInputBox(image.Rect(32+72*3, 32+32*2, 32+72*3+64, 32*2+64))
-	p.textJu = ui.NewInputBox(image.Rect(32+72*4, 32+32*2, 32+72*4+128+8+256, 32*2+64))
-	//p.cbType = ui.NewCheckBox(cx-32, 206, "XXX")
-
+	px4, py4 := 64, 96+64
+	const gongWidth = 128
 	gongOffset := [][]int{{0, 0},
-		{150, 300}, {300, 0}, {0, 150},
-		{0, 0}, {150, 150}, {300, 300},
-		{300, 150}, {0, 300}, {150, 0},
+		{1, 2}, {2, 0}, {0, 1},
+		{0, 0}, {1, 1}, {2, 2},
+		{2, 1}, {0, 2}, {1, 0},
 	}
 	p.textGong = append(p.textGong, nil)
 	for i := 1; i <= 9; i++ {
-		offX, offZ := gongOffset[i][0], gongOffset[i][1]
-		txtGong := ui.NewTextBox(image.Rect(32+offX, 64+32*2+offZ, 32+150+offX, 64+32*2+150+offZ))
+		offX, offZ := gongOffset[i][0]*gongWidth, gongOffset[i][1]*gongWidth
+		txtGong := ui.NewTextBox(image.Rect(px4+offX, py4+offZ, px4+offX+gongWidth, py4+offZ+gongWidth))
 		txtGong.SetText(i)
 		p.textGong = append(p.textGong, txtGong)
 		p.AddChild(txtGong)
+	}
+
+	const zhiPanWidth = 48
+	zhiPanLoc := [][]int{
+		{2, 3, gongWidth, zhiPanWidth}, {1, 3, gongWidth, zhiPanWidth}, {0, 3, gongWidth, zhiPanWidth}, //亥子丑
+		{0, 2, -zhiPanWidth, gongWidth}, {0, 1, -zhiPanWidth, gongWidth}, {0, 0, -zhiPanWidth, gongWidth}, //寅卯辰
+		{0, 0, gongWidth, -zhiPanWidth}, {1, 0, gongWidth, -zhiPanWidth}, {2, 0, gongWidth, -zhiPanWidth}, //巳午未
+		{3, 0, zhiPanWidth, gongWidth}, {3, 1, zhiPanWidth, gongWidth}, {3, 2, zhiPanWidth, gongWidth}, //申酉戌
+		{2, 3, gongWidth, zhiPanWidth}, //亥
+	}
+	p.zhiPan = append(p.zhiPan, nil)
+	for i := 1; i <= 12; i++ {
+		offX, offZ := zhiPanLoc[i][0]*gongWidth, zhiPanLoc[i][1]*gongWidth
+		minX := min(px4+offX, px4+offX+zhiPanLoc[i][2])
+		maxX := max(px4+offX, px4+offX+zhiPanLoc[i][2])
+		minY := min(py4+offZ, py4+offZ+zhiPanLoc[i][3])
+		maxY := max(py4+offZ, py4+offZ+zhiPanLoc[i][3])
+		txtZhi := ui.NewTextBox(image.Rect(minX, minY, maxX, maxY))
+		txtZhi.DisableHScroll = true
+		txtZhi.DisableVScroll = true
+		p.zhiPan = append(p.zhiPan, txtZhi)
+		p.AddChild(txtZhi)
+		p.zhiPan[i].SetText(LunarUtil.ZHI[i])
 	}
 
 	p.AddChild(p.inputSYear)
@@ -111,6 +145,9 @@ func NewUIQiMen(width, height int) *UIQiMen {
 	p.AddChild(p.inputSHour)
 	p.AddChild(p.inputSMin)
 	p.AddChild(p.btnCalc)
+	p.AddChild(p.cbTypeRoll)
+	p.AddChild(p.cbTypeFly)
+	p.AddChild(p.cbTypeAmaze)
 
 	p.AddChild(p.textLYear)
 	p.AddChild(p.textLMonth)
@@ -125,10 +162,12 @@ func NewUIQiMen(width, height int) *UIQiMen {
 	p.AddChild(p.textHourRB)
 	p.AddChild(p.textJu)
 
-	//p.AddChild(p.cbType)
-	//p.AddChild(p.btnTestHost)
-	//p.AddChild(p.btnDevHost)
-	//p.AddChild(p.btnLocalhost)
+	p.cbTypeRoll.SetChecked(false)
+	p.cbTypeFly.SetChecked(false)
+	p.cbTypeAmaze.SetChecked(true)
+	p.cbTypeRoll.Disabled = true
+	p.cbTypeFly.Disabled = true
+	p.cbTypeAmaze.Disabled = true
 
 	p.inputSYear.MaxChars = 4
 	p.inputSMonth.MaxChars = 2
@@ -272,5 +311,20 @@ func (p *UIQiMen) Apply(year, month, day, hour, minute int) {
 
 	for i := 1; i <= 9; i++ {
 		p.textGong[i].Text = pan.Gongs[i].FmtText
+	}
+
+	//大六壬 月将落时支 顺布余支
+	yueJiangIdx, yueJiangPos := pan.YueJiangIdx, pan.YueJiangPos
+	for i := yueJiangPos; i < yueJiangPos+12; i++ {
+		z := LunarUtil.ZHI[qimen.Idx12[yueJiangIdx]]
+		var j, h string
+		if i == yueJiangPos {
+			j = "\n月将"
+		}
+		if z == pan.HourHorse {
+			h = "\n驿马"
+		}
+		p.zhiPan[qimen.Idx12[i]].SetText(fmt.Sprintf("%s%s%s", z, j, h))
+		yueJiangIdx++
 	}
 }

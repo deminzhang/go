@@ -67,6 +67,11 @@ type QMPan struct {
 	DutyDoor    string //值使
 	DutyDoorPos int    //值使落宫
 
+	YueJiang    string
+	HourHorse   string
+	YueJiangIdx int
+	YueJiangPos int
+
 	JuText string     //局文本
 	Gongs  [10]QMGong //九宫飞盘格
 
@@ -90,24 +95,12 @@ func (p *QMPan) calcGong() {
 	ju := util.Abs(p.Ju)
 	//地盘 三奇六仪
 	if p.Ju > 0 { //阳遁顺仪奇逆布
-		//for i := ju; i <= 9; i++ {
-		//	g9[i].EarthGan = _QM3Q6Y[i-ju]
-		//}
-		//for i := 1; i < ju; i++ {
-		//	g9[i].EarthGan = _QM3Q6Y[i-ju+9]
-		//}
 		for i := ju; i < ju+9; i++ {
-			g9[_GongIdx[i]].EarthGan = _QM3Q6YCircle[i-ju]
+			g9[Idx9[i]].EarthGan = _QM3Q6YCircle[i-ju]
 		}
 	} else { //阴遁逆仪奇顺行
-		//for i := ju; i > 0; i-- {
-		//	g9[i].EarthGan = _QM3Q6Y[ju-i]
-		//}
-		//for i := 1; i < ju; i-- {
-		//	g9[i].EarthGan = _QM3Q6Y[i-ju-9]
-		//}
 		for i := ju + 9; i > ju; i-- {
-			g9[_GongIdx[i]].EarthGan = _QM3Q6YCircle[ju+9-i]
+			g9[Idx9[i]].EarthGan = _QM3Q6YCircle[ju+9-i]
 		}
 	}
 	//定值符值使 时旬首所遁地仪宫
@@ -147,25 +140,13 @@ func (p *QMPan) calcGong() {
 		}
 	}
 	if p.Ju > 0 {
-		//for i := dutyStarPos; i <= 9; i++ {
-		//	g9[i].SkyGan = _QM3Q6Y[i-dutyStarPos]
-		//}
-		//for i := 1; i < dutyStarPos; i++ {
-		//	g9[i].SkyGan = _QM3Q6Y[i-dutyStarPos+9]
-		//}
 		for i := dutyStarPos; i < dutyStarPos+9; i++ {
-			g9[_GongIdx[i]].SkyGan = _QM3Q6YCircle[xunGanIdx]
+			g9[Idx9[i]].SkyGan = _QM3Q6YCircle[xunGanIdx]
 			xunGanIdx++
 		}
 	} else {
-		//for i := dutyStarPos; i > 0; i-- {
-		//	g9[i].SkyGan = _QM3Q6Y[dutyStarPos-i]
-		//}
-		//for i := 1; i < dutyStarPos; i-- {
-		//	g9[i].SkyGan = _QM3Q6Y[i-dutyStarPos-9]
-		//}
 		for i := dutyStarPos + 9; i > dutyStarPos; i-- {
-			g9[_GongIdx[i]].SkyGan = _QM3Q6YCircle[xunGanIdx]
+			g9[Idx9[i]].SkyGan = _QM3Q6YCircle[xunGanIdx]
 			xunGanIdx++
 		}
 	}
@@ -173,7 +154,7 @@ func (p *QMPan) calcGong() {
 	//天盘 落九星 顺飞九宫
 	//if p.Type == QMTypeAmaze || p.FlyType == QMFlyTypeAllOrder {
 	for i := dutyStarPos; i < dutyStarPos+9; i++ {
-		g9[_GongIdx[i]].HStar = _QMStar9Circle[duty+i-dutyStarPos]
+		g9[Idx9[i]].HStar = _QMStar9Circle[duty+i-dutyStarPos]
 	}
 	//} else {
 	//}
@@ -184,24 +165,12 @@ func (p *QMPan) calcGong() {
 	//九神值符腾蛇是，太阴六合勾陈次。
 	//太常朱雀九地天，午后白虎玄武治。//阴遁用白虎玄武
 	if p.Ju > 0 { //阳遁
-		//for i := dutyStarPos; i <= 9; i++ {
-		//	g9[i].God = _QMGod9S[i-dutyStarPos]
-		//}
-		//for i := 1; i < dutyStarPos; i++ {
-		//	g9[i].God = _QMGod9S[i-dutyStarPos+9]
-		//}
 		for i := dutyStarPos; i < dutyStarPos+9; i++ {
-			g9[_GongIdx[i]].God = _QMGod9SCircle[i-dutyStarPos]
+			g9[Idx9[i]].God = _QMGod9SCircle[i-dutyStarPos]
 		}
 	} else {
-		//for i := dutyStarPos; i > 0; i-- {
-		//	g9[i].God = _QMGod9L[dutyStarPos-i]
-		//}
-		//for i := 1; i < dutyStarPos; i-- {
-		//	g9[i].God = _QMGod9L[i-dutyStarPos-9]
-		//}
 		for i := dutyStarPos + 9; i > dutyStarPos; i-- {
-			g9[_GongIdx[i]].God = _QMGod9LCircle[dutyStarPos+9-i]
+			g9[Idx9[i]].God = _QMGod9LCircle[dutyStarPos+9-i]
 		}
 	}
 	//排暗干支神
@@ -215,7 +184,7 @@ func (p *QMPan) calcGong() {
 		}
 		if p.Ju > 0 { //阳遁
 			for i := duty; i <= duty+9; i++ {
-				gid := _GongIdx[i]
+				gid := Idx9[i]
 				gz := LunarUtil.JIA_ZI[jiaZiIdx]
 				jiaZiIdx++
 				if jiaZiIdx > 60 {
@@ -230,7 +199,7 @@ func (p *QMPan) calcGong() {
 			}
 		} else {
 			for i := duty + 9; i >= duty; i-- {
-				gid := _GongIdx[i]
+				gid := Idx9[i]
 				gz := LunarUtil.JIA_ZI[jiaZiIdx]
 				jiaZiIdx++
 				if jiaZiIdx > 60 {
@@ -250,7 +219,7 @@ func (p *QMPan) calcGong() {
 	//布九门
 	if p.Type == QMTypeAmaze || p.Type == QMTypeFlyDoor {
 		for i := p.DutyDoorPos; i < p.DutyDoorPos+9; i++ {
-			g9[_GongIdx[i]].Door = _QMDoor9Circle[duty+i-p.DutyDoorPos]
+			g9[Idx9[i]].Door = _QMDoor9[Idx9[duty+i-p.DutyDoorPos]]
 		}
 	} else {
 	}
@@ -330,6 +299,7 @@ func NewPan(year int, month int, day int, hour int, minute int) (*QMPan, error) 
 		juName = fmt.Sprintf("阳%d局", juIdx)
 	}
 	shiXun := LunarUtil.GetXun(shiGanZhi)
+	shiZhi := shiGanZhi[len(shiGanZhi)/2:]
 	p := QMPan{
 		Type:        QMTypeAmaze,
 		SolarYear:   year,
@@ -344,9 +314,9 @@ func NewPan(year int, month int, day int, hour int, minute int) (*QMPan, error) 
 		LunarYearC:  cal.GetYearInChinese(),
 		LunarMonthC: cal.GetMonthInChinese() + "月",
 		LunarDayC:   cal.GetDayInChinese(),
-		LunarHourC:  shiGanZhi[len(shiGanZhi)/2:] + "时",
+		LunarHourC:  shiZhi + "时",
 		HourGan:     shiGanZhi[:len(shiGanZhi)/2],
-		HourZhi:     shiGanZhi[len(shiGanZhi)/2:],
+		HourZhi:     shiZhi,
 		YearRB:      c8[0],
 		MonthRB:     c8[1],
 		DayRB:       dayGanZhi,
@@ -355,8 +325,23 @@ func NewPan(year int, month int, day int, hour int, minute int) (*QMPan, error) 
 		Ju:          juIdx,
 		Yuan3:       dayYuanIdx,
 		ShiXun:      shiXun,
+		YueJiang:    YueJiang[cal.GetMonth()],
+		HourHorse:   Horse[shiZhi],
 	}
 	p.calcGong()
+	//大六壬 月将落时支 顺布余支
+	for i := 1; i <= 12; i++ {
+		if p.YueJiang == LunarUtil.ZHI[i] {
+			p.YueJiangIdx = i
+			break
+		}
+	}
+	for i := 1; i <= 12; i++ {
+		if p.HourZhi == LunarUtil.ZHI[i] {
+			p.YueJiangPos = i
+			break
+		}
+	}
 
 	//fmt
 	p.JuText = fmt.Sprintf("%s%s %s %s遁%s 值符%s 值使%s", jieQiName, yuanName, juName,
@@ -364,7 +349,7 @@ func NewPan(year int, month int, day int, hour int, minute int) (*QMPan, error) 
 
 	for i := 1; i <= 9; i++ {
 		g := p.Gongs[i]
-		p.Gongs[i].FmtText = fmt.Sprintf("\n       %s\n\n%s    %s    %s\n\n%s    %s    %s\n\n                        %s %s",
+		p.Gongs[i].FmtText = fmt.Sprintf("\n       %s\n\n%s    %s    %s\n\n%s    %s    %s\n\n       %s%s",
 			g.God,
 			g.AnGan, g.HStar, g.SkyGan,
 			g.AnZhi, g.Door, g.EarthGan, _Gua8In9[i],
