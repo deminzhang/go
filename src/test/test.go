@@ -2,19 +2,16 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"unicode/utf8"
 	//"github.com/Luxurioust/excelize"
 	// "github.com/aarzilli/golua/lua"
 	//"github.com/golang/protobuf/proto"
 )
 
 func main() {
-
-	loc, err := time.LoadLocation("Asia/Shanghai")
-	if loc == nil {
-		fmt.Println(err)
-	}
-	fmt.Println("TZ", loc.String())
+	ss := "你好"
+	ll := utf8.RuneCountInString(ss)
+	fmt.Println("TZ", ll)
 
 	return
 }
